@@ -1,0 +1,31 @@
+# ZenPlanner — Error Log
+
+> PM agent writes here immediately when any error occurs.
+> Antigravity reads this when returning after a break.
+> Format: [TIMESTAMP] [SEVERITY] [AGENT] Error description + fix attempted
+
+---
+
+## Active Errors
+
+*None yet — build not started*
+
+---
+
+## Resolved Errors
+
+*None yet*
+
+---
+
+## Error Format
+
+```
+[2026-03-14 03:57] [🔴 HALT] [SCAFFOLD] npm install failed — @line/liff not found
+  Fix attempted: changed to @line/liff@latest
+  Status: ✅ Resolved at 04:02
+
+[2026-03-14 04:15] [🟡 WARN] [FOUNDATION] console.log in globals.css
+  Fix attempted: removed
+  Status: ✅ Resolved at 04:16
+```

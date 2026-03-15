@@ -1,26 +1,398 @@
 @import "tailwindcss";
 
+/* ===========================================
+   ZEN DESIGN SYSTEM - CSS Variables
+   SSOT: .claude/ssot/design-system.md
+   =========================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Palette — Zen Garden */
+  --zen-bg: #FAFAF7;
+  --zen-surface: #FFFFFF;
+  --zen-surface-alt: #F5F3EE;
+  --zen-border: #E8E4DB;
+  --zen-border-hover: #D4CFC3;
+
+  /* Text */
+  --zen-text: #2C2C2C;
+  --zen-text-secondary: #6B6560;
+  --zen-text-muted: #A8A098;
+
+  /* Accent Colors — Nature */
+  --zen-sage: #7C9A82;
+  --zen-sage-light: #A8C5AE;
+  --zen-earth: #B38B6D;
+  --zen-sky: #89A4C7;
+  --zen-blossom: #D4837F;
+  --zen-gold: #C9A96E;
+  --zen-indigo: #6B7AA1;
+  --zen-stone: #8B8680;
+
+  /* Brand Colors */
+  --zen-line: #06C755;
+
+  /* Shadows */
+  --zen-shadow-sm: 0 1px 3px rgba(44, 44, 44, 0.06);
+  --zen-shadow-md: 0 4px 12px rgba(44, 44, 44, 0.08);
+  --zen-shadow-lg: 0 8px 24px rgba(44, 44, 44, 0.10);
+
+  /* Borders */
+  --zen-radius-sm: 6px;
+  --zen-radius-md: 10px;
+  --zen-radius-lg: 14px;
+  --zen-radius-xl: 20px;
+  --zen-radius-full: 9999px;
+
+  /* Typography */
+  --zen-font-display: 'Cormorant Garamond', Georgia, serif;
+  --zen-font-body: 'Nunito', 'Noto Sans Thai', sans-serif;
+  --zen-font-mono: 'JetBrains Mono', monospace;
+
+  /* Touch & Safe Area */
+  --zen-touch-target: 44px;
+  --zen-bottom-nav-height: 64px;
+  --zen-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --zen-safe-top: env(safe-area-inset-top, 0px);
 }
+
+/* ===========================================
+   TAILWIND v4 THEME MAPPING
+   =========================================== */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-zen-bg: var(--zen-bg);
+  --color-zen-surface: var(--zen-surface);
+  --color-zen-surface-alt: var(--zen-surface-alt);
+  --color-zen-border: var(--zen-border);
+  --color-zen-border-hover: var(--zen-border-hover);
+  --color-zen-text: var(--zen-text);
+  --color-zen-text-secondary: var(--zen-text-secondary);
+  --color-zen-text-muted: var(--zen-text-muted);
+  --color-zen-sage: var(--zen-sage);
+  --color-zen-sage-light: var(--zen-sage-light);
+  --color-zen-earth: var(--zen-earth);
+  --color-zen-sky: var(--zen-sky);
+  --color-zen-blossom: var(--zen-blossom);
+  --color-zen-gold: var(--zen-gold);
+  --color-zen-indigo: var(--zen-indigo);
+  --color-zen-stone: var(--zen-stone);
+  --color-zen-line: var(--zen-line);
+
+  --font-display: var(--zen-font-display);
+  --font-body: var(--zen-font-body);
+  --font-mono: var(--zen-font-mono);
+
+  --shadow-zen-sm: var(--zen-shadow-sm);
+  --shadow-zen-md: var(--zen-shadow-md);
+  --shadow-zen-lg: var(--zen-shadow-lg);
+
+  --radius-zen-sm: var(--zen-radius-sm);
+  --radius-zen-md: var(--zen-radius-md);
+  --radius-zen-lg: var(--zen-radius-lg);
+  --radius-zen-xl: var(--zen-radius-xl);
+  --radius-zen-full: var(--zen-radius-full);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ===========================================
+   ZEN ANIMATIONS
+   =========================================== */
+
+@keyframes zen-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.02); opacity: 1; }
+}
+
+@keyframes zen-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zen-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes zen-ripple {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes zen-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Per-animal frame animations */
+@keyframes zen-pulse-gold { 0%,100% { box-shadow: 0 0 8px #C9A96E; } 50% { box-shadow: 0 0 24px #C9A96E; } }
+@keyframes zen-wave-slow { 0%,100% { border-radius: 14px; } 50% { border-radius: 18px 10px 18px 10px; } }
+@keyframes zen-bounce-playful { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes zen-glow-mystic { 0%,100% { box-shadow: 0 0 16px #8E7CC3; } 50% { box-shadow: 0 0 32px #8E7CC3; } }
+@keyframes zen-shift-clever { 0%,100% { border-radius: 14px; } 33% { border-radius: 18px 10px 14px 14px; } 66% { border-radius: 14px 14px 10px 18px; } }
+@keyframes zen-grow-steady { 0% { box-shadow: 0 0 0 0 rgba(124,154,130,0); } 100% { box-shadow: 0 0 0 6px rgba(124,154,130,0); } }
+@keyframes zen-soar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes zen-tentacle-wave { 0%,100% { border-radius: 14px; } 25% { border-radius: 20px 10px 16px 12px; } 75% { border-radius: 12px 16px 10px 20px; } }
+@keyframes zen-stone-solid { 0%,100% { transform: translate(2px, 2px); } }
+@keyframes zen-howl-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(160,82,45,0); } 50% { box-shadow: 0 0 0 8px rgba(160,82,45,0.15); } }
+@keyframes zen-petal-fall { 0%,100% { border-top-color: #FFD1DC; } 50% { border-top-color: #E8A0B1; } }
+@keyframes zen-minimal-line { 0% { border-width: 1px; } 100% { border-width: 1.5px; } }
+@keyframes zen-stillness { 0%,95% { transform: scale(1); } 96%,100% { transform: scale(1.01); } }
+@keyframes zen-feather-drift { 0%,100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
+@keyframes zen-morph-wings { 0%,100% { border-radius: 14px; } 50% { border-radius: 30px 10px 30px 10px; } }
+@keyframes zen-sway { 0%,100% { transform: rotate(-0.5deg); } 50% { transform: rotate(0.5deg); } }
+
+/* Quiz-specific animations */
+@keyframes zen-slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes zen-slide-out-left { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-100%); } }
+@keyframes zen-pop { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes zen-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@keyframes zen-progress-fill { from { width: 0%; } }
+@keyframes zen-confetti { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
+@keyframes zen-pulse-grow { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes zen-button-press { 0% { transform: scale(1); } 50% { transform: scale(0.95); } 100% { transform: scale(1); } }
+@keyframes zen-card-hover { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
+@keyframes zen-option-select { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+@keyframes zen-glow-pulse { 0%,100% { box-shadow: 0 0 8px var(--zen-sage); } 50% { box-shadow: 0 0 20px var(--zen-sage); } }
+
+/* Animation utility classes */
+.animate-zen-breathe { animation: zen-breathe 3s ease-in-out infinite; }
+.animate-zen-fade-in { animation: zen-fade-in 0.5s ease-out forwards; }
+.animate-zen-reveal { animation: zen-reveal 0.8s ease-out forwards; }
+.animate-zen-float { animation: zen-float 3s ease-in-out infinite; }
+.animate-zen-pulse-gold { animation: zen-pulse-gold 2s ease-in-out infinite; }
+.animate-zen-wave-slow { animation: zen-wave-slow 4s ease-in-out infinite; }
+.animate-zen-bounce-playful { animation: zen-bounce-playful 1s ease-in-out infinite; }
+.animate-zen-glow-mystic { animation: zen-glow-mystic 2s ease-in-out infinite; }
+.animate-zen-shift-clever { animation: zen-shift-clever 3s ease-in-out infinite; }
+
+/* Quiz animation classes */
+.animate-zen-slide-up { animation: zen-slide-up 0.4s ease-out forwards; }
+.animate-zen-slide-out-left { animation: zen-slide-out-left 0.3s ease-in forwards; }
+.animate-zen-pop { animation: zen-pop 0.3s ease-out forwards; }
+.animate-zen-shake { animation: zen-shake 0.3s ease-in-out; }
+.animate-zen-progress-fill { animation: zen-progress-fill 0.5s ease-out forwards; }
+.animate-zen-confetti { animation: zen-confetti 1s ease-in-out forwards; }
+.animate-zen-pulse-grow { animation: zen-pulse-grow 0.3s ease-in-out; }
+.animate-zen-button-press { animation: zen-button-press 0.2s ease-in-out; }
+.animate-zen-card-hover { animation: zen-card-hover 0.3s ease-out; }
+.animate-zen-glow-pulse { animation: zen-glow-pulse 1.5s ease-in-out infinite; }
+
+/* ===========================================
+   ZEN UTILITY CLASSES
+   =========================================== */
+
+.zen-card {
+  background: var(--zen-surface);
+  border: 1px solid var(--zen-border);
+  border-radius: var(--zen-radius-lg);
+  box-shadow: var(--zen-shadow-md);
+}
+
+.zen-button {
+  min-height: var(--zen-touch-target);
+  border-radius: var(--zen-radius-full);
+  font-family: var(--zen-font-body);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  padding: 0 24px;
+}
+
+.zen-button-primary {
+  background: var(--zen-sage);
+  color: white;
+}
+
+.zen-button-ghost {
+  background: transparent;
+  border: 1px solid var(--zen-border);
+  color: var(--zen-text);
+}
+
+.zen-input {
+  min-height: var(--zen-touch-target);
+  font-size: 16px;
+  border: 1px solid var(--zen-border);
+  border-radius: var(--zen-radius-md);
+  padding: 0 16px;
+  font-family: var(--zen-font-body);
+  background: var(--zen-surface);
+  color: var(--zen-text);
+  width: 100%;
+}
+
+.zen-input:focus {
+  outline: none;
+  ring: 2px solid var(--zen-sage);
+}
+
+.zen-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--zen-bottom-nav-height);
+  padding-bottom: var(--zen-safe-bottom);
+  background: var(--zen-surface);
+  border-top: 1px solid var(--zen-border);
+}
+
+/* ===========================================
+   MOBILE FIRST BASE STYLES
+   =========================================== */
+
+body {
+  background: var(--zen-bg);
+  color: var(--zen-text);
+  font-family: var(--zen-font-body);
+  min-height: 100vh;
+  padding-top: var(--zen-safe-top);
+  padding-bottom: var(--zen-safe-bottom);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Touch targets minimum 44px */
+button, a, input, select, textarea {
+  min-height: var(--zen-touch-target);
+}
+
+/* Prevent iOS zoom on input focus */
+input, select, textarea {
+  font-size: 16px;
+}
+
+/* Safe area padding for notched devices */
+.pb-safe { padding-bottom: var(--zen-safe-bottom); }
+.pt-safe { padding-top: var(--zen-safe-top); }
+
+/* ===========================================
+   RESPONSIVE: Mobile first (375px base)
+   Scale up with min-width
+   =========================================== */
+
+/* Tablet */
+@media (min-width: 640px) {
+  body {
+    padding-bottom: calc(var(--zen-safe-bottom) + 20px);
+  }
+
+  .zen-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .zen-card {
+    padding: 24px;
+  }
+
+  .zen-button {
+    padding: 0 32px;
+  }
+
+  /* Grid layouts for tablet */
+  .grid-cols-2-desktop {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Tablet landscape / Small tablet */
+@media (min-width: 768px) {
+  .zen-container {
+    max-width: 720px;
+  }
+
+  /* Tool grid - 2 columns on tablet */
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Better spacing for tablet */
+  .zen-card {
+    padding: 20px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  body {
+    padding-bottom: 0;
+  }
+
+  .zen-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  .zen-card {
+    padding: 28px;
+  }
+
+  /* Larger fonts for desktop */
+  .hero-text {
+    font-size: 3rem;
+  }
+
+  .text-4xl {
+    font-size: 2.5rem;
+  }
+
+  .text-3xl {
+    font-size: 2rem;
+  }
+
+  /* Desktop-specific spacing */
+  .desktop-space-y-8 > * + * {
+    margin-top: 2rem;
+  }
+
+  /* Grid layouts for desktop */
+  .grid-cols-2-desktop {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-3-desktop {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-cols-4-desktop {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Desktop sidebar layout */
+  .desktop-sidebar {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+  }
+
+  /* Desktop: show bottom nav alternative */
+  .hide-on-desktop {
+    display: none;
+  }
+
+  /* Desktop: enable horizontal layouts */
+  .desktop-flex-row {
+    flex-direction: row;
+  }
+
+  .desktop-flex-row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  /* Larger touch targets still available but not fixed */
+  .zen-button, .zen-input {
+    min-height: 48px;
+  }
+}
+
+/* Extra large desktop */
+@media (min-width: 1280px) {
+  .zen-container {
+    max-width: 1024px;
+  }
 }
