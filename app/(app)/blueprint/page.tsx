@@ -24,6 +24,7 @@ const DEFAULT_TOOLS: ToolId[] = [
   "eisenhower_matrix",
   "gratitude_log",
   "streak_tracker",
+  "mindfulness_bell",
 ];
 
 export default function BlueprintPage() {
@@ -75,6 +76,13 @@ export default function BlueprintPage() {
       : [...selectedTools, toolId];
 
     setSelectedTools(newSelection);
+
+    // Save to localStorage for fallback
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("zenplanner_selected_tools", JSON.stringify(newSelection));
+      } catch {}
+    }
 
     // Save to database
     if (blueprintId) {

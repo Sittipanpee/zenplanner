@@ -81,31 +81,66 @@ export default function DashboardPage() {
   const supabase = createClient();
 
   // State for user's selected tools from Blueprint
-  const [selectedTools, setSelectedTools] = useState<string[]>([]);
+  // Initialize with default tools if no saved data
+  const [selectedTools, setSelectedTools] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("zenplanner_selected_tools");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch {}
+      }
+    }
+    // Default tools for new users
+    return [
+      "daily_power_block",
+      "weekly_compass",
+      "mood_tracker",
+      "habit_heatmap",
+      "gratitude_log",
+      "streak_tracker",
+    ];
+  });
   const [hasBlueprint, setHasBlueprint] = useState(false);
 
-  // Fetch user's blueprint/tools on mount
+  // Fetch user's blueprint/tools on mount - but work without login
   useEffect(() => {
     const fetchBlueprint = async () => {
       try {
+        // Try to get user (works even without login for guest)
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
 
-        const { data: blueprints, error } = await supabase
-          .from("planner_blueprints")
-          .select("tool_selection, status")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(1);
+        // Try to fetch from Supabase first
+        if (user) {
+          const { data: blueprints, error } = await supabase
+            .from("planner_blueprints")
+            .select("tool_selection, status")
+            .eq("user_id", user.id)
+            .order("created_at", { ascending: false })
+            .limit(1);
 
-        console.log("Blueprint fetch result:", { blueprints, error });
+          console.log("Blueprint fetch result:", { blueprints, error });
 
-        if (!error && blueprints && blueprints.length > 0) {
-          const blueprint = blueprints[0];
-          if (blueprint.tool_selection && Array.isArray(blueprint.tool_selection)) {
-            setSelectedTools(blueprint.tool_selection as string[]);
-            setHasBlueprint(true);
-            console.log("Tools loaded:", blueprint.tool_selection);
+          if (!error && blueprints && blueprints.length > 0) {
+            const blueprint = blueprints[0];
+            if (blueprint.tool_selection && Array.isArray(blueprint.tool_selection)) {
+              setSelectedTools(blueprint.tool_selection as string[]);
+              setHasBlueprint(true);
+              console.log("Tools loaded from Supabase:", blueprint.tool_selection);
+              return;
+            }
+          }
+        }
+
+        // Fallback: Load from localStorage or use default
+        const savedTools = localStorage.getItem("zenplanner_selected_tools");
+        if (savedTools) {
+          try {
+            const tools = JSON.parse(savedTools);
+            setSelectedTools(tools);
+            console.log("Tools loaded from localStorage:", tools);
+          } catch {
+            // Use defaults
           }
         }
       } catch (error) {
@@ -116,15 +151,17 @@ export default function DashboardPage() {
     fetchBlueprint();
   }, [supabase]);
 
-  // Check which tool categories should be shown based on Blueprint
-  const showMoodBlock = selectedTools.some(t =>
-    ['mood_tracker', 'energy_map', 'gratitude_log', 'journal_prompt'].includes(t)
-  );
-  const showPrioritiesBlock = selectedTools.some(t =>
-    ['daily_power_block', 'eisenhower_matrix', 'time_boxing', 'weekly_compass'].includes(t)
-  );
-  const showHabitBlock = selectedTools.some(t =>
-    ['habit_heatmap', 'habit_stack', 'streak_tracker', 'quest_system', 'level_up'].includes(t)
+  // Default tool blocks - always show for all users
+  // These are the core dashboard features
+  const showMoodBlock = true; // Always show mood/energy tracking
+  const showPrioritiesBlock = true; // Always show daily priorities
+  const showHabitBlock = true; // Always show habit tracking
+
+  // Additional tools from Blueprint - for "เครื่องมือ Planner ของคุณ" section
+  const blueprintTools = selectedTools.filter(t =>
+    !['mood_tracker', 'energy_map', 'gratitude_log', 'journal_prompt',
+      'daily_power_block', 'eisenhower_matrix', 'time_boxing', 'weekly_compass',
+      'habit_heatmap', 'habit_stack', 'streak_tracker', 'quest_system', 'level_up'].includes(t)
   );
   const toolDisplayNames: Record<string, string> = {
     daily_power_block: "⚡ Daily Power Block",

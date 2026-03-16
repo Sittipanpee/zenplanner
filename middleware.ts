@@ -38,8 +38,8 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Define protected routes (quiz is now public)
-  const protectedRoutes = ['/dashboard', '/blueprint', '/generate', '/profile', '/tools', '/stats']
+  // Define protected routes (dashboard and tools are public for guest mode)
+  const protectedRoutes = ['/blueprint', '/generate', '/profile']
   const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login')
 

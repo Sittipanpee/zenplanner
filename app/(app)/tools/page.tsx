@@ -29,6 +29,7 @@ export default function ToolsPage() {
       "weekly_compass",
       "habit_heatmap",
       "streak_tracker",
+      "mindfulness_bell",
     ];
   });
 

@@ -250,13 +250,22 @@ function createToolSheet(
     case "reading_list":
       rows = createReadingListRows();
       break;
-    default:
-      // Generic template for any remaining tools
+    case "mindfulness_bell":
+      // Mindfulness Bell - scheduled breathing reminders
       rows = [
-        [TOOL_INFO[toolId]?.name || toolId, "", ""],
-        ["", "", ""],
-        ["Date", "Task/Note", "Status"],
+        ["🛎️ Mindfulness Bell - การตั้งเตือนสติ", "", "", ""],
+        ["", "", "", ""],
+        ["วัน/เวลา", "กิจกรรม", "ระดับพลัง (1-5)", "สถานะ"],
+        ["จันทร์ 09:00", "หายใจเข้าลึก", "4", "✓"],
+        ["จันทร์ 14:00", "พักสมอง 5 นาที", "3", "✓"],
+        ["อังคาร 09:00", "หายใจเข้าลึก", "4", ""],
+        ["อังคาร 14:00", "พักสมอง 5 นาที", "3", ""],
+        ["", "", "", ""],
+        ["📝 บันทึกการทำ mindfulness:", "", "", ""],
+        ["", "", "", ""],
+        ["วันที่", "ความรู้สึก", "หมายเหตุ", ""],
       ];
+      break;
   }
 
   const sheet = XLSX.utils.aoa_to_sheet(rows);
