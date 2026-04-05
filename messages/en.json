@@ -181,9 +181,90 @@
       "viewAll": "View all"
     },
     "quickActions": {
+      "title": "Quick actions",
       "newPlanner": "New planner",
       "retakeQuiz": "Retake quiz",
-      "viewStats": "View stats"
+      "viewStats": "View stats",
+      "takeQuiz": "Take Quiz",
+      "createPlanner": "Create Planner",
+      "tools": "Tools",
+      "statistics": "Stats"
+    },
+    "mood": {
+      "title": "Today's mood",
+      "howAreYou": "How are you feeling today?",
+      "energyLevel": "Energy level"
+    },
+    "priorities": {
+      "title": "Today's priorities",
+      "empty": "No priorities yet. Try adding one!",
+      "placeholder": "Add a priority..."
+    },
+    "habits": {
+      "title": "Habit tracker",
+      "empty": "No habits tracked yet. Try adding one!",
+      "today": "today",
+      "best": "Best",
+      "days": "days",
+      "placeholder": "Add a habit..."
+    },
+    "plannerTools": {
+      "title": "Your planner tools",
+      "noTools": "No extra tools selected",
+      "customize": "Customize tools"
+    },
+    "quizzes": "Quizzes",
+    "planner": "Planner",
+    "consecutiveDays": "Consecutive days",
+    "recentActivity": "Recent activity",
+    "findAnimal": "Find your new spirit animal",
+    "overview30": "30-day overview"
+  },
+  "generate": {
+    "ready": {
+      "title": "Create your planner",
+      "subtitle": "Ready to generate your Excel planner",
+      "demoMode": "(Demo mode)",
+      "hasTools": "(Tools already selected)",
+      "excelSupport": "Supports Excel and Google Sheets",
+      "builtInFormulas": "Built-in Excel formulas",
+      "personalised": "Personalised to your spirit animal",
+      "startButton": "Start generating",
+      "backToCustomize": "Back to customize tools"
+    },
+    "noPayment": {
+      "title": "Please pay first",
+      "pending": "Payment is not yet complete",
+      "notFound": "Payment not found",
+      "failed": "Payment failed",
+      "goToPayment": "Go to payment",
+      "backToDashboard": "Back to dashboard"
+    },
+    "checking": {
+      "title": "Checking...",
+      "subtitle": "Verifying payment status"
+    },
+    "generating": {
+      "title": "Generating planner...",
+      "subtitle": "Customizing tools for you",
+      "step1": "Prepare data",
+      "step2": "Create tools",
+      "step3": "Adjust layout",
+      "step4": "Build Excel file"
+    },
+    "completed": {
+      "title": "Planner ready!",
+      "subtitle": "Your personalised planner has been generated",
+      "tools": "Tools: {count} items",
+      "download": "Download planner",
+      "backToDashboard": "Back to dashboard",
+      "openHint": "Open the file with Excel or Google Sheets to edit"
+    },
+    "failed": {
+      "title": "Something went wrong",
+      "subtitle": "Could not generate planner. Please try again.",
+      "retry": "Retry",
+      "backToCustomize": "Back to customize tools"
     }
   },
   "profile": {

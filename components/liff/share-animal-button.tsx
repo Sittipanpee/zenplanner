@@ -11,6 +11,7 @@
 import React, { useState, useCallback } from 'react';
 import { Share2, Check, Copy, Loader2 } from 'lucide-react';
 import { SpiritAnimal } from '@/lib/types';
+import { getAnimal } from '@/lib/animal-data';
 import { shareToLINE, FlexMessageObject, isInLIFF } from '@/lib/liff';
 
 interface ShareAnimalButtonProps {
@@ -20,55 +21,12 @@ interface ShareAnimalButtonProps {
 }
 
 /**
- * Thai animal names for display
- */
-const ANIMAL_NAMES: Record<SpiritAnimal, string> = {
-  lion: 'สิงโต',
-  whale: 'วาฬ',
-  dolphin: 'โลมา',
-  owl: 'นกฮูก',
-  fox: 'จิ้งจอก',
-  turtle: 'เต่า',
-  eagle: 'นกอินทรี',
-  octopus: 'ปลาหมึก',
-  mountain: 'ภูเขา',
-  wolf: 'หมาป่า',
-  sakura: 'ซากุระ',
-  cat: 'แมว',
-  crocodile: 'จระเข้',
-  dove: 'นกเขา',
-  butterfly: 'ผีเสื้อ',
-  bamboo: 'ไม้ไผ่',
-};
-
-/**
- * Animal emoji mapping
- */
-const ANIMAL_EMOJI: Record<SpiritAnimal, string> = {
-  lion: '🦁',
-  whale: '🐋',
-  dolphin: '🐬',
-  owl: '🦉',
-  fox: '🦊',
-  turtle: '🐢',
-  eagle: '🦅',
-  octopus: '🐙',
-  mountain: '🏔️',
-  wolf: '🐺',
-  sakura: '🌸',
-  cat: '🐱',
-  crocodile: '🐊',
-  dove: '🐦',
-  butterfly: '🦋',
-  bamboo: '🎋',
-};
-
-/**
  * Build a Flex Message for sharing the spirit animal result.
  */
 function buildAnimalFlexMessage(animal: SpiritAnimal, insight: string): FlexMessageObject {
-  const animalName = ANIMAL_NAMES[animal];
-  const emoji = ANIMAL_EMOJI[animal];
+  const animalData = getAnimal(animal);
+  const animalName = animalData.nameTh;
+  const emoji = animalData.emoji;
 
   return {
     type: 'flex',

@@ -8,6 +8,7 @@
 
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ZenCard } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { Download, CheckCircle, Loader2, FileSpreadsheet, AlertCircle, Play, RefreshCw } from "lucide-react";
@@ -30,6 +31,7 @@ function GenerateContent() {
   const paymentId = searchParams.get("paymentId");
   const blueprintId = searchParams.get("blueprintId");
   const supabase = createClient();
+  const t = useTranslations('generate');
 
   const [status, setStatus] = useState<GenStatus>("ready");
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("pending");
@@ -37,13 +39,16 @@ function GenerateContent() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [toolCount, setToolCount] = useState(0);
-  const [currentStep, setCurrentStep] = useState<GenerationStep>({ label: "เตรียมพร้อม", status: "pending" });
-  const [steps, setSteps] = useState<GenerationStep[]>([
-    { label: "เตรียมข้อมูล", status: "pending" },
-    { label: "สร้างเครื่องมือ", status: "pending" },
-    { label: "ปรับแต่ง Layout", status: "pending" },
-    { label: "สร้างไฟล์ Excel", status: "pending" },
-  ]);
+  const [currentStep, setCurrentStep] = useState<GenerationStep>({ label: "", status: "pending" });
+  const stepLabels = [
+    t('generating.step1'),
+    t('generating.step2'),
+    t('generating.step3'),
+    t('generating.step4'),
+  ];
+  const [steps, setSteps] = useState<GenerationStep[]>(
+    stepLabels.map(label => ({ label, status: "pending" as const }))
+  );
 
   const updateStep = (index: number, stepStatus: "pending" | "active" | "done") => {
     setSteps(prev => prev.map((step, i) => ({
@@ -223,12 +228,7 @@ function GenerateContent() {
     setProgress(0);
     setDownloadUrl(null);
     setErrorMessage(null);
-    setSteps([
-      { label: "เตรียมข้อมูล", status: "pending" },
-      { label: "สร้างเครื่องมือ", status: "pending" },
-      { label: "ปรับแต่ง Layout", status: "pending" },
-      { label: "สร้างไฟล์ Excel", status: "pending" },
-    ]);
+    setSteps(stepLabels.map(label => ({ label, status: "pending" as const })));
   };
 
   const goToPayment = () => {
@@ -248,37 +248,37 @@ function GenerateContent() {
             <FileSpreadsheet className="w-10 h-10 text-zen-sage" />
           </div>
           <h1 className="font-display text-2xl font-bold text-zen-text">
-            สร้าง Planner ของคุณ
+            {t('ready.title')}
           </h1>
           <p className="text-zen-text-secondary">
-            พร้อมสร้าง Excel Planner แล้ว
-            {blueprintId && blueprintId !== "demo" ? " (มีการเลือกเครื่องมือแล้ว)" : " (โหมดทดลอง)"}
+            {t('ready.subtitle')}
+            {blueprintId && blueprintId !== "demo" ? ` ${t('ready.hasTools')}` : ` ${t('ready.demoMode')}`}
           </p>
 
           <ZenCard className="text-left">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <CheckCircle className="w-4 h-4 text-zen-sage" />
-                <span>รองรับ Excel และ Google Sheets</span>
+                <span>{t('ready.excelSupport')}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <CheckCircle className="w-4 h-4 text-zen-sage" />
-                <span>มีสูตร Excel ในตัว</span>
+                <span>{t('ready.builtInFormulas')}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <CheckCircle className="w-4 h-4 text-zen-sage" />
-                <span>ปรับแต่งตามสัตว์ประจำตัวคุณ</span>
+                <span>{t('ready.personalised')}</span>
               </div>
             </div>
           </ZenCard>
 
           <ZenButton fullWidth size="lg" onClick={checkPaymentAndGenerate}>
             <Play className="w-5 h-5 mr-2" />
-            เริ่มสร้าง Planner
+            {t('ready.startButton')}
           </ZenButton>
 
           <ZenButton variant="ghost" fullWidth onClick={goToBlueprint}>
-            กลับไปปรับแต่งเครื่องมือ
+            {t('ready.backToCustomize')}
           </ZenButton>
         </div>
       </main>
@@ -294,22 +294,22 @@ function GenerateContent() {
             <AlertCircle className="w-10 h-10 text-zen-earth" />
           </div>
           <h1 className="font-display text-2xl font-bold text-zen-text">
-            กรุณาชำระเงินก่อน
+            {t('noPayment.title')}
           </h1>
           <p className="text-zen-text-secondary">
             {paymentStatus === "pending"
-              ? "การชำระเงินยังไม่เสร็จสมบูรณ์"
+              ? t('noPayment.pending')
               : paymentStatus === "not_found"
-              ? "ไม่พบรายการชำระเงิน"
-              : "การชำระเงินล้มเหลว"}
+              ? t('noPayment.notFound')
+              : t('noPayment.failed')}
           </p>
 
           <ZenButton fullWidth size="lg" onClick={goToPayment}>
-            ไปหน้าชำระเงิน
+            {t('noPayment.goToPayment')}
           </ZenButton>
 
           <ZenButton variant="ghost" fullWidth onClick={() => router.push("/dashboard")}>
-            กลับสู่หน้าหลัก
+            {t('noPayment.backToDashboard')}
           </ZenButton>
         </div>
       </main>
@@ -323,10 +323,10 @@ function GenerateContent() {
         <div className="w-full max-w-md text-center space-y-6">
           <Loader2 className="w-10 h-10 text-zen-sage animate-spin mx-auto" />
           <h1 className="font-display text-xl font-bold text-zen-text">
-            กำลังตรวจสอบ...
+            {t('checking.title')}
           </h1>
           <p className="text-zen-text-secondary">
-            กำลังตรวจสอบสถานะการชำระเงิน
+            {t('checking.subtitle')}
           </p>
         </div>
       </main>
@@ -342,10 +342,10 @@ function GenerateContent() {
             <CheckCircle className="w-10 h-10 text-zen-sage" />
           </div>
           <h1 className="font-display text-2xl font-bold text-zen-text">
-            Planner พร้อมแล้ว!
+            {t('completed.title')}
           </h1>
           <p className="text-zen-text-secondary">
-            สร้าง Planner เฉพาะตัวสำหรับคุณสำเร็จ
+            {t('completed.subtitle')}
           </p>
 
           <ZenCard className="text-left">
@@ -353,7 +353,7 @@ function GenerateContent() {
               <FileSpreadsheet className="w-8 h-8 text-zen-sage" />
               <div>
                 <p className="font-semibold text-zen-text">MyZenPlanner.xlsx</p>
-                <p className="text-sm text-zen-text-muted">เครื่องมือ: {toolCount} รายการ</p>
+                <p className="text-sm text-zen-text-muted">{t('completed.tools', { count: toolCount })}</p>
               </div>
             </div>
           </ZenCard>
@@ -361,16 +361,16 @@ function GenerateContent() {
           <div className="space-y-3">
             <ZenButton fullWidth size="lg" onClick={handleDownload}>
               <Download className="w-5 h-5 mr-2" />
-              ดาวน์โหลด Planner
+              {t('completed.download')}
             </ZenButton>
 
             <ZenButton variant="secondary" fullWidth onClick={() => router.push("/dashboard")}>
-              กลับสู่หน้าหลัก
+              {t('completed.backToDashboard')}
             </ZenButton>
           </div>
 
           <p className="text-sm text-zen-text-muted">
-            เปิดไฟล์ด้วย Excel หรือ Google Sheets เพื่อแก้ไขได้
+            {t('completed.openHint')}
           </p>
         </div>
       </main>
@@ -386,26 +386,26 @@ function GenerateContent() {
             <AlertCircle className="w-10 h-10 text-zen-blossom" />
           </div>
           <h1 className="font-display text-2xl font-bold text-zen-text">
-            เกิดข้อผิดพลาด
+            {t('failed.title')}
           </h1>
           <p className="text-zen-text-secondary">
-            ไม่สามารถสร้าง Planner ได้ กรุณาลองใหม่
+            {t('failed.subtitle')}
           </p>
 
           {errorMessage && (
-            <ZenCard className="text-left bg-red-50 border-red-200">
-              <p className="text-sm text-red-600 font-mono">{errorMessage}</p>
+            <ZenCard className="text-left bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800">
+              <p className="text-sm text-red-600 dark:text-red-400 font-mono">{errorMessage}</p>
             </ZenCard>
           )}
 
           <div className="space-y-3">
             <ZenButton fullWidth onClick={handleRetry}>
               <RefreshCw className="w-4 h-4 mr-2" />
-              ลองใหม่
+              {t('failed.retry')}
             </ZenButton>
 
             <ZenButton variant="ghost" fullWidth onClick={goToBlueprint}>
-              กลับไปปรับแต่งเครื่องมือ
+              {t('failed.backToCustomize')}
             </ZenButton>
           </div>
         </div>
@@ -429,11 +429,11 @@ function GenerateContent() {
         </div>
 
         <h1 className="font-display text-2xl font-bold text-zen-text">
-          กำลังสร้าง Planner...
+          {t('generating.title')}
         </h1>
 
         <p className="text-zen-text-secondary">
-          กำลังปรับแต่งเครื่องมือต่างๆ ให้เหมาะกับคุณ
+          {t('generating.subtitle')}
         </p>
 
         {/* Progress bar */}
@@ -492,7 +492,7 @@ function LoadingFallback() {
       <div className="w-full max-w-md text-center space-y-6">
         <Loader2 className="w-10 h-10 text-zen-sage animate-spin mx-auto" />
         <h1 className="font-display text-xl font-bold text-zen-text">
-          กำลังโหลด...
+          Loading...
         </h1>
       </div>
     </main>

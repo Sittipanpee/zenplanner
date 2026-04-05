@@ -181,9 +181,90 @@
       "viewAll": "ดูทั้งหมด"
     },
     "quickActions": {
+      "title": "ลัดเข้าใช้งาน",
       "newPlanner": "สร้างแผนใหม่",
       "retakeQuiz": "ทำแบบทดสอบอีกครั้ง",
-      "viewStats": "ดูสถิติ"
+      "viewStats": "ดูสถิติ",
+      "takeQuiz": "ทำ Quiz",
+      "createPlanner": "สร้าง Planner",
+      "tools": "เครื่องมือ",
+      "statistics": "สถิติ"
+    },
+    "mood": {
+      "title": "อารมณ์วันนี้",
+      "howAreYou": "ความรู้สึกของคุณวันนี้",
+      "energyLevel": "ระดับพลัง"
+    },
+    "priorities": {
+      "title": "ลำดับความสำคัญวันนี้",
+      "empty": "ยังไม่มีลำดับความสำคัญ ลองเพิ่มดูสิ!",
+      "placeholder": "เพิ่มลำดับความสำคัญ..."
+    },
+    "habits": {
+      "title": "ติดตามนิสัย",
+      "empty": "ยังไม่มีนิสัยที่ติดตาม ลองเพิ่มดูสิ!",
+      "today": "วันนี้",
+      "best": "Best",
+      "days": "วัน",
+      "placeholder": "เพิ่มนิสัย..."
+    },
+    "plannerTools": {
+      "title": "เครื่องมือ Planner ของคุณ",
+      "noTools": "ยังไม่ได้เลือกเครื่องมือเพิ่ม",
+      "customize": "ปรับแต่งเครื่องมือ"
+    },
+    "quizzes": "Quiz ที่ทำ",
+    "planner": "Planner",
+    "consecutiveDays": "วันต่อเนื่อง",
+    "recentActivity": "กิจกรรมล่าสุด",
+    "findAnimal": "ค้นหาสัตว์ประจำตัวใหม่",
+    "overview30": "ภาพรวม 30 วัน"
+  },
+  "generate": {
+    "ready": {
+      "title": "สร้าง Planner ของคุณ",
+      "subtitle": "พร้อมสร้าง Excel Planner แล้ว",
+      "demoMode": "(โหมดทดลอง)",
+      "hasTools": "(มีการเลือกเครื่องมือแล้ว)",
+      "excelSupport": "รองรับ Excel และ Google Sheets",
+      "builtInFormulas": "มีสูตร Excel ในตัว",
+      "personalised": "ปรับแต่งตามสัตว์ประจำตัวคุณ",
+      "startButton": "เริ่มสร้าง Planner",
+      "backToCustomize": "กลับไปปรับแต่งเครื่องมือ"
+    },
+    "noPayment": {
+      "title": "กรุณาชำระเงินก่อน",
+      "pending": "การชำระเงินยังไม่เสร็จสมบูรณ์",
+      "notFound": "ไม่พบรายการชำระเงิน",
+      "failed": "การชำระเงินล้มเหลว",
+      "goToPayment": "ไปหน้าชำระเงิน",
+      "backToDashboard": "กลับสู่หน้าหลัก"
+    },
+    "checking": {
+      "title": "กำลังตรวจสอบ...",
+      "subtitle": "กำลังตรวจสอบสถานะการชำระเงิน"
+    },
+    "generating": {
+      "title": "กำลังสร้าง Planner...",
+      "subtitle": "กำลังปรับแต่งเครื่องมือต่างๆ ให้เหมาะกับคุณ",
+      "step1": "เตรียมข้อมูล",
+      "step2": "สร้างเครื่องมือ",
+      "step3": "ปรับแต่ง Layout",
+      "step4": "สร้างไฟล์ Excel"
+    },
+    "completed": {
+      "title": "Planner พร้อมแล้ว!",
+      "subtitle": "สร้าง Planner เฉพาะตัวสำหรับคุณสำเร็จ",
+      "tools": "เครื่องมือ: {count} รายการ",
+      "download": "ดาวน์โหลด Planner",
+      "backToDashboard": "กลับสู่หน้าหลัก",
+      "openHint": "เปิดไฟล์ด้วย Excel หรือ Google Sheets เพื่อแก้ไขได้"
+    },
+    "failed": {
+      "title": "เกิดข้อผิดพลาด",
+      "subtitle": "ไม่สามารถสร้าง Planner ได้ กรุณาลองใหม่",
+      "retry": "ลองใหม่",
+      "backToCustomize": "กลับไปปรับแต่งเครื่องมือ"
     }
   },
   "profile": {

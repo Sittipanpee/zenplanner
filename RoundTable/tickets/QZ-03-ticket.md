@@ -2,7 +2,7 @@
 
 **Phase:** Production Sprint
 **Team:** QZ-03 Quiz Psychologist
-**Status:** [~] IN PROGRESS
+**Status:** [x] COMPLETE
 **Depends on:** None
 **Blocks:** INT-09
 
@@ -18,20 +18,20 @@ Full overhaul of the quiz system covering:
 
 ## Acceptance Criteria
 
-- [ ] Quiz answers accumulate correctly across multiple requests (loaded from DB JSONB field)
-- [ ] Custom mode returns a meaningful LLM response instead of 501
-- [ ] Profile route does NOT send system prompt twice
-- [ ] Profile completion JSON extracted with `{...}` regex, not `[...]`
-- [ ] [PROFILE_COMPLETE] detection works: extract JSON first, then check tag
-- [ ] Zod schema validates parsed profile JSON
-- [ ] Complete route calls generatePersonalityNarrative() and stores/returns the narrative
-- [ ] QuizState.phase includes 'intro' in the union type
-- [ ] Axis score per-question contribution uses full axis value (not divided)
-- [ ] archetype-map.ts has no unused variable warnings
-- [ ] getArchetypeCode has a fallback return value
-- [ ] lib/quiz-prompts.ts exports: generatePersonalityNarrative, buildQuizSystemPrompt, buildScoringPrompt, buildNarrativePrompt
-- [ ] NarrativeSchema Zod validation applied to LLM output
-- [ ] Graceful LLM failure fallback returns sensible defaults
+- [x] Quiz answers accumulate correctly across multiple requests (loaded from DB JSONB field)
+- [x] Custom mode returns a meaningful LLM response instead of 501
+- [x] Profile route does NOT send system prompt twice
+- [x] Profile completion JSON extracted with `{...}` regex, not `[...]`
+- [x] [PROFILE_COMPLETE] detection works: extract JSON first, then check tag
+- [x] Zod schema validates parsed profile JSON
+- [x] Complete route calls generatePersonalityNarrative() and stores/returns the narrative
+- [x] QuizState.phase includes 'intro' in the union type
+- [x] Axis score per-question contribution uses full axis value (not divided)
+- [x] archetype-map.ts has no unused variable warnings
+- [x] getArchetypeCode has a fallback return value
+- [x] lib/quiz-prompts.ts exports: generatePersonalityNarrative, buildQuizSystemPrompt, buildScoringPrompt, buildNarrativePrompt
+- [x] NarrativeSchema Zod validation applied to LLM output
+- [x] Graceful LLM failure fallback returns sensible defaults
 
 ## Boundaries
 

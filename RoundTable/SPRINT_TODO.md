@@ -36,14 +36,14 @@
 - **STATUS:** [x] COMPLETE
 
 ### QZ-03: Quiz Psychologist
-- [ ] `lib/quiz-engine.ts`: fix QuizState.phase type (add 'intro'), improve scoring range
-- [ ] `lib/quiz-data.ts`: ensure all 22 questions have proper axis weights
-- [ ] `lib/archetype-map.ts`: remove unused variables, fix getArchetypeCode fallback
-- [ ] `lib/quiz-prompts.ts` (NEW): rich prompt templates for AI personality narrative (TH/EN/ZH)
-- [ ] `app/api/quiz/step/route.ts`: fix answers array reset (load from DB), fix custom/minigame modes
-- [ ] `app/api/quiz/complete/route.ts`: integrate AI narrative generation, Zod validate LLM output
-- [ ] `app/api/quiz/profile/route.ts`: fix system prompt duplication, fix profile JSON regex, fix completion detection
-- **STATUS:** [ ] PENDING
+- [x] `lib/quiz-engine.ts`: fix QuizState.phase type (add 'intro'), improve scoring range
+- [x] `lib/quiz-data.ts`: all 22 questions verified — proper axis weights confirmed
+- [x] `lib/archetype-map.ts`: remove unused variables, fix getArchetypeCode fallback
+- [x] `lib/quiz-prompts.ts` (NEW): rich prompt templates for AI personality narrative (TH/EN/ZH)
+- [x] `app/api/quiz/step/route.ts`: fix answers array reset (load from DB), fix custom/minigame modes
+- [x] `app/api/quiz/complete/route.ts`: integrate AI narrative generation, Zod validate LLM output
+- [x] `app/api/quiz/profile/route.ts`: fix system prompt duplication, fix profile JSON regex, fix completion detection
+- **STATUS:** [x] COMPLETE
 
 ### DS-04: Notioneer (Design System)
 - [x] `app/globals.css`: full dark mode variable system (html[data-theme="dark"]), reduced-motion, fix invalid CSS (ring->outline)

@@ -183,7 +183,88 @@
     "quickActions": {
       "newPlanner": "新建计划",
       "retakeQuiz": "重新测验",
-      "viewStats": "查看统计"
+      "viewStats": "查看统计",
+      "takeQuiz": "做测验",
+      "createPlanner": "创建计划",
+      "tools": "工具",
+      "statistics": "统计",
+      "title": "快捷操作"
+    },
+    "mood": {
+      "title": "今天的心情",
+      "howAreYou": "你今天感觉怎么样？",
+      "energyLevel": "精力水平"
+    },
+    "priorities": {
+      "title": "今天的优先事项",
+      "empty": "还没有优先事项。试试添加一个吧！",
+      "placeholder": "添加优先事项..."
+    },
+    "habits": {
+      "title": "习惯追踪",
+      "empty": "还没有追踪的习惯。试试添加一个吧！",
+      "today": "今天",
+      "best": "最佳",
+      "days": "天",
+      "placeholder": "添加习惯..."
+    },
+    "plannerTools": {
+      "title": "你的计划工具",
+      "noTools": "还没有选择额外工具",
+      "customize": "自定义工具"
+    },
+    "quizzes": "已完成测验",
+    "planner": "计划",
+    "consecutiveDays": "连续天数",
+    "recentActivity": "最近活动",
+    "findAnimal": "寻找你的新精神动物",
+    "overview30": "30天概览"
+  },
+  "generate": {
+    "ready": {
+      "title": "创建你的计划",
+      "subtitle": "准备好生成 Excel 计划了",
+      "demoMode": "（演示模式）",
+      "hasTools": "（已选择工具）",
+      "excelSupport": "支持 Excel 和 Google Sheets",
+      "builtInFormulas": "内置 Excel 公式",
+      "personalised": "根据你的精神动物个性化",
+      "startButton": "开始生成",
+      "backToCustomize": "返回自定义工具"
+    },
+    "noPayment": {
+      "title": "请先付款",
+      "pending": "付款尚未完成",
+      "notFound": "未找到付款记录",
+      "failed": "付款失败",
+      "goToPayment": "前往付款",
+      "backToDashboard": "返回仪表板"
+    },
+    "checking": {
+      "title": "检查中...",
+      "subtitle": "正在验证付款状态"
+    },
+    "generating": {
+      "title": "正在生成计划...",
+      "subtitle": "正在为你定制工具",
+      "step1": "准备数据",
+      "step2": "创建工具",
+      "step3": "调整布局",
+      "step4": "生成 Excel 文件"
+    },
+    "completed": {
+      "title": "计划已就绪！",
+      "subtitle": "已为你生成个性化计划",
+      "tools": "工具：{count} 项",
+      "download": "下载计划",
+      "backToDashboard": "返回仪表板",
+      "openHint": "用 Excel 或 Google Sheets 打开文件即可编辑"
+    },
+    "failed": {
+      "title": "出了点问题",
+      "subtitle": "无法生成计划，请重试",
+      "retry": "重试",
+      "backToCustomize": "返回自定义工具"
     }
   },
   "profile": {
