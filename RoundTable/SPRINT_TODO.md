@@ -128,14 +128,14 @@
 ## Wave 2 — Integration QA (after Wave 1 complete)
 
 ### INT-09: Integration QA
-- [ ] Read all changed files, check for TypeScript errors across boundaries
-- [ ] Fix any import path issues between agents' outputs
-- [ ] Verify i18n keys in pages match messages/*.json (no missing keys)
-- [ ] Verify all new components are properly exported/imported
-- [ ] Run `npm install` to install new deps
-- [ ] Run `npm run build` — fix all errors
-- [ ] Verify build output clean (zero TypeScript errors, zero warnings that block)
-- **STATUS:** [ ] PENDING
+- [x] Read all changed files, check for TypeScript errors across boundaries
+- [x] Fix any import path issues between agents' outputs
+- [x] Verify i18n keys in pages match messages/*.json (no missing keys)
+- [x] Verify all new components are properly exported/imported
+- [x] Run `npm install` to install new deps
+- [x] Run `npm run build` — fix all errors
+- [x] Verify build output clean (zero TypeScript errors, zero warnings that block)
+- **STATUS:** [x] COMPLETE
 
 ---
 
@@ -157,6 +157,6 @@
 
 ## Sprint Completion Gate
 - [ ] Wave 1: All 8 agents COMPLETE
-- [ ] Wave 2: Build passes clean
+- [x] Wave 2: Build passes clean
 - [ ] Wave 3: DA score ≥ 99/100
 - [ ] All changes committed and pushed to claude/spawn-agent-fvw52

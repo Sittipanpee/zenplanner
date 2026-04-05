@@ -177,7 +177,7 @@ export function getAnimal(animal: SpiritAnimal): AnimalData
 
 ## Done Criteria
 
-- [ ] `npm run build` exits 0, zero TypeScript errors
+- [x] `npm run build` exits 0, zero TypeScript errors
 - [ ] All 12 P0s resolved  
 - [ ] i18n complete: EN/TH/ZH all text translated, switcher functional
 - [ ] Dark mode: system preference + manual toggle + localStorage persistence
@@ -200,5 +200,5 @@ export function getAnimal(animal: SpiritAnimal): AnimalData
 | INF-06 Infrastructure | COMPLETE | 05-04-2026 | All 5 items delivered. tailwind-merge dep needed from BE-02. |
 | QF-07 Quiz Flow | COMPLETE | 05-04-2026 | All 11 files: i18n, dark mode, ARIA, sessionStorage persistence, alert->inline, window.location->router.push |
 | FP-08 Feature Pages | COMPLETE | 05-04-2026 | All 30+ files: i18n (useTranslations), dark mode (zen CSS vars), bug fixes (LINE SVG, hardcoded lion, hardcoded 8 tools, CSV disable, alert->Link, animal-data SSOT), new settings page, search/filter in tool-grid, message files extended |
-| INT-09 Integration QA | PENDING | — | — |
+| INT-09 Integration QA | COMPLETE | 05-04-2026 | Build passes exit 0. 4 TS errors fixed, Google Fonts replaced with CSS vars, next-intl upgraded 3.x->4.9.0, env var throws moved to runtime. |
 | DA-10 Devil's Advocate | PENDING | — | — |
