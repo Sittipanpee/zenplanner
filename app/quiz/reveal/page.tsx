@@ -28,8 +28,12 @@ function QuizRevealContent() {
   const [showContent, setShowContent] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Get locale-aware name
+  // Get locale-aware name and description
   const animalName = locale === "th" ? data.nameTh : locale === "zh" ? data.nameZh : data.nameEn;
+  const animalDescription =
+    locale === "th" ? (data.descriptionTh ?? data.description) :
+    locale === "zh" ? (data.descriptionZh ?? data.description) :
+    data.description;
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
@@ -37,7 +41,7 @@ function QuizRevealContent() {
   }, []);
 
   const handleShare = async () => {
-    const text = `${t("reveal.title")} ${animalName} ${data.emoji}! ${data.description}`;
+    const text = `${t("reveal.title")} ${animalName} ${data.emoji}! ${animalDescription}`;
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -74,7 +78,7 @@ function QuizRevealContent() {
             {animalName}
           </h2>
           <p className="text-zen-text-secondary dark:text-zinc-400 max-w-sm mx-auto animate-zen-fade-in" style={{ animationDelay: "0.6s" }}>
-            {data.description}
+            {animalDescription}
           </p>
         </div>
       </div>
