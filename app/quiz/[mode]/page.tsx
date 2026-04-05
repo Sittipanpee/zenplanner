@@ -1,18 +1,24 @@
 /**
  * Quiz Game Page
  * Handles the actual quiz gameplay
+ * With sessionStorage persistence, i18n, dark mode, and previous-question button
  */
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 import { QuizCard, QuizProgress } from "@/components/quiz/quiz-card";
 import { ZenButton } from "@/components/ui/zen-button";
+import { getAnimal } from "@/lib/animal-data";
 import { createClient } from "@/lib/supabase/client";
 import { QUIZ_DATA, type QuizQuestion } from "@/lib/quiz-data";
 import { getDominantAnimal } from "@/lib/archetype-map";
 import type { AxisScores } from "@/lib/types";
+import { ArrowLeft } from "lucide-react";
+
+const STORAGE_KEY = "zenplanner-quiz-state";
 
 // Use quiz data from lib (22 questions)
 const QUIZ_QUESTIONS: QuizQuestion[] = QUIZ_DATA;
@@ -26,35 +32,100 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const t = useTranslations("quiz");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
 
+  // Resolve params
   useEffect(() => {
     params.then((p) => setMode(p.mode));
   }, [params]);
 
-  const handleAnswer = async (optionIndex: number) => {
+  // On mount: restore from sessionStorage
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.currentQuestion !== undefined && Array.isArray(parsed.answers)) {
+          setCurrentQuestion(parsed.currentQuestion);
+          setAnswers(parsed.answers);
+          if (parsed.mode) {
+            setMode(parsed.mode);
+          }
+        }
+      }
+    } catch {
+      // [SKIP] sessionStorage not available or corrupted — start fresh
+    }
+  }, []);
+
+  const handleAnswer = useCallback(async (optionIndex: number) => {
     setIsLoading(true);
 
     // Store answer
     const newAnswers = [...answers, optionIndex];
+    const newQuestion = currentQuestion + 1;
+
+    // Persist to sessionStorage
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        currentQuestion: newQuestion,
+        answers: newAnswers,
+        mode,
+      }));
+    } catch {
+      // [SKIP] sessionStorage write failed — continue without persistence
+    }
+
     setAnswers(newAnswers);
 
     // Simulate delay for effect
     await new Promise((r) => setTimeout(r, 500));
 
     if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      setCurrentQuestion(newQuestion);
     } else {
       // Calculate result
       const scores = calculateScores(newAnswers);
       const animal = determineAnimal(scores);
       setResult({ animal, scores });
 
+      // Clear sessionStorage on complete
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // [SKIP] sessionStorage removal failed
+      }
+
       // Try to save to database (if user is logged in)
       await saveQuizResult(animal, scores);
     }
 
     setIsLoading(false);
-  };
+  }, [answers, currentQuestion, mode]);
+
+  /** Go back to previous question */
+  const handlePrevious = useCallback(() => {
+    if (currentQuestion <= 0 || answers.length === 0) return;
+
+    const newAnswers = answers.slice(0, -1);
+    const newQuestion = currentQuestion - 1;
+
+    setAnswers(newAnswers);
+    setCurrentQuestion(newQuestion);
+
+    // Update sessionStorage
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        currentQuestion: newQuestion,
+        answers: newAnswers,
+        mode,
+      }));
+    } catch {
+      // [SKIP] sessionStorage write failed
+    }
+  }, [currentQuestion, answers, mode]);
 
   const saveQuizResult = async (animal: string, scores: AxisScores) => {
     setIsSaving(true);
@@ -62,7 +133,7 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
-        console.log("User not logged in, skipping save");
+        console.log("[SKIP] User not logged in, skipping quiz save");
         setIsSaving(false);
         return;
       }
@@ -115,65 +186,39 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
 
   // Show result page
   if (result) {
-    const animalEmojis: Record<string, string> = {
-      lion: "🦁", whale: "🐋", dolphin: "🐬", owl: "🦉", fox: "🦊",
-      turtle: "🐢", eagle: "🦅", octopus: "🐙", mountain: "🏔️", wolf: "🐺",
-      sakura: "🌸", cat: "🐱", crocodile: "🐊", dove: "🕊️", butterfly: "🦋", bamboo: "🌿"
-    };
-    const animalNames: Record<string, string> = {
-      lion: "สิงโต", whale: "วาฬ", dolphin: "โลมา", owl: "นกฮูก", fox: "จิ้งจอก",
-      turtle: "เต่า", eagle: "นกอินทรี", octopus: "ปลาหมึก", mountain: "ภูเขา", wolf: "หมาป่า",
-      sakura: "ซากุระ", cat: "แมว", crocodile: "จระเข้", dove: "นกพิราบ", butterfly: "ผีเสื้อ", bamboo: "ไผ่"
-    };
-    const animalDescriptions: Record<string, string> = {
-      lion: "ผู้นำที่เกิดมาพร้อมวิสัยทัศน์!",
-      whale: "นักคิดที่มองเห็นภาพใหญ่",
-      dolphin: "ผู้เชื่อมต่อแห่งความสุข",
-      owl: "ผู้สังเกตการณ์อันชาญฉลาด",
-      fox: "ผู้ปรับตัวอันฉลาดหลักแหลม",
-      turtle: "ผู้สร้างที่ไม่หยุดเดิน",
-      eagle: "วิสัยทัศน์เหนือก้อนเมฆ",
-      octopus: "จอมมัลติทาสก์ผู้เก่งกาจ",
-      mountain: "สถาปนิกแห่งกาลเวลา",
-      wolf: "ผู้นำฝูงผู้ภักดี",
-      sakura: "ศิลปินแห่งกระแส",
-      cat: "ผู้จัดการตัวเอง",
-      crocodile: "นักล่าผู้อดทน",
-      dove: "ผู้รักษาสมดุล",
-      butterfly: "นักสำรวจผู้ไม่หยุดค้นหา",
-      bamboo: "ผู้ยืดหยุ่นไม่มีวันหัก"
-    };
+    const animalData = getAnimal(result.animal as Parameters<typeof getAnimal>[0]);
+    const animalName = locale === "th" ? animalData.nameTh : locale === "zh" ? animalData.nameZh : animalData.nameEn;
 
     return (
-      <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
+      <main className="min-h-screen bg-zen-bg dark:bg-zinc-950 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-md text-center space-y-6 animate-zen-reveal">
           <div className="text-6xl mb-4">
-            {animalEmojis[result.animal] || "🦋"}
+            {animalData.emoji}
           </div>
-          <h1 className="font-display text-2xl font-bold text-zen-text">
-            สัตว์ประจำตัวคุณคือ...
+          <h1 className="font-display text-2xl font-bold text-zen-text dark:text-zinc-100">
+            {t("reveal.title")}
           </h1>
           <h2 className="font-display text-4xl font-bold text-zen-sage capitalize">
-            {animalNames[result.animal] || result.animal}
+            {animalName}
           </h2>
-          <p className="text-zen-text-secondary">
-            {animalDescriptions[result.animal] || "การเปลี่ยนแปลงที่สวยงาม"}
+          <p className="text-zen-text-secondary dark:text-zinc-400">
+            {animalData.description}
           </p>
           {/* Saving status indicator */}
           {isSaving && (
-            <p className="text-sm text-zen-text-muted flex items-center justify-center gap-2">
-              <span className="w-2 h-2 bg-zen-sage rounded-full animate-pulse" />
-              กำลังบันทึกผลลัพธ์...
+            <p className="text-sm text-zen-text-muted dark:text-zinc-500 flex items-center justify-center gap-2">
+              <span className="w-2 h-2 bg-zen-sage rounded-full animate-pulse" aria-hidden="true" />
+              {tCommon("actions.loading")}
             </p>
           )}
           {!isSaving && (
             <p className="text-sm text-zen-sage flex items-center justify-center gap-2">
-              <span className="w-2 h-2 bg-zen-sage rounded-full" />
-              บันทึกแล้ว
+              <span className="w-2 h-2 bg-zen-sage rounded-full" aria-hidden="true" />
+              {tCommon("actions.done")}
             </p>
           )}
           <ZenButton fullWidth onClick={() => router.push(`/quiz/reveal?animal=${result.animal}`)}>
-            ดูผลลัพธ์เต็ม →
+            {tCommon("actions.continue")}
           </ZenButton>
         </div>
       </main>
@@ -183,7 +228,7 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   const currentQ = QUIZ_QUESTIONS[currentQuestion];
 
   return (
-    <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
+    <main className="min-h-screen bg-zen-bg dark:bg-zinc-950 flex flex-col items-center justify-center p-4">
       <QuizProgress current={currentQuestion + 1} total={QUIZ_QUESTIONS.length} />
 
       <QuizCard
@@ -202,12 +247,24 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
         isLoading={isLoading}
       />
 
-      <div className="mt-6">
+      <div className="mt-6 flex items-center gap-4">
+        {/* Previous question button */}
+        {currentQuestion > 0 && (
+          <button
+            onClick={handlePrevious}
+            disabled={isLoading}
+            className="flex items-center gap-1 text-zen-text-secondary dark:text-zinc-400 text-sm hover:text-zen-text dark:hover:text-zinc-200 disabled:opacity-50 transition-colors"
+            aria-label={t("question.back")}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {t("question.back")}
+          </button>
+        )}
         <button
           onClick={() => router.push("/quiz")}
-          className="text-zen-text-muted text-sm hover:underline"
+          className="text-zen-text-muted dark:text-zinc-500 text-sm hover:underline"
         >
-          ← กลับ
+          {tCommon("actions.cancel")}
         </button>
       </div>
     </main>
