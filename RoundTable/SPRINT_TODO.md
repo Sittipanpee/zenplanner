@@ -142,16 +142,16 @@
 ## Wave 3 — Devil's Advocate (after Wave 2 complete)
 
 ### DA-10: Devil's Advocate
-- [ ] Re-run full audit against P0-P3 issue list from Session 2
-- [ ] Score each feature domain 0-100
-- [ ] Verify dark mode works across all pages
-- [ ] Verify i18n: all visible text translated in all 3 languages
-- [ ] Verify LINE auth flow creates session
-- [ ] Verify planner download works
-- [ ] Verify quiz AI narrative generates
-- [ ] Verify payment webhook is secured
-- [ ] Target: all domains ≥ 95/100, no P0 or P1 remaining
-- **STATUS:** [ ] PENDING
+- [x] Re-run full audit against P0-P3 issue list from Session 2
+- [x] Score each feature domain 0-100
+- [x] Verify dark mode works across all pages
+- [x] Verify i18n: all visible text translated in all 3 languages
+- [x] Verify LINE auth flow creates session
+- [x] Verify planner download works
+- [x] Verify quiz AI narrative generates
+- [x] Verify payment webhook is secured
+- [ ] Target: all domains >= 95/100, no P0 or P1 remaining -- FAILED (82/100, 7 P1 remaining)
+- **STATUS:** [x] COMPLETE — Score: 82/100, Verdict: NOT READY
 
 ---
 
