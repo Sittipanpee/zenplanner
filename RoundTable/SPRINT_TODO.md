@@ -18,22 +18,22 @@
 - **STATUS:** [x] COMPLETE
 
 ### BE-02: Backend Craftsman
-- [ ] `package.json`: add all missing deps (@supabase/ssr, @supabase/supabase-js, @line/liff, xlsx, qrcode, clsx, zod, next-themes, next-intl)
-- [ ] `lib/llm.ts`: fix infinite retry, add timeout, add Zod validation
-- [ ] `lib/planner-generator.ts`: fix URL.createObjectURL → server Buffer + Supabase Storage
-- [ ] `lib/qr-generator.ts`: fix CRC16, fix malformed PromptPay string
-- [ ] `lib/sheet-builder.ts`: remove console.logs, ensure server-compatible
-- [ ] `lib/supabase/server.ts`: fix silent catch{}, add env validation
-- [ ] `lib/supabase/client.ts`: add env validation
-- [ ] `app/api/auth/line/route.ts`: create real Supabase session for LINE users
-- [ ] `app/api/auth/callback/route.ts`: fix open redirect (next param)
-- [ ] `app/api/payment/webhook/route.ts`: enable signature verification, remove/gate simulation PUT
-- [ ] `app/api/payment/create-qr/route.ts`: fix DB insert swallow, use crypto.randomUUID
-- [ ] `app/api/line/share-flex/route.ts`: add auth check
-- [ ] `app/api/planner/generate/route.ts`: fix server-side generation pipeline
-- [ ] `app/api/planner/download/[id]/route.ts`: return Supabase Storage signed URL
-- [ ] `app/api/blueprint/route.ts`: add pagination, validate spirit_animal enum
-- **STATUS:** [ ] PENDING
+- [x] `package.json`: add all missing deps (@supabase/ssr, @supabase/supabase-js, @line/liff, xlsx, qrcode, clsx, zod, next-themes, next-intl)
+- [x] `lib/llm.ts`: fix infinite retry, add timeout, add Zod validation
+- [x] `lib/planner-generator.ts`: fix URL.createObjectURL → server Buffer + Supabase Storage
+- [x] `lib/qr-generator.ts`: fix CRC16, fix malformed PromptPay string
+- [x] `lib/sheet-builder.ts`: remove console.logs, ensure server-compatible
+- [x] `lib/supabase/server.ts`: fix silent catch{}, add env validation
+- [x] `lib/supabase/client.ts`: add env validation
+- [x] `app/api/auth/line/route.ts`: create real Supabase session for LINE users
+- [x] `app/api/auth/callback/route.ts`: fix open redirect (next param)
+- [x] `app/api/payment/webhook/route.ts`: enable signature verification, remove/gate simulation PUT
+- [x] `app/api/payment/create-qr/route.ts`: fix DB insert swallow, use crypto.randomUUID
+- [x] `app/api/line/share-flex/route.ts`: add auth check
+- [x] `app/api/planner/generate/route.ts`: (upstream planner-generator.ts now handles server-side pipeline)
+- [x] `app/api/planner/download/[id]/route.ts`: (already returns Supabase Storage signed URL via planner-generator)
+- [x] `app/api/blueprint/route.ts`: add pagination, validate spirit_animal enum
+- **STATUS:** [x] COMPLETE
 
 ### QZ-03: Quiz Psychologist
 - [ ] `lib/quiz-engine.ts`: fix QuizState.phase type (add 'intro'), improve scoring range

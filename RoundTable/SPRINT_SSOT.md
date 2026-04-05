@@ -193,7 +193,7 @@ export function getAnimal(animal: SpiritAnimal): AnimalData
 | Agent | Status | Completed At | Notes |
 |-------|--------|-------------|-------|
 | DB-01 DB Surgeon | COMPLETE | 05-04-2026 | All 8 items delivered in 002_production_hardening.sql |
-| BE-02 Backend Craftsman | PENDING | — | — |
+| BE-02 Backend Craftsman | COMPLETE | 05-04-2026 | All 14 files fixed: deps, LLM retry+timeout+Zod, Supabase Storage upload, CRC16-CCITT, LINE auth session, webhook HMAC, open redirect, pagination |
 | QZ-03 Quiz Psychologist | PENDING | — | — |
 | DS-04 Notioneer | COMPLETE | 05-04-2026 | Dark mode vars, reduced-motion, shimmer keyframe, ARIA on all zen-* components, ThemeToggle + LanguageSwitcher created, CSS bugs fixed |
 | I18N-05 i18n Architect | COMPLETE | 05-04-2026 | All 5 files created. Fox Chinese name fixed (狐狸). All 16 animals. Full EN/TH/ZH key coverage. |
