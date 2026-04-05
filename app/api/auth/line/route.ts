@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       const { data: listData } = await supabaseAdmin.auth.admin.listUsers();
       const existingUser = listData?.users?.find((u) => u.email === deterministicEmail);
       if (existingUser) {
-        await supabaseAdmin.auth.admin.updateUser(existingUser.id, {
+        await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
           user_metadata: {
             display_name: lineProfile.displayName,
             full_name: lineProfile.displayName,

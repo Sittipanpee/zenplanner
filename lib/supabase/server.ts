@@ -1,28 +1,31 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-if (!SUPABASE_URL) {
-  throw new Error('Missing env var NEXT_PUBLIC_SUPABASE_URL — set it in .env.local')
-}
-if (!SUPABASE_ANON_KEY) {
-  throw new Error('Missing env var NEXT_PUBLIC_SUPABASE_ANON_KEY — set it in .env.local')
+/**
+ * Env vars read at call time (not module level) so the build can collect
+ * page data without throwing during static analysis.
+ */
+function getSupabaseEnv() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!url) throw new Error('Missing env var NEXT_PUBLIC_SUPABASE_URL — set it in .env.local')
+  if (!key) throw new Error('Missing env var NEXT_PUBLIC_SUPABASE_ANON_KEY — set it in .env.local')
+  return { url, key }
 }
 
 export async function createClient() {
+  const { url, key } = getSupabaseEnv()
   const cookieStore = await cookies()
 
   return createServerClient(
-    SUPABASE_URL!,
-    SUPABASE_ANON_KEY!,
+    url,
+    key,
     {
       cookies: {
         getAll() {
           return cookieStore.getAll()
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)

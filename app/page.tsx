@@ -4,6 +4,8 @@
  * i18n + dark mode ready
  */
 
+export const dynamic = 'force-dynamic'
+
 import { Sparkles, Target } from 'lucide-react'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'

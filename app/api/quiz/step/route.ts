@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
       else if (acceptLanguage.startsWith("en")) locale = "en";
 
       // Load conversation history from DB
-      let conversation: Array<{ role: "user" | "assistant"; content: string }> = [];
+      let conversation: Array<{ role: "user" | "assistant" | "system"; content: string }> = [];
       if (sessionId) {
         const { data: session } = await supabase
           .from("quiz_sessions")
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
 
         if (session?.conversation && Array.isArray(session.conversation)) {
           conversation = session.conversation as Array<{
-            role: "user" | "assistant";
+            role: "user" | "assistant" | "system";
             content: string;
           }>;
         }
