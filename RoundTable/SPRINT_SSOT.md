@@ -199,6 +199,6 @@ export function getAnimal(animal: SpiritAnimal): AnimalData
 | I18N-05 i18n Architect | COMPLETE | 05-04-2026 | All 5 files created. Fox Chinese name fixed (狐狸). All 16 animals. Full EN/TH/ZH key coverage. |
 | INF-06 Infrastructure | COMPLETE | 05-04-2026 | All 5 items delivered. tailwind-merge dep needed from BE-02. |
 | QF-07 Quiz Flow | COMPLETE | 05-04-2026 | All 11 files: i18n, dark mode, ARIA, sessionStorage persistence, alert->inline, window.location->router.push |
-| FP-08 Feature Pages | PENDING | — | — |
+| FP-08 Feature Pages | COMPLETE | 05-04-2026 | All 30+ files: i18n (useTranslations), dark mode (zen CSS vars), bug fixes (LINE SVG, hardcoded lion, hardcoded 8 tools, CSV disable, alert->Link, animal-data SSOT), new settings page, search/filter in tool-grid, message files extended |
 | INT-09 Integration QA | PENDING | — | — |
 | DA-10 Devil's Advocate | PENDING | — | — |

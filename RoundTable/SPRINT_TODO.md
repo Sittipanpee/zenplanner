@@ -88,34 +88,40 @@
 - **STATUS:** [x] COMPLETE
 
 ### FP-08: Feature Pages Agent
-- [ ] `app/layout.tsx`: add ThemeProvider (next-themes) + NextIntlClientProvider, ThemeToggle + LanguageSwitcher in global nav
-- [ ] `app/(app)/layout.tsx`: mount ZenBottomNav (mobile) + ZenSidebar (desktop) as actual shared app shell
-- [ ] `components/dashboard/heatmap.tsx`: dark mode, i18n labels, fix month alignment
-- [ ] `components/dashboard/stats-grid.tsx`: dark mode, i18n, use real streak data (or clear stub with TODO comment)
-- [ ] `components/dashboard/animal-profile.tsx`: use lib/animal-data.ts, dark mode, i18n
-- [ ] `components/dashboard/planner-history.tsx`: dark mode, i18n
-- [ ] `components/planner/tool-grid.tsx`: add search/filter, dark mode, i18n
-- [ ] `components/planner/tool-card.tsx`: dark mode, i18n
-- [ ] `components/planner/special-tool-previews.tsx`: dark mode
-- [ ] `components/planner/customization-panel.tsx`: sync color scheme IDs with blueprint/customize/page.tsx, dark mode, i18n
-- [ ] `components/planner/preview-mini.tsx`: dark mode
-- [ ] `components/export/share-card.tsx`: fix LINE icon SVG, fix silent Facebook/Twitter handlers, dark mode, i18n
-- [ ] `components/export/download-card.tsx`: fix CSV option (disable or implement), dark mode, i18n
-- [ ] `components/export/generation-progress.tsx`: dark mode, i18n
-- [ ] `components/liff/line-login-button.tsx`: dark mode
-- [ ] `components/liff/share-animal-button.tsx`: dark mode
-- [ ] `app/(app)/dashboard/page.tsx`: i18n, dark mode
-- [ ] `app/(app)/blueprint/page.tsx`: fix hardcoded "lion", i18n, dark mode
-- [ ] `app/(app)/blueprint/customize/page.tsx`: sync customization IDs, i18n, dark mode
-- [ ] `app/(app)/generate/page.tsx`: i18n, dark mode
-- [ ] `app/(app)/generate/done/page.tsx`: fix hardcoded "8 tools", fix CSV toggle, i18n, dark mode
-- [ ] `app/(app)/profile/page.tsx`: replace alert("coming soon") with settings page link, i18n, dark mode
-- [ ] `app/(app)/payment/page.tsx`: i18n, dark mode
-- [ ] `app/(app)/stats/page.tsx`: i18n, dark mode
-- [ ] `app/(app)/tools/page.tsx`: i18n, dark mode
-- [ ] `app/(app)/settings/page.tsx` (NEW): real settings page (language, theme, account)
-- [ ] `app/page.tsx`: landing/splash, i18n, dark mode
-- **STATUS:** [ ] PENDING
+- [x] `app/layout.tsx`: add ThemeProvider (next-themes) + NextIntlClientProvider, ThemeToggle + LanguageSwitcher in global nav
+- [x] `app/(app)/layout.tsx`: mount ZenBottomNav (mobile) + ZenSidebar (desktop) as actual shared app shell
+- [x] `components/dashboard/heatmap.tsx`: dark mode, i18n labels, fix month alignment
+- [x] `components/dashboard/stats-grid.tsx`: dark mode, i18n, use real streak data (or clear stub with TODO comment)
+- [x] `components/dashboard/animal-profile.tsx`: use lib/animal-data.ts, dark mode, i18n
+- [x] `components/dashboard/planner-history.tsx`: dark mode, i18n
+- [x] `components/planner/tool-grid.tsx`: add search/filter, dark mode, i18n
+- [x] `components/planner/tool-card.tsx`: dark mode, i18n
+- [x] `components/planner/special-tool-previews.tsx`: dark mode (hardcoded empty color replaced with CSS var)
+- [x] `components/planner/customization-panel.tsx`: sync color scheme IDs with blueprint/customize/page.tsx, dark mode, i18n
+- [x] `components/planner/preview-mini.tsx`: dark mode (hardcoded empty color replaced with CSS var)
+- [x] `components/export/share-card.tsx`: fix LINE icon SVG, fix silent Facebook/Twitter handlers (inline SVG icons), dark mode, i18n
+- [x] `components/export/download-card.tsx`: fix CSV option (disabled with "Coming soon"), dark mode, i18n
+- [x] `components/export/generation-progress.tsx`: dark mode, i18n
+- [x] `components/liff/line-login-button.tsx`: fix LINE icon SVG, dark mode (zen CSS vars already in use)
+- [x] `components/liff/share-animal-button.tsx`: replaced hardcoded ANIMAL_NAMES/ANIMAL_EMOJI with lib/animal-data.ts
+- [x] `app/(app)/dashboard/page.tsx`: i18n (all embedded tool labels), dark mode (surface-alt for heatmap), locale-aware animal names
+- [x] `app/(app)/blueprint/page.tsx`: fix hardcoded "lion" (fetches from Supabase profile), i18n, dark mode
+- [x] `app/(app)/blueprint/customize/page.tsx`: sync customization IDs, i18n, dark mode
+- [x] `app/(app)/generate/page.tsx`: i18n (all 6 status states), dark mode
+- [x] `app/(app)/generate/done/page.tsx`: fix hardcoded "8 tools" (uses toolCount), fix CSV toggle, i18n, dark mode
+- [x] `app/(app)/profile/page.tsx`: replace alert("coming soon") with Link to /settings, i18n, dark mode
+- [x] `app/(app)/payment/page.tsx`: i18n, dark mode
+- [x] `app/(app)/stats/page.tsx`: i18n, dark mode
+- [x] `app/(app)/tools/page.tsx`: i18n, dark mode
+- [x] `app/(app)/settings/page.tsx` (NEW): real settings page (language, theme, account)
+- [x] `app/page.tsx`: landing/splash, i18n, dark mode
+- [x] `app/not-found.tsx`: i18n, dark mode
+- [x] `app/(app)/error.tsx`: i18n, dark mode
+- [x] `app/loading.tsx` + `app/(app)/loading.tsx`: dark mode ready
+- [x] `messages/en.json`: added generate.*, dashboard.mood/priorities/habits/plannerTools/quickActions keys
+- [x] `messages/th.json`: added matching Thai translations
+- [x] `messages/zh.json`: added matching Chinese translations
+- **STATUS:** [x] COMPLETE
 
 ---
 

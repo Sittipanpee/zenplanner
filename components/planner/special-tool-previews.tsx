@@ -44,7 +44,7 @@ export function HabitHeatmapPreview({ customization }: HabitHeatmapPreviewProps)
   };
 
   const getColor = (intensity: number) => {
-    if (intensity === 0) return "#E8E4DB"; // Empty
+    if (intensity === 0) return "var(--zen-surface-alt, #E8E4DB)"; // Empty - uses CSS var for dark mode
     if (intensity === 1) return colors.border; // Light
     if (intensity === 2) return colors.accent; // Medium
     return colors.bg; // Full
