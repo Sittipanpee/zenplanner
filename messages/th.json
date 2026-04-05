@@ -5,6 +5,7 @@
       "tagline": "วางแผนด้วยจิตวิญญาณของคุณ"
     },
     "nav": {
+      "home": "หน้าแรก",
       "dashboard": "แดชบอร์ด",
       "quiz": "แบบทดสอบ",
       "planner": "แผน",
@@ -34,7 +35,9 @@
     "theme": {
       "light": "โหมดกลางวัน",
       "dark": "โหมดกลางคืน",
-      "system": "ตามระบบ"
+      "system": "ตามระบบ",
+      "toggleLight": "เปลี่ยนเป็นโหมดสว่าง",
+      "toggleDark": "เปลี่ยนเป็นโหมดมืด"
     },
     "language": {
       "en": "English",
@@ -153,7 +156,18 @@
       "waiting": "รอการชำระเงิน...",
       "success": "ชำระเงินสำเร็จ!",
       "failed": "การชำระเงินล้มเหลว",
-      "retry": "ลองอีกครั้ง"
+      "retry": "ลองอีกครั้ง",
+      "creatingQr": "กำลังสร้าง QR Code...",
+      "howTo": "วิธีชำระเงิน",
+      "forTesting": "สำหรับทดสอบ",
+      "simulateSuccess": "จำลองการชำระเงินสำเร็จ",
+      "cancelButton": "ยกเลิก",
+      "timeout": "หมดเวลาชำระเงิน",
+      "redirecting": "กำลังนำไปสู่หน้าดาวน์โหลด...",
+      "errorGeneric": "เกิดข้อผิดพลาด กรุณาลองใหม่",
+      "tryAgainError": "กรุณาลองใหม่อีกครั้ง",
+      "amountDisplay": "{amount} บาท",
+      "loadingPage": "กำลังโหลด..."
     }
   },
   "dashboard": {
@@ -212,6 +226,11 @@
       "title": "เครื่องมือ Planner ของคุณ",
       "noTools": "ยังไม่ได้เลือกเครื่องมือเพิ่ม",
       "customize": "ปรับแต่งเครื่องมือ"
+    },
+    "tools": {
+      "edit": "แก้ไข",
+      "create": "สร้าง",
+      "more": "+{count} อีก"
     },
     "quizzes": "Quiz ที่ทำ",
     "planner": "Planner",

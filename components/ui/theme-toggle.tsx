@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 /**
  * Sun icon — circle with 8 radiating lines.
@@ -63,6 +64,7 @@ function MoonIcon() {
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const t = useTranslations('common.theme')
 
   useEffect(() => setMounted(true), [])
 
@@ -78,7 +80,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       className="zen-btn-icon"
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={isDark ? t('toggleLight') : t('toggleDark')}
     >
       {isDark ? <SunIcon /> : <MoonIcon />}
     </button>

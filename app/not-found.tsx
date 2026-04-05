@@ -26,7 +26,7 @@ export default async function NotFound() {
           <Link href="/">
             <ZenButton fullWidth>
               <Home className="w-5 h-5 mr-2" />
-              {t('nav.dashboard')}
+              {t('nav.home')}
             </ZenButton>
           </Link>
           <Link href="/quiz">

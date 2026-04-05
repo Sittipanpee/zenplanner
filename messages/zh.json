@@ -5,6 +5,7 @@
       "tagline": "随心规划，顺势而为"
     },
     "nav": {
+      "home": "首页",
       "dashboard": "仪表板",
       "quiz": "测验",
       "planner": "计划",
@@ -34,7 +35,9 @@
     "theme": {
       "light": "浅色模式",
       "dark": "深色模式",
-      "system": "跟随系统"
+      "system": "跟随系统",
+      "toggleLight": "切换到亮色模式",
+      "toggleDark": "切换到暗色模式"
     },
     "language": {
       "en": "English",
@@ -153,7 +156,18 @@
       "waiting": "等待付款中...",
       "success": "付款成功！",
       "failed": "付款失败",
-      "retry": "重试"
+      "retry": "重试",
+      "creatingQr": "正在生成二维码...",
+      "howTo": "如何付款",
+      "forTesting": "用于测试",
+      "simulateSuccess": "模拟支付成功",
+      "cancelButton": "取消",
+      "timeout": "支付超时",
+      "redirecting": "正在跳转到下载页面...",
+      "errorGeneric": "发生错误，请重试。",
+      "tryAgainError": "请再试一次。",
+      "amountDisplay": "{amount} 泰铢",
+      "loadingPage": "加载中..."
     }
   },
   "dashboard": {
@@ -212,6 +226,11 @@
       "title": "你的计划工具",
       "noTools": "还没有选择额外工具",
       "customize": "自定义工具"
+    },
+    "tools": {
+      "edit": "编辑",
+      "create": "创建",
+      "more": "+{count} 更多"
     },
     "quizzes": "已完成测验",
     "planner": "计划",

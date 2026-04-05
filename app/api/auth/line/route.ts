@@ -60,7 +60,9 @@ export async function POST(request: NextRequest) {
 
     // If user already exists, update their metadata
     if (createError && createError.message?.includes("already been registered")) {
-      const { data: listData } = await supabaseAdmin.auth.admin.listUsers();
+      // Bounded user lookup — perPage caps the scan size.
+      // For production at scale, consider a custom DB query by email.
+      const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
       const existingUser = listData?.users?.find((u) => u.email === deterministicEmail);
       if (existingUser) {
         await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {

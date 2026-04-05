@@ -5,6 +5,7 @@
       "tagline": "Plan with your spirit"
     },
     "nav": {
+      "home": "Home",
       "dashboard": "Dashboard",
       "quiz": "Quiz",
       "planner": "Planner",
@@ -34,7 +35,9 @@
     "theme": {
       "light": "Light mode",
       "dark": "Dark mode",
-      "system": "System"
+      "system": "System",
+      "toggleLight": "Switch to light mode",
+      "toggleDark": "Switch to dark mode"
     },
     "language": {
       "en": "English",
@@ -153,7 +156,18 @@
       "waiting": "Waiting for payment...",
       "success": "Payment confirmed!",
       "failed": "Payment failed",
-      "retry": "Try again"
+      "retry": "Try again",
+      "creatingQr": "Creating QR Code...",
+      "howTo": "How to pay",
+      "forTesting": "For testing",
+      "simulateSuccess": "Simulate payment success",
+      "cancelButton": "Cancel",
+      "timeout": "Payment timed out",
+      "redirecting": "Redirecting to download...",
+      "errorGeneric": "An error occurred. Please try again.",
+      "tryAgainError": "Please try again.",
+      "amountDisplay": "{amount} THB",
+      "loadingPage": "Loading..."
     }
   },
   "dashboard": {
@@ -212,6 +226,11 @@
       "title": "Your planner tools",
       "noTools": "No extra tools selected",
       "customize": "Customize tools"
+    },
+    "tools": {
+      "edit": "Edit",
+      "create": "Create",
+      "more": "+{count} more"
     },
     "quizzes": "Quizzes",
     "planner": "Planner",

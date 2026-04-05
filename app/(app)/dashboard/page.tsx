@@ -59,7 +59,7 @@ function setLocalStorage<T>(key: string, value: T): void {
 // getAnimalName and getAnimal imported from @/lib/animal-data
 
 export default function DashboardPage() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const t = useTranslations('dashboard');
   const locale = useLocale();
 
@@ -102,14 +102,11 @@ export default function DashboardPage() {
             .order("created_at", { ascending: false })
             .limit(1);
 
-          console.log("Blueprint fetch result:", { blueprints, error });
-
           if (!error && blueprints && blueprints.length > 0) {
             const blueprint = blueprints[0];
             if (blueprint.tool_selection && Array.isArray(blueprint.tool_selection)) {
               setSelectedTools(blueprint.tool_selection as string[]);
               setHasBlueprint(true);
-              console.log("Tools loaded from Supabase:", blueprint.tool_selection);
               return;
             }
           }
@@ -121,7 +118,6 @@ export default function DashboardPage() {
           try {
             const tools = JSON.parse(savedTools);
             setSelectedTools(tools);
-            console.log("Tools loaded from localStorage:", tools);
           } catch {
             // Use defaults
           }
@@ -356,15 +352,21 @@ export default function DashboardPage() {
     let temp = 0;
 
     // Check consecutive days from today
+    // Allow today to have no activity (grace period — streak counts from yesterday)
     const today = new Date();
+    let streakStarted = false;
     for (let i = 0; i < 365; i++) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().split("T")[0];
 
       if (datesWithActivity.has(dateStr)) {
-        if (i === 0 || current > 0) current++;
-      } else if (i > 0) {
+        current++;
+        streakStarted = true;
+      } else if (i === 0) {
+        // Today has no activity — skip, check yesterday
+        continue;
+      } else {
         break;
       }
     }
@@ -444,10 +446,8 @@ export default function DashboardPage() {
     fetchUserData();
   }, [supabase, currentStreak, bestStreak]);
 
-  const recentActivity = [
-    { type: "quiz", title: "ทำ Quiz สัตว์ประจำตัว", date: "วันนี้", status: "completed" as const },
-    { type: "planner", title: "สร้าง Planner", date: "เมื่อวาน", status: "completed" as const },
-  ];
+  // TODO: Fetch from activity_log table
+  const recentActivity: { type: string; title: string; date: string; status: "completed" | "pending" }[] = [];
 
   const quickActions = [
     { icon: <Sparkles className="w-6 h-6" />, label: t('quickActions.takeQuiz'), href: "/quiz", color: "bg-zen-gold/10 text-zen-gold" },
@@ -706,7 +706,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="font-semibold text-zen-text">{t('plannerTools.title')}</h2>
                   <Link href="/blueprint" className="text-sm text-zen-sage hover:underline">
-                    {selectedTools.length > 0 ? 'แก้ไข' : 'สร้าง'}
+                    {selectedTools.length > 0 ? t('tools.edit') : t('tools.create')}
                   </Link>
                 </div>
                 <ZenCard padding="sm">
@@ -722,7 +722,7 @@ export default function DashboardPage() {
                       ))}
                       {selectedTools.length > 8 && (
                         <span className="px-2 py-1 bg-zen-surface-alt text-zen-text-muted text-xs rounded-lg">
-                          +{selectedTools.length - 8} อีก
+                          {t('tools.more', { count: selectedTools.length - 8 })}
                         </span>
                       )}
                     </div>
