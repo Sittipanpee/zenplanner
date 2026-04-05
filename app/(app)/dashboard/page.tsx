@@ -671,7 +671,7 @@ export default function DashboardPage() {
 
                     {/* Habit heatmap visualization - GitHub-style tiles */}
                     <div className="mt-4 pt-3 border-t border-zen-border">
-                      <p className="text-xs text-zen-text-muted mb-2">ภาพรวม 30 วัน</p>
+                      <p className="text-xs text-zen-text-muted mb-2">{t('overview30')}</p>
                       <HabitHeatmap habitActivity={habitActivity} />
                     </div>
                   </>
@@ -779,7 +779,7 @@ export default function DashboardPage() {
 
             {/* Recent Activity */}
             <div>
-              <h2 className="font-semibold text-zen-text mb-3">กิจกรรมล่าสุด</h2>
+              <h2 className="font-semibold text-zen-text mb-3">{t('recentActivity')}</h2>
               <ZenCard padding="sm">
                 {recentActivity.map((item, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border-b border-zen-border last:border-0">
@@ -798,7 +798,7 @@ export default function DashboardPage() {
               <Link href="/quiz">
                 <ZenButton fullWidth>
                   <Sparkles className="w-5 h-5 mr-2" />
-                  ค้นหาสัตว์ประจำตัวใหม่
+                  {t('findAnimal')}
                 </ZenButton>
               </Link>
             </div>
@@ -839,7 +839,7 @@ function HabitHeatmap({ habitActivity }: { habitActivity: ActivityLog[] }) {
   // Get color based on completion
   const getTileColor = (date: string) => {
     const count = habitByDate[date] || 0;
-    if (count === 0) return "bg-zen-bg";
+    if (count === 0) return "bg-zen-surface-alt";
     if (count <= 2) return "bg-zen-sage-light";
     if (count <= 4) return "bg-zen-sage";
     return "bg-zen-earth";
