@@ -26,20 +26,36 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/profile', labelKey: 'profile', icon: <User className="w-5 h-5" /> },
 ]
 
+// Fallback label map in case translations are missing — ensures nav never shows raw keys
+const FALLBACK_LABELS: Record<string, string> = {
+  dashboard: 'Dashboard',
+  planner: 'Planner',
+  tools: 'Tools',
+  profile: 'Profile',
+  settings: 'Settings',
+}
+
 export default function AppLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const t = useTranslations('common.nav')
+  let t: (key: string) => string
+  try {
+    t = useTranslations('common.nav')
+  } catch {
+    // Fallback if translations not loaded
+    t = (key: string) => FALLBACK_LABELS[key] ?? key
+  }
+
   const pathname = usePathname()
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pb-16 md:pb-0">
+    <div className="min-h-screen bg-zen-bg pb-16 md:pb-0">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex md:fixed md:left-0 md:top-0 md:h-screen md:w-64 bg-[var(--bg-secondary)] border-r border-[var(--border-primary)] flex-col z-20">
-        <div className="p-6 border-b border-[var(--border-primary)]">
-          <h1 className="font-display text-2xl font-bold text-[var(--accent-primary)]">ZenPlanner</h1>
+      <aside className="hidden md:flex md:fixed md:left-0 md:top-0 md:h-screen md:w-64 bg-zen-surface border-r border-zen-border flex-col z-20">
+        <div className="p-6 border-b border-zen-border">
+          <h1 className="font-display text-2xl font-bold text-zen-sage">ZenPlanner</h1>
         </div>
         <nav className="flex-1 p-4">
           {NAV_ITEMS.map((item) => {
@@ -50,8 +66,8 @@ export default function AppLayout({
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors mb-1 ${
                   isActive
-                    ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]'
-                    : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)]'
+                    ? 'bg-zen-sage/10 text-zen-sage'
+                    : 'text-zen-text-secondary hover:bg-zen-surface-alt hover:text-zen-text'
                 }`}
               >
                 {item.icon}
@@ -60,14 +76,14 @@ export default function AppLayout({
             )
           })}
         </nav>
-        <div className="p-4 border-t border-[var(--border-primary)] space-y-3">
+        <div className="p-4 border-t border-zen-border space-y-3">
           <div className="flex items-center justify-between px-2">
             <LanguageSwitcher />
             <ThemeToggle />
           </div>
           <Link
             href="/settings"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-muted)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-zen-text-muted hover:bg-zen-surface-alt hover:text-zen-text transition-colors"
           >
             <Settings className="w-5 h-5" />
             <span className="font-medium">{t('settings')}</span>
@@ -76,9 +92,9 @@ export default function AppLayout({
       </aside>
 
       {/* Mobile Header */}
-      <header className="md:hidden sticky top-0 z-50 border-b border-[var(--border-primary)] bg-[var(--bg-primary)]/95 backdrop-blur-sm">
+      <header className="md:hidden sticky top-0 z-50 border-b border-zen-border bg-zen-bg/95 backdrop-blur-sm">
         <div className="flex items-center justify-between px-4 h-14">
-          <h1 className="font-display text-lg font-bold text-[var(--accent-primary)]">ZenPlanner</h1>
+          <h1 className="font-display text-lg font-bold text-zen-sage">ZenPlanner</h1>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <ThemeToggle />
@@ -94,7 +110,7 @@ export default function AppLayout({
       </div>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-[var(--border-primary)] bg-[var(--bg-primary)]/95 backdrop-blur-sm z-50 pb-safe">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-zen-border bg-zen-bg/95 backdrop-blur-sm z-50 pb-safe">
         <div className="flex justify-around items-center h-16 max-w-lg mx-auto px-4">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
@@ -104,8 +120,8 @@ export default function AppLayout({
                 href={item.href}
                 className={`flex flex-col items-center justify-center min-w-[64px] h-14 transition-colors ${
                   isActive
-                    ? 'text-[var(--accent-primary)]'
-                    : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+                    ? 'text-zen-sage'
+                    : 'text-zen-text-muted hover:text-zen-text-secondary'
                 }`}
               >
                 {item.icon}

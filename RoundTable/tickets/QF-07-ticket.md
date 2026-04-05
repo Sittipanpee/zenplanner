@@ -1,7 +1,7 @@
 # QF-07 — Quiz Flow Agent: i18n, Dark Mode, Accessibility, Critical Fixes
 **Phase:** Production Sprint
 **Team:** Arcade
-**Status:** [~] IN PROGRESS
+**Status:** [x] COMPLETE
 **Depends on:** I18N-05 (animal-data.ts, messages/*.json), DS-04 (theme-toggle, language-switcher, globals.css dark mode vars)
 **Blocks:** INT-09 (integration QA)
 

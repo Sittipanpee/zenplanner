@@ -64,7 +64,7 @@ export default async function RootLayout({
       <body
         className={`
           ${cormorant.variable} ${nunito.variable} ${notoSansThai.variable} ${jetbrainsMono.variable}
-          font-body bg-[var(--bg-primary)] text-[var(--text-primary)]
+          font-body bg-zen-bg text-zen-text
           min-h-screen
           pt-safe-top pb-safe-bottom
         `}

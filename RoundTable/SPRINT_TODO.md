@@ -74,18 +74,18 @@
 - **NOTE:** tailwind-merge is NOT in package.json yet — BE-02 must add it as a dependency
 
 ### QF-07: Quiz Flow Agent
-- [ ] `components/quiz/quiz-card.tsx`: i18n, dark mode, ARIA, define `animate-shimmer` keyframe
-- [ ] `components/quiz/animal-card.tsx`: use lib/animal-data.ts, i18n animal names, dark mode
-- [ ] `components/quiz/progress-dots.tsx`: fix conditional style bug, dark mode, ARIA
-- [ ] `components/quiz/axis-indicator.tsx`: dark mode, ARIA
-- [ ] `components/quiz/chat-bubble.tsx`: dark mode, ARIA
-- [ ] `app/quiz/page.tsx`: i18n, dark mode, use ThemeToggle + LanguageSwitcher in nav
-- [ ] `app/quiz/[mode]/page.tsx`: sessionStorage persistence for quiz state, i18n, dark mode
-- [ ] `app/quiz/reveal/page.tsx`: fix fox name (use animal-data.ts), replace alert() with toast/inline feedback, i18n
-- [ ] `app/quiz/profile/page.tsx`: i18n, dark mode, fix auto-redirect (add cancel button)
-- [ ] `app/(auth)/login/page.tsx`: i18n, dark mode, fix window.location.href → router.push
-- [ ] `app/(auth)/signup/page.tsx`: i18n, dark mode
-- **STATUS:** [ ] PENDING
+- [x] `components/quiz/quiz-card.tsx`: i18n, dark mode, ARIA, define `animate-shimmer` keyframe
+- [x] `components/quiz/animal-card.tsx`: use lib/animal-data.ts, i18n animal names, dark mode
+- [x] `components/quiz/progress-dots.tsx`: fix conditional style bug, dark mode, ARIA
+- [x] `components/quiz/axis-indicator.tsx`: dark mode, ARIA
+- [x] `components/quiz/chat-bubble.tsx`: dark mode, ARIA
+- [x] `app/quiz/page.tsx`: i18n, dark mode, use ThemeToggle + LanguageSwitcher in nav
+- [x] `app/quiz/[mode]/page.tsx`: sessionStorage persistence for quiz state, i18n, dark mode
+- [x] `app/quiz/reveal/page.tsx`: fix fox name (use animal-data.ts), replace alert() with toast/inline feedback, i18n
+- [x] `app/quiz/profile/page.tsx`: i18n, dark mode, fix auto-redirect (add cancel button)
+- [x] `app/(auth)/login/page.tsx`: i18n, dark mode, fix window.location.href → router.push
+- [x] `app/(auth)/signup/page.tsx`: i18n, dark mode
+- **STATUS:** [x] COMPLETE
 
 ### FP-08: Feature Pages Agent
 - [ ] `app/layout.tsx`: add ThemeProvider (next-themes) + NextIntlClientProvider, ThemeToggle + LanguageSwitcher in global nav

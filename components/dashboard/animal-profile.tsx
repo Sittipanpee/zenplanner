@@ -1,78 +1,23 @@
 /**
  * Animal Profile Component - Spirit Animal Mini Card
- * Displays user's spirit animal with avatar, name, archetype, and description
+ * Uses canonical animal data from lib/animal-data.ts
+ * i18n + dark mode ready
  */
 
-import Link from "next/link";
-import { ZenCard, ZenCardContent } from "../ui/zen-card";
-import { ZenButton } from "../ui/zen-button";
-import type { SpiritAnimal } from "@/lib/types";
+'use client'
 
-// Animal emoji map (placeholder - can be replaced with custom images)
-const ANIMAL_EMOJIS: Record<SpiritAnimal, string> = {
-  lion: "🦁",
-  whale: "🐋",
-  dolphin: "🐬",
-  owl: "🦉",
-  fox: "🦊",
-  turtle: "🐢",
-  eagle: "🦅",
-  octopus: "🐙",
-  mountain: "🏔️",
-  wolf: "🐺",
-  sakura: "🌸",
-  cat: "🐈",
-  crocodile: "🐊",
-  dove: "🕊️",
-  butterfly: "🦋",
-  bamboo: "🌿",
-};
-
-// Animal name map (Thai)
-const ANIMAL_NAMES: Record<SpiritAnimal, string> = {
-  lion: "สิงโต",
-  whale: "วาฬ",
-  dolphin: "โลมา",
-  owl: "นกฮูก",
-  fox: "จิ้งจอก",
-  turtle: "เต่า",
-  eagle: "อินทรี",
-  octopus: "ปลาหมึกยักษ์",
-  mountain: "ภูเขา",
-  wolf: "หมาป่า",
-  sakura: "ซากุระ",
-  cat: "แมว",
-  crocodile: "จระเข้",
-  dove: "นกพิราบ",
-  butterfly: "ผีเสื้อ",
-  bamboo: "ไผ่",
-};
-
-// Archetype code meanings
-const ARCHETYPE_TITLES: Record<string, string> = {
-  DASESL: "ราชาแห่งแรงบันดาลใจ",
-  NASHLG: "นักปราชญ์ใต้ทะเลลึก",
-  NSSGKS: "นักเล่นผู้ชนะ",
-  NAHPLG: "ผู้พิทักษ์แห่งสติ",
-  DASPLS: "นักกลยุทธ์ผู้ปรับตัว",
-  NAHHKG: "ผู้สร้างที่ไม่หยุดเดิน",
-  DASBLG: "วิสัยทัศน์เหนือก้อนเมฆ",
-  NSSGKS_ALT: "จอมมัลติทาสก์",
-  NAHHLS: "สถาปนิกแห่งกาลเวลา",
-  DASGLS: "ผู้นำฝูง",
-  NAHPKG: "ศิลปินแห่งกระแส",
- NAHPLS: "นักจัดการตัวเอง",
-  NASBLS: "นักล่าผู้อดทน",
-  NAHPKG_ALT: "ผู้รักษาสมดุล",
-  NSSGKG: "นักสำรวจผู้ไม่หยุดค้นหา",
-  NAHHLG: "ผู้ยืดหยุ่นไม่มีวันหัก",
-};
+import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
+import { ZenCard, ZenCardContent } from '../ui/zen-card'
+import { ZenButton } from '../ui/zen-button'
+import { getAnimal, getAnimalName } from '@/lib/animal-data'
+import type { SpiritAnimal } from '@/lib/types'
 
 export interface AnimalProfileProps {
-  animal: SpiritAnimal;
-  archetypeCode?: string;
-  description?: string;
-  showActions?: boolean;
+  animal: SpiritAnimal
+  archetypeCode?: string
+  description?: string
+  showActions?: boolean
 }
 
 export function AnimalProfile({
@@ -81,36 +26,34 @@ export function AnimalProfile({
   description,
   showActions = true,
 }: AnimalProfileProps) {
-  const emoji = ANIMAL_EMOJIS[animal] || "🧘";
-  const name = ANIMAL_NAMES[animal] || animal;
-  const title = archetypeCode ? ARCHETYPE_TITLES[archetypeCode] || archetypeCode : "";
+  const locale = useLocale() as 'en' | 'th' | 'zh'
+  const t = useTranslations('dashboard')
+  const data = getAnimal(animal)
+  const name = getAnimalName(animal, locale)
 
   return (
     <ZenCard variant="highlight" className="relative overflow-hidden">
       {/* Background gradient based on animal */}
       <div
         className="absolute inset-0 opacity-10"
-        style={{
-          background:
-            "linear-gradient(135deg, var(--zen-sage) 0%, var(--zen-earth) 100%)",
-        }}
+        style={{ background: data.gradient }}
       />
 
       <ZenCardContent className="relative">
         <div className="flex items-center gap-4">
           {/* Avatar */}
           <div className="w-16 h-16 rounded-full bg-zen-surface-alt flex items-center justify-center text-4xl shadow-zen-md">
-            {emoji}
+            {data.emoji}
           </div>
 
           {/* Info */}
           <div className="flex-1 min-w-0">
             <h3 className="text-xl font-bold text-zen-text font-display">
-              {emoji} {name}
+              {data.emoji} {name}
             </h3>
-            {title && (
+            {data.archetypeTitle && (
               <p className="text-sm text-zen-sage font-medium mt-0.5">
-                {title}
+                {data.archetypeTitle}
               </p>
             )}
             {archetypeCode && (
@@ -122,9 +65,9 @@ export function AnimalProfile({
         </div>
 
         {/* Description */}
-        {description && (
+        {(description || data.description) && (
           <p className="mt-4 text-sm text-zen-text-secondary line-clamp-2">
-            {description}
+            {description || data.description}
           </p>
         )}
 
@@ -133,19 +76,19 @@ export function AnimalProfile({
           <div className="mt-4 flex gap-2">
             <Link href="/quiz/reveal" className="flex-1">
               <ZenButton variant="secondary" size="sm" fullWidth>
-                ดูโปรไฟล์
+                {t('quickActions.retakeQuiz')}
               </ZenButton>
             </Link>
             <Link href="/blueprint" className="flex-1">
               <ZenButton variant="primary" size="sm" fullWidth>
-                สร้าง Planner
+                {t('quickActions.newPlanner')}
               </ZenButton>
             </Link>
           </div>
         )}
       </ZenCardContent>
     </ZenCard>
-  );
+  )
 }
 
-export default AnimalProfile;
+export default AnimalProfile

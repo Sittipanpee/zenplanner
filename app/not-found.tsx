@@ -1,6 +1,5 @@
 /**
- * 404 Not Found Page
- * i18n + dark mode ready
+ * 404 Not Found Page — i18n + dark mode
  */
 
 import Link from 'next/link'
@@ -12,24 +11,17 @@ export default async function NotFound() {
   const t = await getTranslations('common')
 
   return (
-    <main className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center p-4">
+    <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md text-center space-y-6">
-        {/* 404 Icon */}
-        <div className="w-24 h-24 mx-auto rounded-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] flex items-center justify-center">
-          <span className="font-display text-5xl text-[var(--text-muted)]">?</span>
+        <div className="w-24 h-24 mx-auto rounded-full bg-zen-surface border border-zen-border flex items-center justify-center">
+          <span className="font-display text-5xl text-zen-text-muted">?</span>
         </div>
 
-        {/* Message */}
         <div>
-          <h1 className="font-display text-3xl font-bold text-[var(--text-primary)] mb-2">
-            404
-          </h1>
-          <h2 className="font-semibold text-[var(--text-primary)] mb-2">
-            {t('errors.notFound')}
-          </h2>
+          <h1 className="font-display text-3xl font-bold text-zen-text mb-2">404</h1>
+          <h2 className="font-semibold text-zen-text mb-2">{t('errors.notFound')}</h2>
         </div>
 
-        {/* Actions */}
         <div className="flex flex-col gap-3">
           <Link href="/">
             <ZenButton fullWidth>
