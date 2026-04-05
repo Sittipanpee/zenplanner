@@ -51,6 +51,21 @@
       "networkError": "Network error — check your connection"
     }
   },
+  "landing": {
+    "startJourney": "Start Your Journey",
+    "feature1": {
+      "title": "Spirit Animal Quiz",
+      "desc": "Discover your planning archetype through AI-powered personality analysis"
+    },
+    "feature2": {
+      "title": "Smart Planner",
+      "desc": "Generate a personalized planner with tools matched to your spirit animal"
+    },
+    "feature3": {
+      "title": "3 Languages",
+      "desc": "Full Thai, English, and Chinese support"
+    }
+  },
   "auth": {
     "login": {
       "title": "Welcome back",

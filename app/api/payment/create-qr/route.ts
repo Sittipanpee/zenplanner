@@ -10,8 +10,31 @@ import { generateQRCode } from "@/lib/qr-generator";
 // Mock payment amount - in production this would come from the planner blueprint
 const PLANNER_PRICE = 299; // 299 THB
 
+// Simple in-memory rate limiter — replace with Redis in production
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(identifier: string, maxRequests = 10, windowMs = 60000): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+
+  if (!record || now > record.resetAt) {
+    rateLimitMap.set(identifier, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+
+  if (record.count >= maxRequests) return false;
+  record.count++;
+  return true;
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit by IP — stricter for payment endpoint
+    const ip = request.headers.get('x-forwarded-for') ?? 'unknown';
+    if (!checkRateLimit(ip, 10, 60000)) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+
     const body = await request.json();
     const { blueprintId, amount = PLANNER_PRICE } = body;
 

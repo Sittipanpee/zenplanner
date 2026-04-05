@@ -11,6 +11,8 @@ export type AnimalData = {
   nameZh: string       // Simplified Chinese name (accurate)
   gradient: string     // CSS gradient for animal card background
   description: string  // 1-2 sentence English description
+  descriptionTh?: string  // Thai description
+  descriptionZh?: string  // Simplified Chinese description
   archetypeTitle: string  // e.g. "The Strategic Planner"
   traits: string[]     // 3 key personality traits in English
   particleEffect?: string
@@ -25,6 +27,8 @@ export const ANIMALS: Record<SpiritAnimal, AnimalData> = {
     nameZh: '狮子',
     gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
     description: 'Bold, decisive, and natural leaders who plan with conviction and inspire others to follow.',
+    descriptionTh: 'สิงโตเป็นผู้นำที่เกิดมา มีวิสัยทัศน์กว้างไกลและกล้าหาญ วางแผนด้วยความมั่นใจและสร้างแรงบันดาลใจให้ผู้อื่นทำตาม',
+    descriptionZh: '狮子是天生的领袖，具有远见卓识和无比勇气。他们以坚定的信念规划，激励他人追随。',
     archetypeTitle: 'The Confident Leader',
     traits: ['decisive', 'bold', 'visionary'],
     particleEffect: 'sparkle',
@@ -38,6 +42,8 @@ export const ANIMALS: Record<SpiritAnimal, AnimalData> = {
     nameZh: '鲸鱼',
     gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)',
     description: 'Deeply reflective and emotionally intelligent, whales navigate life\'s depths with quiet wisdom.',
+    descriptionTh: 'วาฬเป็นสัตว์ที่ใคร่ครวญลึกซึ้งและมีความฉลาดทางอารมณ์ นำทางชีวิตด้วยปัญญาอันสงบ',
+    descriptionZh: '鲸鱼深思熟虑且情商极高，以安静的智慧驾驭人生的深处。',
     archetypeTitle: 'The Deep Thinker',
     traits: ['reflective', 'empathetic', 'patient'],
     particleEffect: 'bubbles',
@@ -64,6 +70,8 @@ export const ANIMALS: Record<SpiritAnimal, AnimalData> = {
     nameZh: '猫头鹰',
     gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
     description: 'Wise and methodical, owls plan with precision and see patterns in complexity that others overlook.',
+    descriptionTh: 'นกฮูกมีสติปัญญาลึกซึ้งและมองเห็นสิ่งที่คนอื่นมองข้าม วางแผนอย่างเป็นระบบด้วยความแม่นยำ',
+    descriptionZh: '猫头鹰拥有深邃的智慧，能看见他人忽略的事物。以精确的方法系统地规划一切。',
     archetypeTitle: 'The Wise Analyst',
     traits: ['analytical', 'precise', 'intuitive'],
     particleEffect: 'stars',
@@ -103,6 +111,8 @@ export const ANIMALS: Record<SpiritAnimal, AnimalData> = {
     nameZh: '鹰',
     gradient: 'linear-gradient(135deg, #64748b 0%, #1e293b 100%)',
     description: 'Strategic visionaries with a panoramic perspective, eagles spot the big picture while executing with precision.',
+    descriptionTh: 'นกอินทรีมองเห็นภาพรวมและเล็งเห็นโอกาสจากระยะไกล ดำเนินการตามวิสัยทัศน์ด้วยความแม่นยำ',
+    descriptionZh: '鹰能纵观全局，从远处发现机会。以精确的执行力实现战略愿景。',
     archetypeTitle: 'The Strategic Visionary',
     traits: ['visionary', 'focused', 'strategic'],
     particleEffect: 'wind',
@@ -142,6 +152,8 @@ export const ANIMALS: Record<SpiritAnimal, AnimalData> = {
     nameZh: '狼',
     gradient: 'linear-gradient(135deg, #6366f1 0%, #312e81 100%)',
     description: 'Instinct-driven and fiercely loyal, wolves thrive in tight-knit teams and pursue goals with primal determination.',
+    descriptionTh: 'หมาป่าเป็นสัตว์ที่ทำงานเป็นทีมและซื่อสัตย์ต่อฝูง ไล่ตามเป้าหมายด้วยความมุ่งมั่นอันแรงกล้า',
+    descriptionZh: '狼是团队合作者，对群体忠诚无比。以原始的决心追求目标。',
     archetypeTitle: 'The Loyal Pack Leader',
     traits: ['instinctive', 'loyal', 'determined'],
     particleEffect: 'moonlight',

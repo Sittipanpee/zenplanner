@@ -51,6 +51,21 @@
       "networkError": "网络错误，请检查您的连接"
     }
   },
+  "landing": {
+    "startJourney": "开始你的旅程",
+    "feature1": {
+      "title": "精神动物测验",
+      "desc": "通过AI驱动的个性分析发现你的规划原型"
+    },
+    "feature2": {
+      "title": "智能计划表",
+      "desc": "生成与你精神动物匹配的个性化计划表"
+    },
+    "feature3": {
+      "title": "3种语言",
+      "desc": "完整支持泰语、英语和中文"
+    }
+  },
   "auth": {
     "login": {
       "title": "欢迎回来",
