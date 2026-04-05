@@ -1,6 +1,7 @@
 /**
  * Axis Indicator Component
  * Displays 6-axis visualization for personality profiles
+ * With dark mode and ARIA support
  */
 
 "use client";
@@ -15,42 +16,42 @@ const AXIS_CONFIG: Record<
 > = {
   energy: {
     label: "Energy Rhythm",
-    labelShort: "พลังงาน",
+    labelShort: "Energy",
     poleA: "Dawn Igniter",
     poleB: "Night Weaver",
     color: "bg-zen-gold",
   },
   planning: {
     label: "Planning Style",
-    labelShort: "การวางแผน",
+    labelShort: "Planning",
     poleA: "Architect",
     poleB: "Surfer",
     color: "bg-zen-sage",
   },
   social: {
     label: "Social Fuel",
-    labelShort: "สังคม",
+    labelShort: "Social",
     poleA: "Gatherer",
     poleB: "Hermit",
     color: "bg-zen-blossom",
   },
   decision: {
     label: "Decision Mode",
-    labelShort: "การตัดสินใจ",
+    labelShort: "Decision",
     poleA: "Blade",
     poleB: "Petal",
     color: "bg-zen-earth",
   },
   focus: {
     label: "Focus Pattern",
-    labelShort: "โฟกัส",
+    labelShort: "Focus",
     poleA: "Laser",
     poleB: "Kaleidoscope",
     color: "bg-zen-sky",
   },
   drive: {
     label: "Drive Source",
-    labelShort: "แรงขับเคลื่อน",
+    labelShort: "Drive",
     poleA: "Summit",
     poleB: "Garden",
     color: "bg-zen-indigo",
@@ -76,7 +77,7 @@ export function AxisIndicator({
   const axisKeys = Object.keys(scores) as (keyof AxisScores)[];
 
   return (
-    <div className={cn("space-y-3", className)}>
+    <div className={cn("space-y-3", className)} role="group" aria-label="Personality axis scores">
       {axisKeys.map((key) => {
         const config = AXIS_CONFIG[key];
         const value = scores[key];
@@ -89,17 +90,24 @@ export function AxisIndicator({
           >
             {showLabels && (
               <div className="flex justify-between items-center text-xs">
-                <span className="text-zen-text-secondary font-medium">
+                <span className="text-zen-text-secondary dark:text-zinc-400 font-medium">
                   {compact ? config.labelShort : config.label}
                 </span>
-                <span className="text-zen-text-muted text-[10px]">
+                <span className="text-zen-text-muted dark:text-zinc-500 text-[10px]">
                   {normalizedValue}%
                 </span>
               </div>
             )}
 
             {/* Progress bar */}
-            <div className="relative h-2 bg-zen-surface-alt rounded-full overflow-hidden">
+            <div
+              className="relative h-2 bg-zen-surface-alt dark:bg-zinc-800 rounded-full overflow-hidden"
+              role="meter"
+              aria-label={config.label}
+              aria-valuenow={normalizedValue}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
               <div
                 className={cn(
                   "absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out",
@@ -108,12 +116,12 @@ export function AxisIndicator({
                 style={{ width: `${normalizedValue}%` }}
               />
               {/* Center marker */}
-              <div className="absolute inset-y-0 left-1/2 w-0.5 bg-zen-border -translate-x-1/2" />
+              <div className="absolute inset-y-0 left-1/2 w-0.5 bg-zen-border dark:bg-zinc-600 -translate-x-1/2" />
             </div>
 
             {/* Pole labels */}
             {showLabels && !compact && (
-              <div className="flex justify-between text-[10px] text-zen-text-muted">
+              <div className="flex justify-between text-[10px] text-zen-text-muted dark:text-zinc-500">
                 <span>{config.poleA}</span>
                 <span>{config.poleB}</span>
               </div>
@@ -145,26 +153,29 @@ export function AxisSummary({ scores, className }: AxisSummaryProps) {
   return (
     <div
       className={cn(
-        "bg-zen-surface border border-zen-border rounded-xl p-4",
+        "bg-zen-surface dark:bg-zinc-900 border border-zen-border dark:border-zinc-700 rounded-xl p-4",
         className
       )}
+      role="region"
+      aria-label="Personality traits summary"
     >
-      <h3 className="text-sm font-semibold text-zen-text mb-3">
-        ลักษณะนิสัยของคุณ
+      <h3 className="text-sm font-semibold text-zen-text dark:text-zinc-100 mb-3">
+        Your Traits
       </h3>
       <div className="grid grid-cols-2 gap-2 text-xs">
         {(Object.keys(scores) as (keyof AxisScores)[]).map((key) => (
           <div
             key={key}
-            className="flex items-center gap-2 p-2 bg-zen-surface-alt rounded-lg"
+            className="flex items-center gap-2 p-2 bg-zen-surface-alt dark:bg-zinc-800 rounded-lg"
           >
             <div
               className={cn(
                 "w-2 h-2 rounded-full",
                 AXIS_CONFIG[key].color
               )}
+              aria-hidden="true"
             />
-            <span className="text-zen-text-secondary truncate">
+            <span className="text-zen-text-secondary dark:text-zinc-400 truncate">
               {getDominantTrait(key)}
             </span>
           </div>

@@ -69,6 +69,13 @@ const ARCHETYPE_DESC: Record<SpiritAnimal, string> = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Auth check
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { animal, archetypeCode, userName } = await request.json();
 
     if (!animal || !isSpiritAnimal(animal)) {

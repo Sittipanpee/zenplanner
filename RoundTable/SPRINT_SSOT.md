@@ -196,7 +196,7 @@ export function getAnimal(animal: SpiritAnimal): AnimalData
 | BE-02 Backend Craftsman | PENDING | — | — |
 | QZ-03 Quiz Psychologist | PENDING | — | — |
 | DS-04 Notioneer | COMPLETE | 05-04-2026 | Dark mode vars, reduced-motion, shimmer keyframe, ARIA on all zen-* components, ThemeToggle + LanguageSwitcher created, CSS bugs fixed |
-| I18N-05 i18n Architect | PENDING | — | — |
+| I18N-05 i18n Architect | COMPLETE | 05-04-2026 | All 5 files created. Fox Chinese name fixed (狐狸). All 16 animals. Full EN/TH/ZH key coverage. |
 | INF-06 Infrastructure | COMPLETE | 05-04-2026 | All 5 items delivered. tailwind-merge dep needed from BE-02. |
 | QF-07 Quiz Flow | PENDING | — | — |
 | FP-08 Feature Pages | PENDING | — | — |

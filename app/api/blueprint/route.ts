@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { isSpiritAnimal } from "@/lib/types";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,15 +16,29 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { data: blueprints, error } = await supabase
+    // Pagination params
+    const { searchParams } = new URL(request.url);
+    const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "20", 10) || 20, 1), 100);
+    const offset = Math.max(parseInt(searchParams.get("offset") || "0", 10) || 0, 0);
+
+    const { data: blueprints, error, count } = await supabase
       .from("planner_blueprints")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
 
-    return NextResponse.json({ blueprints });
+    return NextResponse.json({
+      blueprints,
+      pagination: {
+        total: count ?? 0,
+        limit,
+        offset,
+        hasMore: (count ?? 0) > offset + limit,
+      },
+    });
   } catch (error) {
     console.error("Get blueprints error:", error);
     return NextResponse.json({ error: "Failed to get blueprints" }, { status: 500 });
@@ -40,6 +55,14 @@ export async function POST(request: NextRequest) {
     }
 
     const blueprint = await request.json();
+
+    // Validate spirit_animal if provided
+    if (blueprint.spirit_animal && !isSpiritAnimal(blueprint.spirit_animal)) {
+      return NextResponse.json(
+        { error: `Invalid spirit_animal: ${blueprint.spirit_animal}` },
+        { status: 400 }
+      );
+    }
 
     const { data, error } = await supabase
       .from("planner_blueprints")
