@@ -7,10 +7,12 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { ZenCard } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { ShareAnimalButton } from "@/components/liff/share-animal-button";
+import { getAnimal, getAnimalName } from "@/lib/animal-data";
 import type { SpiritAnimal } from "@/lib/types";
 import {
   CheckCircle,
@@ -21,30 +23,21 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-const ANIMAL_INFO: Record<string, { emoji: string; nameTh: string }> = {
-  lion: { emoji: "🦁", nameTh: "สิงโต" },
-  whale: { emoji: "🐋", nameTh: "วาฬ" },
-  dolphin: { emoji: "🐬", nameTh: "โลมา" },
-  owl: { emoji: "🦉", nameTh: "นกฮูก" },
-  fox: { emoji: "🦊", nameTh: "จิ้งจอก" },
-  turtle: { emoji: "🐢", nameTh: "เต่า" },
-  eagle: { emoji: "🦅", nameTh: "อินทรี" },
-  wolf: { emoji: "🐺", nameTh: "หมาป่า" },
-  cat: { emoji: "🐱", nameTh: "แมว" },
-  butterfly: { emoji: "🦋", nameTh: "ผีเสื้อ" },
-};
-
 function GenerateDoneContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('planner.done');
+  const locale = useLocale() as 'en' | 'th' | 'zh';
 
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [format, setFormat] = useState<"xlsx" | "csv">("xlsx");
   const [isCopied, setIsCopied] = useState(false);
 
   const animal = (searchParams.get("animal") || "lion") as SpiritAnimal;
-  const info = ANIMAL_INFO[animal] || ANIMAL_INFO.lion;
-  const insight = "ค้นพบสัตว์ประจำตัวของคุณบน ZenPlanner!";
+  const toolCount = parseInt(searchParams.get("tools") || "0", 10);
+  const animalData = getAnimal(animal);
+  const animalDisplayName = getAnimalName(animal, locale);
+  const insight = t('shareTitle');
 
   // Get download URL from localStorage or generate
   useEffect(() => {
@@ -60,7 +53,7 @@ function GenerateDoneContent() {
     if (downloadUrl) {
       const a = document.createElement("a");
       a.href = downloadUrl;
-      a.download = `ZenPlanner-${info.nameTh}.xlsx`;
+      a.download = `ZenPlanner-${animalDisplayName}.xlsx`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -96,7 +89,7 @@ function GenerateDoneContent() {
             Planner พร้อมแล้ว!
           </h1>
           <p className="text-zen-text-secondary animate-zen-fade-in" style={{ animationDelay: "0.1s" }}>
-            สร้าง {info.nameTh} {info.emoji} Planner สำเร็จแล้ว
+            สร้าง {animalDisplayName} {animalData.emoji} Planner สำเร็จแล้ว
           </p>
         </div>
 
@@ -107,12 +100,12 @@ function GenerateDoneContent() {
               <FileSpreadsheet className="w-7 h-7 text-zen-sage" />
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-zen-text">ZenPlanner-{info.nameTh}</p>
-              <p className="text-sm text-zen-text-muted">8 เครื่องมือ • Excel/Sheets</p>
+              <p className="font-semibold text-zen-text">ZenPlanner-{animalDisplayName}</p>
+              <p className="text-sm text-zen-text-muted">{toolCount || '?'} tools • Excel/Sheets</p>
             </div>
           </div>
 
-          {/* Format Selection */}
+          {/* Format Selection — CSV disabled with Coming Soon */}
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => setFormat("xlsx")}
@@ -122,17 +115,14 @@ function GenerateDoneContent() {
                   : "bg-zen-surface-alt text-zen-text-secondary hover:bg-zen-border"
               }`}
             >
-              Excel (.xlsx)
+              {t('downloadExcel')}
             </button>
             <button
-              onClick={() => setFormat("csv")}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                format === "csv"
-                  ? "bg-zen-sage text-white"
-                  : "bg-zen-surface-alt text-zen-text-secondary hover:bg-zen-border"
-              }`}
+              disabled
+              className="flex-1 py-2 px-3 rounded-lg text-sm font-medium bg-zen-surface-alt text-zen-text-muted opacity-50 cursor-not-allowed"
+              title="Coming soon"
             >
-              CSV
+              CSV (Coming soon)
             </button>
           </div>
 

@@ -7,6 +7,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ZenCard } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { QrCode, Timer, CheckCircle, XCircle, Loader2, CreditCard } from "lucide-react";
@@ -25,6 +26,7 @@ interface PaymentData {
 function PaymentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('planner.payment');
   const blueprintId = searchParams.get("blueprintId") || "demo-blueprint";
 
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
@@ -192,10 +194,10 @@ function PaymentContent() {
         {/* Header */}
         <div className="text-center mb-6">
           <h1 className="font-display text-2xl font-bold text-zen-text mb-2">
-            ชำระเงิน
+            {t('title')}
           </h1>
           <p className="text-zen-text-secondary">
-            สแกน QR Code เพื่อชำระ {PLANNER_PRICE} บาท
+            {t('scan')} — {t('amount')}: {PLANNER_PRICE} THB
           </p>
         </div>
 

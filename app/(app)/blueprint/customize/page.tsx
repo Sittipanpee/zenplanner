@@ -7,13 +7,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ZenCard } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { ZenInput } from "@/components/ui/zen-input";
 import { ArrowLeft, ArrowRight, Palette, Clock, FolderOpen, Check, Sparkles } from "lucide-react";
 
-// Zen color palettes
+// SYNCED: These 5 schemes MUST match customization-panel.tsx COLOR_SCHEMES
 const COLOR_PALETTES = [
   {
     id: "zen-sage",
@@ -52,6 +53,7 @@ const DEFAULT_CATEGORIES = ["งาน", "สุขภาพ", "การเง�
 
 export default function CustomizePage() {
   const router = useRouter();
+  const t = useTranslations('planner.customize');
 
   // State
   const [selectedPalette, setSelectedPalette] = useState("zen-sage");
@@ -116,10 +118,10 @@ export default function CustomizePage() {
           </Link>
           <div>
             <h1 className="font-display text-xl font-bold text-zen-text">
-              ปรับแต่ง Planner
+              {t('title')}
             </h1>
             <p className="text-sm text-zen-text-secondary">
-              ตั้งค่าส่วนตัว
+              {t('preview')}
             </p>
           </div>
         </div>

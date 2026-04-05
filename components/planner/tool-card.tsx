@@ -1,56 +1,39 @@
 /**
  * Tool Card Component
  * Individual planner tool display with optional preview
+ * i18n + dark mode ready
  */
 
-"use client";
+'use client'
 
-import { Check } from "lucide-react";
-import type { ToolId, BlueprintCustomization } from "@/lib/types";
-import { ToolPreview } from "./special-tool-previews";
+import { useTranslations } from 'next-intl'
+import { Check } from 'lucide-react'
+import type { ToolId, BlueprintCustomization } from '@/lib/types'
+import { ToolPreview } from './special-tool-previews'
 
 interface ToolCardProps {
-  toolId: ToolId;
-  name: string;
-  description: string;
-  category: string;
-  isSelected: boolean;
-  onToggle: (toolId: ToolId) => void;
-  customization?: BlueprintCustomization;
-  showPreview?: boolean;
+  toolId: ToolId
+  name: string
+  description: string
+  category: string
+  isSelected: boolean
+  onToggle: (toolId: ToolId) => void
+  customization?: BlueprintCustomization
+  showPreview?: boolean
 }
 
-// Tools that have special visual previews
 const SPECIAL_PREVIEW_TOOLS: ToolId[] = [
-  "habit_heatmap",
-  "streak_tracker",
-  "21day_challenge",
-  "quest_system",
-  "progress_bars",
-  "level_up",
-  "daily_power_block",
-  "mood_tracker",
-  "kanban_board",
-  "life_wheel",
-  "eisenhower_matrix",
-  "weekly_compass",
-  "milestone_map",
-  "budget_tracker",
-  "energy_map",
-  "morning_clarity",
-];
+  'habit_heatmap', 'streak_tracker', '21day_challenge', 'quest_system',
+  'progress_bars', 'level_up', 'daily_power_block', 'mood_tracker',
+  'kanban_board', 'life_wheel', 'eisenhower_matrix', 'weekly_compass',
+  'milestone_map', 'budget_tracker', 'energy_map', 'morning_clarity',
+]
 
 export function ToolCard({
-  toolId,
-  name,
-  description,
-  category,
-  isSelected,
-  onToggle,
-  customization,
-  showPreview = false,
+  toolId, name, description, category, isSelected, onToggle, customization, showPreview = false,
 }: ToolCardProps) {
-  const hasSpecialPreview = SPECIAL_PREVIEW_TOOLS.includes(toolId);
+  const t = useTranslations('planner.toolGrid')
+  const hasSpecialPreview = SPECIAL_PREVIEW_TOOLS.includes(toolId)
 
   return (
     <button
@@ -60,24 +43,24 @@ export function ToolCard({
         focus-visible:ring-2 focus-visible:ring-zen-sage focus-visible:outline-none
         overflow-hidden
         ${isSelected
-          ? "border-zen-sage bg-zen-sage/5"
-          : "border-zen-border hover:border-zen-border-hover bg-zen-surface"
+          ? 'border-zen-sage bg-zen-sage/5'
+          : 'border-zen-border hover:border-zen-border-hover bg-zen-surface'
         }
       `}
+      aria-pressed={isSelected}
+      aria-label={isSelected ? t('removeTool') : t('addTool')}
     >
-      {/* Special Preview Area */}
       {showPreview && hasSpecialPreview && (
         <div className="p-2 border-b border-zen-border bg-zen-surface-alt">
           <ToolPreview toolId={toolId} customization={customization} />
         </div>
       )}
 
-      {/* Card Content */}
       <div className="flex items-start gap-3 p-4">
         <div
           className={`
             w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0
-            ${isSelected ? "bg-zen-sage text-white" : "bg-zen-surface-alt text-zen-text-muted"}
+            ${isSelected ? 'bg-zen-sage text-white' : 'bg-zen-surface-alt text-zen-text-muted'}
           `}
         >
           {isSelected && <Check className="w-4 h-4" />}
@@ -91,5 +74,5 @@ export function ToolCard({
         </div>
       </div>
     </button>
-  );
+  )
 }

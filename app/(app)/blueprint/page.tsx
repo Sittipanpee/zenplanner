@@ -7,11 +7,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 import { ZenCard, ZenCardHeader } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { ToolGrid } from "@/components/planner/tool-grid";
+import { getAnimal, getAnimalName } from "@/lib/animal-data";
 import { ArrowLeft, ArrowRight, Sparkles, Loader2 } from "lucide-react";
-import type { ToolId, BlueprintCustomization } from "@/lib/types";
+import type { ToolId, BlueprintCustomization, SpiritAnimal } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
 
 // Default tool recommendations based on common patterns
@@ -37,13 +39,27 @@ export default function BlueprintPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [blueprintId, setBlueprintId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [spiritAnimal, setSpiritAnimal] = useState<SpiritAnimal | null>(null);
+  const locale = useLocale() as 'en' | 'th' | 'zh';
+  const t = useTranslations('planner.blueprint');
 
-  // Fetch user's existing blueprint on mount
+  // Fetch user's existing blueprint AND spirit_animal from profile on mount
   useEffect(() => {
     const fetchBlueprint = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
+          // Fetch spirit_animal from profile
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("spirit_animal")
+            .eq("id", user.id)
+            .single();
+
+          if (profile?.spirit_animal) {
+            setSpiritAnimal(profile.spirit_animal as SpiritAnimal);
+          }
+
           const { data: blueprints } = await supabase
             .from("planner_blueprints")
             .select("*")
@@ -118,8 +134,8 @@ export default function BlueprintPage() {
             user_id: user.id,
             title: "My ZenPlanner",
             description: "Personalized planner based on spirit animal",
-            spirit_animal: "lion",
-            archetype_code: "lion-leader",
+            spirit_animal: spiritAnimal || "lion",
+            archetype_code: spiritAnimal ? `${spiritAnimal}-default` : "lion-leader",
             tool_selection: selectedTools,
             customization,
             status: "draft",
@@ -156,10 +172,10 @@ export default function BlueprintPage() {
             </button>
             <div>
               <h1 className="font-display text-xl md:text-2xl font-bold text-zen-text">
-                ปรับแต่ง Planner
+                {t('title')}
               </h1>
               <p className="text-sm text-zen-text-secondary">
-                เลือกเครื่องมือที่คุณต้องการ
+                {t('subtitle')}
               </p>
             </div>
           </div>
@@ -169,7 +185,7 @@ export default function BlueprintPage() {
         <div className="max-w-4xl mx-auto px-4 mt-8">
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="w-8 h-8 text-zen-sage animate-spin mb-4" />
-            <p className="text-zen-text-secondary">กำลังโหลด...</p>
+            <p className="text-zen-text-secondary">Loading...</p>
           </div>
         </div>
       </main>
@@ -186,10 +202,10 @@ export default function BlueprintPage() {
           </button>
           <div>
             <h1 className="font-display text-xl md:text-2xl font-bold text-zen-text">
-              ปรับแต่ง Planner
+              {t('title')}
             </h1>
             <p className="text-sm text-zen-text-secondary">
-              เลือกเครื่องมือที่คุณต้องการ
+              {t('subtitle')}
             </p>
           </div>
         </div>
@@ -200,10 +216,12 @@ export default function BlueprintPage() {
         <ZenCard>
           <div className="flex items-center gap-3 mb-2">
             <Sparkles className="w-5 h-5 text-zen-gold" />
-            <span className="font-semibold text-zen-text">สัตว์ประจำตัว: สิงโต 🦁</span>
+            <span className="font-semibold text-zen-text">
+              {t('spiritAnimal')}: {spiritAnimal ? `${getAnimalName(spiritAnimal, locale)} ${getAnimal(spiritAnimal).emoji}` : t('noAnimal')}
+            </span>
           </div>
           <p className="text-sm text-zen-text-secondary">
-            แนะนำเครื่องมือที่เหมาะกับคุณ: Daily Power Block, Weekly Compass, และอื่นๆ
+            {t('subtitle')}
           </p>
         </ZenCard>
       </div>
@@ -212,9 +230,8 @@ export default function BlueprintPage() {
       <div className="max-w-4xl mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-zen-text">
-            เครื่องมือที่เลือก ({selectedTools.length})
+            {t('selectedTools')} ({selectedTools.length})
           </h2>
-          <span className="text-sm text-zen-text-muted">แตะเพื่อเลือก/ยกเลิก</span>
         </div>
 
         <ToolGrid selectedTools={selectedTools} onToggleTool={handleToggleTool} customization={customization} />
@@ -229,7 +246,7 @@ export default function BlueprintPage() {
             onClick={handleGenerate}
             isLoading={isGenerating}
           >
-            สร้าง Planner ของฉัน
+            {t('generate')}
             <ArrowRight className="w-5 h-5 ml-2" />
           </ZenButton>
         </div>

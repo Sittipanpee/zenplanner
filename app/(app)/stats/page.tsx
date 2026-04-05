@@ -6,6 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ZenCard } from "@/components/ui/zen-card";
@@ -18,6 +19,7 @@ import type { ActivityLog } from "@/lib/types";
 export default function StatsPage() {
   const router = useRouter();
   const supabase = createClient();
+  const t = useTranslations('dashboard');
   const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -110,10 +112,10 @@ export default function StatsPage() {
           </Link>
           <div>
             <h1 className="font-display text-xl font-bold text-zen-text">
-              สถิติของคุณ
+              {t('title')}
             </h1>
             <p className="text-sm text-zen-text-secondary">
-              ติดตามความก้าวหน้า
+              {t('stats.currentStreak')}
             </p>
           </div>
         </div>

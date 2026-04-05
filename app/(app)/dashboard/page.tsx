@@ -7,14 +7,16 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { ZenCard, ZenCardHeader, ZenCardContent } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { ZenStatusBadge } from "@/components/ui/zen-badge";
 import { Heatmap } from "@/components/dashboard/heatmap";
+import { getAnimal, getAnimalName } from "@/lib/animal-data";
 import Link from "next/link";
 import { Home, Sparkles, LayoutGrid, BarChart3, Target, TrendingUp, CheckCircle2, Circle, Plus, Minus, Zap, Flame, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import type { ActivityLog } from "@/lib/types";
+import type { ActivityLog, SpiritAnimal } from "@/lib/types";
 
 interface HabitItem {
   id: string;
@@ -54,28 +56,7 @@ function setLocalStorage<T>(key: string, value: T): void {
   }
 }
 
-// Helper to get Thai name for animal
-function getAnimalName(animal: string): string {
-  const animalNames: Record<string, string> = {
-    lion: "สิงโต",
-    whale: "วาฬ",
-    dolphin: "โลมา",
-    owl: "นกฮูก",
-    fox: "จิ้งจอก",
-    turtle: "เต่า",
-    eagle: "อินทรี",
-    octopus: "ปลาหมึก",
-    mountain: "ภูเขา",
-    wolf: "หมาป่า",
-    sakura: "ซากุระ",
-    cat: "แมว",
-    crocodile: "จระเข้",
-    dove: "นกพิราบ",
-    butterfly: "ผีเสื้อ",
-    bamboo: "ไผ่",
-  };
-  return animalNames[animal] || animal;
-}
+// getAnimalName and getAnimal imported from @/lib/animal-data
 
 export default function DashboardPage() {
   const supabase = createClient();
@@ -438,16 +419,14 @@ export default function DashboardPage() {
           .select("*", { count: "exact", head: true })
           .eq("user_id", user.id);
 
-        // Animal emoji mapping
-        const animalEmojis: Record<string, string> = {
-          lion: "🦁", whale: "🐋", dolphin: "🐬", owl: "🦉", fox: "🦊",
-          turtle: "🐢", eagle: "🦅", octopus: "🐙", mountain: "🏔️", wolf: "🐺",
-          sakura: "🌸", cat: "🐱", crocodile: "🐊", dove: "🕊️", butterfly: "🦋", bamboo: "🌿"
-        };
+        // Use canonical animal data from lib/animal-data
+        const animalEmoji = profile?.spirit_animal
+          ? getAnimal(profile.spirit_animal as SpiritAnimal)?.emoji || "🦁"
+          : "🦁";
 
         setUserStats(prev => ({
           spiritAnimal: profile?.spirit_animal || null,
-          spiritAnimalEmoji: profile?.spirit_animal ? animalEmojis[profile.spirit_animal] || "🦁" : "🦁",
+          spiritAnimalEmoji: animalEmoji,
           quizzesCompleted: quizCount || 0,
           plannersCreated: plannerCount || 0,
           currentStreak: prev.currentStreak,
@@ -488,8 +467,10 @@ export default function DashboardPage() {
               {userStats.spiritAnimalEmoji}
             </div>
             <div>
-              <h1 className="font-display text-2xl md:text-3xl font-bold text-zen-text">สวัสดี! 👋</h1>
-              <p className="text-zen-text-secondary">สัตว์ประจำตัว: {userStats.spiritAnimal ? getAnimalName(userStats.spiritAnimal) : 'ยังไม่ทราบ'}</p>
+              <h1 className="font-display text-2xl md:text-3xl font-bold text-zen-text">
+                {userStats.spiritAnimalEmoji} {userStats.spiritAnimal ? getAnimalName(userStats.spiritAnimal as SpiritAnimal, 'th') : ''}
+              </h1>
+              <p className="text-zen-text-secondary">{userStats.spiritAnimal ? getAnimalName(userStats.spiritAnimal as SpiritAnimal, 'en') : 'Take the quiz!'}</p>
             </div>
           </div>
         </div>
