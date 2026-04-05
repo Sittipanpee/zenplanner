@@ -1,0 +1,206 @@
+{
+  "common": {
+    "app": {
+      "name": "ZenPlanner",
+      "tagline": "Plan with your spirit"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "quiz": "Quiz",
+      "planner": "Planner",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Log out",
+      "login": "Log in"
+    },
+    "actions": {
+      "continue": "Continue",
+      "back": "Back",
+      "save": "Save",
+      "cancel": "Cancel",
+      "generate": "Generate",
+      "download": "Download",
+      "share": "Share",
+      "copy": "Copy link",
+      "copied": "Copied!",
+      "loading": "Loading...",
+      "error": "Something went wrong",
+      "retry": "Try again",
+      "close": "Close",
+      "next": "Next",
+      "skip": "Skip",
+      "done": "Done"
+    },
+    "theme": {
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "system": "System"
+    },
+    "language": {
+      "en": "English",
+      "th": "ไทย",
+      "zh": "中文"
+    },
+    "errors": {
+      "notFound": "Page not found",
+      "serverError": "Server error — please try again later",
+      "unauthorized": "Please log in to continue",
+      "networkError": "Network error — check your connection"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue your planning journey",
+      "lineButton": "Continue with LINE",
+      "githubButton": "Continue with GitHub",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "orDivider": "or"
+    },
+    "signup": {
+      "title": "Create your account",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "quiz": {
+    "home": {
+      "title": "Discover your spirit animal",
+      "subtitle": "A short quiz to reveal your unique planning personality",
+      "startButton": "Start the quiz",
+      "modeClassic": "Classic",
+      "modeChat": "Chat",
+      "modeGame": "Mini-game",
+      "estimatedTime": "About 3 minutes"
+    },
+    "question": {
+      "progress": "Question {current} of {total}",
+      "back": "Previous question"
+    },
+    "reveal": {
+      "title": "Your spirit animal is",
+      "subtitle": "This archetype reflects how you naturally approach planning and life",
+      "share": "Share your result",
+      "takeAgain": "Retake quiz",
+      "viewPlanner": "Create my planner",
+      "copied": "Link copied to clipboard!",
+      "copyError": "Could not copy — please copy the URL manually"
+    },
+    "profile": {
+      "title": "Tell us about your lifestyle",
+      "chatPlaceholder": "Describe your typical day, goals, or anything on your mind...",
+      "send": "Send",
+      "analyzing": "Analysing your profile...",
+      "complete": "Profile complete"
+    },
+    "summary": {
+      "title": "Your planning profile",
+      "traits": "Key traits",
+      "strengths": "Your strengths",
+      "recommendation": "Recommended tools"
+    }
+  },
+  "planner": {
+    "blueprint": {
+      "title": "Build your blueprint",
+      "subtitle": "Choose the tools that fit your life",
+      "spiritAnimal": "Your spirit animal",
+      "selectedTools": "{count} tools selected",
+      "customize": "Customise",
+      "generate": "Generate planner",
+      "noAnimal": "Complete the quiz first to unlock your personalised blueprint"
+    },
+    "toolGrid": {
+      "searchPlaceholder": "Search tools...",
+      "allCategories": "All categories",
+      "noResults": "No tools found",
+      "selected": "Selected",
+      "addTool": "Add",
+      "removeTool": "Remove"
+    },
+    "customize": {
+      "title": "Customise your planner",
+      "colorScheme": "Colour scheme",
+      "layout": "Layout",
+      "paperSize": "Paper size",
+      "preview": "Preview"
+    },
+    "generate": {
+      "title": "Generating your planner",
+      "step1": "Preparing your blueprint...",
+      "step2": "Crafting your daily pages...",
+      "step3": "Building habit trackers...",
+      "step4": "Adding your personal touches...",
+      "step5": "Almost ready..."
+    },
+    "done": {
+      "title": "Your planner is ready!",
+      "subtitle": "Download or share it with a friend",
+      "downloadExcel": "Download Excel",
+      "downloadSheets": "Open in Google Sheets",
+      "shareTitle": "Share",
+      "shareLine": "Share on LINE",
+      "shareFacebook": "Share on Facebook",
+      "shareTwitter": "Share on X (Twitter)",
+      "copyLink": "Copy link"
+    },
+    "payment": {
+      "title": "Unlock your planner",
+      "subtitle": "One-time payment — yours to keep forever",
+      "amount": "฿{amount}",
+      "scan": "Scan to pay",
+      "waiting": "Waiting for payment...",
+      "success": "Payment confirmed!",
+      "failed": "Payment failed",
+      "retry": "Try again"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {name}",
+    "stats": {
+      "currentStreak": "Current streak",
+      "longestStreak": "Longest streak",
+      "plannersCreated": "Planners created",
+      "toolsUsed": "Tools used",
+      "daysActive": "Days active",
+      "planners": "{count} planners"
+    },
+    "heatmap": {
+      "title": "Activity",
+      "less": "Less",
+      "more": "More",
+      "tooltip": "{count} activities on {date}",
+      "empty": "No activity yet"
+    },
+    "recentPlanners": {
+      "title": "Recent planners",
+      "empty": "No planners yet",
+      "createFirst": "Create your first planner",
+      "viewAll": "View all"
+    },
+    "quickActions": {
+      "newPlanner": "New planner",
+      "retakeQuiz": "Retake quiz",
+      "viewStats": "View stats"
+    }
+  },
+  "profile": {
+    "title": "Your profile",
+    "spiritAnimal": "Spirit animal",
+    "editProfile": "Edit profile",
+    "planningStyle": "Planning style",
+    "keyTraits": "Key traits",
+    "settings": {
+      "title": "Settings",
+      "notifications": "Notifications",
+      "privacy": "Privacy",
+      "language": "Language",
+      "theme": "Theme",
+      "account": "Account",
+      "signOut": "Sign out",
+      "deleteAccount": "Delete account"
+    }
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "common": {
+    "app": {
+      "name": "ZenPlanner",
+      "tagline": "随心规划，顺势而为"
+    },
+    "nav": {
+      "dashboard": "仪表板",
+      "quiz": "测验",
+      "planner": "计划",
+      "profile": "个人资料",
+      "settings": "设置",
+      "logout": "退出",
+      "login": "登录"
+    },
+    "actions": {
+      "continue": "继续",
+      "back": "返回",
+      "save": "保存",
+      "cancel": "取消",
+      "generate": "生成",
+      "download": "下载",
+      "share": "分享",
+      "copy": "复制链接",
+      "copied": "已复制！",
+      "loading": "加载中...",
+      "error": "出错了",
+      "retry": "重试",
+      "close": "关闭",
+      "next": "下一步",
+      "skip": "跳过",
+      "done": "完成"
+    },
+    "theme": {
+      "light": "浅色模式",
+      "dark": "深色模式",
+      "system": "跟随系统"
+    },
+    "language": {
+      "en": "English",
+      "th": "ไทย",
+      "zh": "中文"
+    },
+    "errors": {
+      "notFound": "页面不存在",
+      "serverError": "服务器错误，请稍后再试",
+      "unauthorized": "请先登录后继续",
+      "networkError": "网络错误，请检查您的连接"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "欢迎回来",
+      "subtitle": "登录后继续您的规划之旅",
+      "lineButton": "使用 LINE 登录",
+      "githubButton": "使用 GitHub 登录",
+      "noAccount": "还没有账号？",
+      "signUp": "立即注册",
+      "orDivider": "或"
+    },
+    "signup": {
+      "title": "创建账号",
+      "hasAccount": "已有账号？",
+      "signIn": "立即登录"
+    }
+  },
+  "quiz": {
+    "home": {
+      "title": "发现你的精神动物",
+      "subtitle": "通过简短的测验，揭示你独特的规划个性",
+      "startButton": "开始测验",
+      "modeClassic": "经典模式",
+      "modeChat": "对话模式",
+      "modeGame": "小游戏",
+      "estimatedTime": "约 3 分钟"
+    },
+    "question": {
+      "progress": "第 {current} / {total} 题",
+      "back": "上一题"
+    },
+    "reveal": {
+      "title": "你的精神动物是",
+      "subtitle": "这个原型反映了你天然的规划方式和生活态度",
+      "share": "分享结果",
+      "takeAgain": "重新测验",
+      "viewPlanner": "创建我的计划",
+      "copied": "链接已复制到剪贴板！",
+      "copyError": "复制失败，请手动复制链接"
+    },
+    "profile": {
+      "title": "告诉我们你的生活方式",
+      "chatPlaceholder": "描述你的日常、目标，或者任何你想说的...",
+      "send": "发送",
+      "analyzing": "正在分析你的个人资料...",
+      "complete": "资料完善完成"
+    },
+    "summary": {
+      "title": "你的规划档案",
+      "traits": "核心特质",
+      "strengths": "你的优势",
+      "recommendation": "推荐工具"
+    }
+  },
+  "planner": {
+    "blueprint": {
+      "title": "构建你的蓝图",
+      "subtitle": "选择适合你生活的工具",
+      "spiritAnimal": "你的精神动物",
+      "selectedTools": "已选 {count} 个工具",
+      "customize": "自定义",
+      "generate": "生成计划",
+      "noAnimal": "请先完成测验以解锁你的专属蓝图"
+    },
+    "toolGrid": {
+      "searchPlaceholder": "搜索工具...",
+      "allCategories": "全部分类",
+      "noResults": "未找到相关工具",
+      "selected": "已选",
+      "addTool": "添加",
+      "removeTool": "移除"
+    },
+    "customize": {
+      "title": "自定义你的计划",
+      "colorScheme": "配色方案",
+      "layout": "布局",
+      "paperSize": "纸张大小",
+      "preview": "预览"
+    },
+    "generate": {
+      "title": "正在生成你的计划",
+      "step1": "准备蓝图中...",
+      "step2": "构建每日页面中...",
+      "step3": "添加习惯追踪器...",
+      "step4": "加入你的个性化细节...",
+      "step5": "即将完成..."
+    },
+    "done": {
+      "title": "你的计划已就绪！",
+      "subtitle": "下载或分享给朋友",
+      "downloadExcel": "下载 Excel",
+      "downloadSheets": "在 Google Sheets 中打开",
+      "shareTitle": "分享",
+      "shareLine": "分享到 LINE",
+      "shareFacebook": "分享到 Facebook",
+      "shareTwitter": "分享到 X (Twitter)",
+      "copyLink": "复制链接"
+    },
+    "payment": {
+      "title": "解锁你的计划",
+      "subtitle": "一次付款，永久拥有",
+      "amount": "฿{amount}",
+      "scan": "扫码支付",
+      "waiting": "等待付款中...",
+      "success": "付款成功！",
+      "failed": "付款失败",
+      "retry": "重试"
+    }
+  },
+  "dashboard": {
+    "title": "仪表板",
+    "welcome": "欢迎回来，{name}",
+    "stats": {
+      "currentStreak": "当前连续天数",
+      "longestStreak": "最长连续天数",
+      "plannersCreated": "已创建的计划",
+      "toolsUsed": "使用的工具",
+      "daysActive": "活跃天数",
+      "planners": "{count} 份计划"
+    },
+    "heatmap": {
+      "title": "活动记录",
+      "less": "少",
+      "more": "多",
+      "tooltip": "{date} 有 {count} 项活动",
+      "empty": "暂无活动记录"
+    },
+    "recentPlanners": {
+      "title": "最近的计划",
+      "empty": "暂无计划",
+      "createFirst": "创建你的第一份计划",
+      "viewAll": "查看全部"
+    },
+    "quickActions": {
+      "newPlanner": "新建计划",
+      "retakeQuiz": "重新测验",
+      "viewStats": "查看统计"
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "spiritAnimal": "精神动物",
+    "editProfile": "编辑资料",
+    "planningStyle": "规划风格",
+    "keyTraits": "核心特质",
+    "settings": {
+      "title": "设置",
+      "notifications": "通知",
+      "privacy": "隐私",
+      "language": "语言",
+      "theme": "主题",
+      "account": "账号",
+      "signOut": "退出登录",
+      "deleteAccount": "删除账号"
+    }
+  }
+}

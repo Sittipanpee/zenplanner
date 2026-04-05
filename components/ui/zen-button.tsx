@@ -9,14 +9,17 @@ export interface ZenButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> 
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
   fullWidth?: boolean;
+  /** Accessible label for icon-only buttons */
+  "aria-label"?: string;
 }
 
 export const ZenButton = forwardRef<HTMLButtonElement, ZenButtonProps>(
   ({ className = "", variant = "primary", size = "md", isLoading, fullWidth, children, disabled, ...props }, ref) => {
     const baseStyles = `
       zen-button inline-flex items-center justify-center font-body font-semibold
-      transition-all duration-200 ease-out focus:outline-none focus:ring-2
-      focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed
+      transition-all duration-200 ease-out
+      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zen-sage
+      disabled:opacity-50 disabled:cursor-not-allowed
     `;
 
     const variants = {

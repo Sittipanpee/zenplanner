@@ -32,6 +32,7 @@ export function ZenBadge({
 
   return (
     <span
+      role="status"
       className={`
         inline-flex items-center font-medium rounded-full
         ${variants[variant]}

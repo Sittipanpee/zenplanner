@@ -1,13 +1,13 @@
 /**
  * Quiz Card Component
- * Animated card for quiz questions
+ * Animated card for quiz questions with i18n, dark mode, and ARIA support
  */
 
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ZenCard } from "@/components/ui/zen-card";
-import { ZenButton } from "@/components/ui/zen-button";
 import { Sparkles, ArrowRight, Zap } from "lucide-react";
 
 export interface QuizQuestion {
@@ -44,6 +44,7 @@ export function QuizCard({
 }: QuizCardProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const t = useTranslations("quiz");
 
   const progressPercent = (questionNumber / totalQuestions) * 100;
 
@@ -62,29 +63,39 @@ export function QuizCard({
   };
 
   return (
-    <div className={`w-full max-w-md mx-auto ${isAnimatingOut ? 'animate-zen-slide-out-left' : 'animate-zen-slide-up'}`}>
+    <div
+      role="region"
+      aria-label={t("question.progress", { current: questionNumber, total: totalQuestions })}
+      className={`w-full max-w-md mx-auto ${isAnimatingOut ? 'animate-zen-slide-out-left' : 'animate-zen-slide-up'}`}
+    >
       {/* Progress */}
       <div className="mb-6">
-        <div className="flex justify-between text-sm text-zen-text-secondary mb-2">
+        <div className="flex justify-between text-sm text-zen-text-secondary dark:text-zinc-400 mb-2">
           <span className="flex items-center gap-2">
             <Zap className="w-4 h-4 text-zen-gold" />
-            คำถามที่ {questionNumber}/{totalQuestions}
+            {t("question.progress", { current: questionNumber, total: totalQuestions })}
           </span>
           <span className="font-semibold text-zen-sage">{Math.round(progressPercent)}%</span>
         </div>
         {/* Animated progress bar */}
-        <div className="h-3 bg-zen-surface-alt rounded-full overflow-hidden relative">
+        <div
+          className="h-3 bg-zen-surface-alt dark:bg-zinc-800 rounded-full overflow-hidden relative"
+          role="progressbar"
+          aria-valuenow={Math.round(progressPercent)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
           <div
             className="h-full bg-gradient-to-r from-zen-sage to-zen-sage-light rounded-full transition-all duration-500 ease-out animate-zen-glow-pulse"
             style={{ width: `${progressPercent}%` }}
           />
-          {/* Shimmer effect */}
+          {/* Shimmer effect — uses animate-shimmer defined in globals.css */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shimmer" />
         </div>
       </div>
 
       {/* Question Card */}
-      <ZenCard variant="interactive" padding="lg" className="text-center hover:animate-zen-card-hover">
+      <ZenCard variant="interactive" padding="lg" className="text-center hover:animate-zen-card-hover dark:bg-zinc-900 dark:border-zinc-700">
         <div className="mb-4 relative">
           <Sparkles className="w-10 h-10 text-zen-gold mx-auto animate-zen-float" />
           {/* Sparkle particles */}
@@ -92,23 +103,26 @@ export function QuizCard({
           <div className="absolute top-0 -left-1 w-1.5 h-1.5 bg-zen-gold rounded-full animate-zen-bounce-playful" style={{ animationDelay: '0.2s' }} />
         </div>
 
-        <h2 className="text-xl font-semibold text-zen-text mb-6 animate-zen-pop">
+        <h2 className="text-xl font-semibold text-zen-text dark:text-zinc-100 mb-6 animate-zen-pop">
           {question.scenario}
         </h2>
 
         {/* Options */}
-        <div className="space-y-3">
+        <div className="space-y-3" role="radiogroup" aria-label={question.scenario}>
           {question.options.map((option, index) => (
             <button
               key={index}
               onClick={() => handleAnswer(index)}
               disabled={isLoading}
+              role="radio"
+              aria-checked={selectedIndex === index}
               className={`
-                w-full p-4 text-left rounded-xl border-2 border-zen-border
+                w-full p-4 text-left rounded-xl border-2 border-zen-border dark:border-zinc-700
                 hover:border-zen-sage hover:bg-zen-sage/5 hover:-translate-y-1
                 focus-visible:ring-2 focus-visible:ring-zen-sage focus-visible:outline-none
                 transition-all duration-200 flex items-center gap-3
                 disabled:opacity-50 disabled:cursor-not-allowed
+                dark:bg-zinc-800/50 dark:hover:bg-zen-sage/10
                 ${selectedIndex === index ? 'animate-zen-button-press border-zen-sage bg-zen-sage/10' : ''}
                 group
               `}
@@ -116,18 +130,18 @@ export function QuizCard({
               <span className={`text-2xl transition-transform duration-200 ${selectedIndex === index ? 'scale-125' : 'group-hover:scale-110'}`}>
                 {option.emoji}
               </span>
-              <span className={`text-zen-text flex-1 transition-colors duration-200 ${selectedIndex === index ? 'text-zen-sage font-medium' : ''}`}>
+              <span className={`text-zen-text dark:text-zinc-200 flex-1 transition-colors duration-200 ${selectedIndex === index ? 'text-zen-sage font-medium' : ''}`}>
                 {option.text}
               </span>
-              <ArrowRight className={`w-5 h-5 text-zen-text-muted transition-all duration-200 ${selectedIndex === index ? 'text-zen-sage animate-zen-shake' : 'group-hover:translate-x-1'}`} />
+              <ArrowRight className={`w-5 h-5 text-zen-text-muted dark:text-zinc-500 transition-all duration-200 ${selectedIndex === index ? 'text-zen-sage animate-zen-shake' : 'group-hover:translate-x-1'}`} />
             </button>
           ))}
         </div>
       </ZenCard>
 
       {/* Hint text */}
-      <p className="text-center text-xs text-zen-text-muted mt-4 animate-zen-fade-in">
-        แต่ละคำตอบจะบอกเล่าสไตล์การวางแผนของคุณ
+      <p className="text-center text-xs text-zen-text-muted dark:text-zinc-500 mt-4 animate-zen-fade-in">
+        {t("question.progress", { current: questionNumber, total: totalQuestions })}
       </p>
     </div>
   );
@@ -146,7 +160,14 @@ export function QuizProgress({
   spiritAnimal?: string;
 }) {
   return (
-    <div className="flex items-center justify-center gap-2 mb-4">
+    <div
+      className="flex items-center justify-center gap-2 mb-4"
+      role="progressbar"
+      aria-valuenow={current}
+      aria-valuemin={0}
+      aria-valuemax={total}
+      aria-label={`Question ${current} of ${total}`}
+    >
       {Array.from({ length: total }).map((_, i) => (
         <div
           key={i}
@@ -158,7 +179,7 @@ export function QuizProgress({
                 : "bg-zen-sage"
               : i === current
                 ? "bg-zen-sage-light scale-125 animate-zen-pulse-grow"
-                : "bg-zen-border"
+                : "bg-zen-border dark:bg-zinc-700"
             }
           `}
         />

@@ -26,11 +26,8 @@ export interface ThaiQRPaymentData {
  * @returns Base64 encoded QR code image
  */
 export async function generateQRCode(paymentData: ThaiQRPaymentData): Promise<string> {
-  // Build PromptPay QR string
-  // Format: EMVCO Merchant Presentment QR
   const qrString = buildPromptPayQRString(paymentData);
 
-  // Generate QR code as base64
   const qrCodeDataUrl = await QRCode.toDataURL(qrString, {
     width: 300,
     margin: 2,
@@ -46,10 +43,9 @@ export async function generateQRCode(paymentData: ThaiQRPaymentData): Promise<st
 
 /**
  * Build PromptPay QR string format
- * Based on Thai QR Payment standard
+ * Based on Thai QR Payment standard (EMVCO)
  */
 function buildPromptPayQRString(data: ThaiQRPaymentData): string {
-  // EMVCO QR Payment format
   const segments: string[] = [];
 
   // Payload Format Indicator (00)
@@ -79,70 +75,47 @@ function buildPromptPayQRString(data: ThaiQRPaymentData): string {
   const merchantName = data.merchantName || "ZenPlanner";
   segments.push(`59${merchantName.length.toString().padStart(2, "0")}${merchantName}`);
 
-  // Merchant City (60) - Bangkok
-  segments.push("60Bangkok");
+  // Merchant City (60) - Bangkok (fixed length prefix)
+  const city = "Bangkok";
+  segments.push(`60${city.length.toString().padStart(2, "0")}${city}`);
 
-  // Additional Data - Reference 1 (62)
-  if (data.ref1) {
-    const ref1Tag = `07${data.ref1.length.toString().padStart(2, "0")}${data.ref1}`;
-    segments.push(`6207${ref1Tag.length.toString().padStart(2, "0")}${ref1Tag}`);
+  // Additional Data (62) - References
+  if (data.ref1 || data.ref2) {
+    let additionalData = "";
+    if (data.ref1) {
+      additionalData += `07${data.ref1.length.toString().padStart(2, "0")}${data.ref1}`;
+    }
+    if (data.ref2) {
+      additionalData += `08${data.ref2.length.toString().padStart(2, "0")}${data.ref2}`;
+    }
+    segments.push(`62${additionalData.length.toString().padStart(2, "0")}${additionalData}`);
   }
 
-  // Additional Data - Reference 2 (62)
-  if (data.ref2) {
-    const ref2Tag = `08${data.ref2.length.toString().padStart(2, "0")}${data.ref2}`;
-    segments.push(`6208${ref2Tag.length.toString().padStart(2, "0")}${ref2Tag}`);
-  }
+  // CRC placeholder -- will be replaced with real CRC16
+  const dataWithoutCRC = segments.join("") + "6304";
+  const crc = calculateCRC16(dataWithoutCRC);
 
-  // CRC (63) - will be calculated
-  // For now, use placeholder - in production calculate proper CRC16
-  segments.push("6304FFFF");
-
-  return segments.join("");
+  return dataWithoutCRC + crc;
 }
 
 /**
- * Generate a simple payment QR for demo/testing
- * Uses a mock format that's easier to test
- */
-export async function generateSimpleQRCode(
-  amount: number,
-  description: string
-): Promise<string> {
-  // Create a simpler QR that works for testing
-  const paymentInfo = `ZenPlanner Payment\nAmount: ${amount} THB\n${description}`;
-
-  const qrCodeDataUrl = await QRCode.toDataURL(paymentInfo, {
-    width: 280,
-    margin: 2,
-    color: {
-      dark: "#2C2C2C",
-      light: "#FFFFFF",
-    },
-    errorCorrectionLevel: "L",
-  });
-
-  return qrCodeDataUrl;
-}
-
-/**
- * Calculate CRC16 for Thai QR
- * Used for proper EMVCO QR validation
+ * Calculate CRC16-CCITT for EMVCO QR validation
+ * Polynomial: 0x1021, Initial: 0xFFFF
  */
 export function calculateCRC16(data: string): string {
-  let crc = 0xFFFF;
+  let crc = 0xffff;
   const polynomial = 0x1021;
 
   for (let i = 0; i < data.length; i++) {
     crc ^= data.charCodeAt(i) << 8;
     for (let j = 0; j < 8; j++) {
       if (crc & 0x8000) {
-        crc = (crc << 1) ^ polynomial;
+        crc = ((crc << 1) ^ polynomial) & 0xffff;
       } else {
-        crc = crc << 1;
+        crc = (crc << 1) & 0xffff;
       }
     }
   }
 
-  return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, "0");
+  return (crc & 0xffff).toString(16).toUpperCase().padStart(4, "0");
 }

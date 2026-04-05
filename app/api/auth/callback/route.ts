@@ -12,7 +12,20 @@ export async function GET(request: NextRequest) {
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get("code");
     const provider = requestUrl.searchParams.get("provider"); // "github" or "line"
-    const next = requestUrl.searchParams.get("next") || "/dashboard";
+    // Validate redirect target — only allow relative paths to prevent open redirect
+    let next = requestUrl.searchParams.get("next") || "/dashboard";
+    if (!next.startsWith("/") || next.startsWith("//")) {
+      next = "/dashboard";
+    }
+    // Block any absolute URL smuggling
+    try {
+      const parsed = new URL(next, request.url);
+      if (parsed.origin !== new URL(request.url).origin) {
+        next = "/dashboard";
+      }
+    } catch {
+      next = "/dashboard";
+    }
 
     if (!code) {
       return NextResponse.redirect(new URL("/login?error=no_code", request.url));

@@ -9,11 +9,22 @@ export interface ZenInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   helperText?: string;
   icon?: React.ReactNode;
+  /** ID of the element describing this input (for aria-describedby) */
+  describedBy?: string;
 }
 
 export const ZenInput = forwardRef<HTMLInputElement, ZenInputProps>(
-  ({ className = "", label, error, helperText, icon, id, ...props }, ref) => {
+  ({ className = "", label, error, helperText, icon, id, describedBy, ...props }, ref) => {
     const inputId = id || props.name;
+    const errorId = inputId ? `${inputId}-error` : undefined;
+    const helperId = inputId ? `${inputId}-helper` : undefined;
+
+    /* Build aria-describedby from error, helper, or explicit describedBy */
+    const ariaDescribedBy = [
+      error && errorId,
+      helperText && !error && helperId,
+      describedBy,
+    ].filter(Boolean).join(" ") || undefined;
 
     return (
       <div className="w-full">
@@ -34,23 +45,25 @@ export const ZenInput = forwardRef<HTMLInputElement, ZenInputProps>(
           <input
             ref={ref}
             id={inputId}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={ariaDescribedBy}
             className={`
               zen-input w-full px-4 py-3 text-zen-text bg-zen-surface
               placeholder:text-zen-text-muted
-              focus:outline-none focus:ring-2 focus:ring-zen-sage focus:border-transparent
+              focus-visible:outline-2 focus-visible:outline-zen-sage focus-visible:outline-offset-[-1px]
               disabled:bg-zen-surface-alt disabled:cursor-not-allowed
               ${icon ? "pl-10" : ""}
-              ${error ? "border-zen-blossom focus:ring-zen-blossom" : "border-zen-border"}
+              ${error ? "border-zen-blossom focus-visible:outline-zen-blossom" : "border-zen-border"}
               ${className}
             `}
             {...props}
           />
         </div>
         {error && (
-          <p className="mt-1.5 text-sm text-zen-blossom">{error}</p>
+          <p id={errorId} className="mt-1.5 text-sm text-zen-blossom" role="alert">{error}</p>
         )}
         {helperText && !error && (
-          <p className="mt-1.5 text-sm text-zen-text-muted">{helperText}</p>
+          <p id={helperId} className="mt-1.5 text-sm text-zen-text-muted">{helperText}</p>
         )}
       </div>
     );
@@ -87,8 +100,8 @@ export const ZenTextarea = forwardRef<HTMLTextAreaElement, ZenTextareaProps>(
           className={`
             zen-input w-full px-4 py-3 text-zen-text bg-zen-surface
             placeholder:text-zen-text-muted resize-none
-            focus:outline-none focus:ring-2 focus:ring-zen-sage focus:border-transparent
-            ${error ? "border-zen-blossom focus:ring-zen-blossom" : "border-zen-border"}
+            focus-visible:outline-2 focus-visible:outline-zen-sage focus-visible:outline-offset-[-1px]
+            ${error ? "border-zen-blossom focus-visible:outline-zen-blossom" : "border-zen-border"}
             ${className}
           `}
           {...props}

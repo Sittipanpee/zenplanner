@@ -1,0 +1,156 @@
+# ZenPlanner Production Sprint — Todo Tracker
+**Last updated:** 05-04-2026 | Sprint start
+
+---
+
+## Wave 1 — Parallel Workers
+
+### DB-01: DB Surgeon
+- [x] Create `supabase/migrations/002_production_hardening.sql`
+  - [x] Add `updated_at` columns + auto-update triggers on all stateful tables
+  - [x] Add indexes: quiz_sessions(user_id), planner_blueprints(user_id), generated_planners(user_id), payments(user_id), activity_log(user_id, activity_date), generation_jobs(blueprint_id), generation_jobs(status), payments(status)
+  - [x] Fix admin RLS: replace `display_name = 'admin'` with `role` column approach
+  - [x] Add NOT NULL constraints on critical columns (activity_type, mode)
+  - [x] Fix `handle_new_user()` trigger to handle LINE metadata fields (COALESCE chain)
+  - [x] Fix `payments.blueprint_id` ON DELETE SET NULL
+  - [x] Add QuizState phase constraint fix (add 'intro' to CHECK)
+  - [x] Add JSONB validation CHECK on axis_scores (must be object when complete)
+- **STATUS:** [x] COMPLETE
+
+### BE-02: Backend Craftsman
+- [ ] `package.json`: add all missing deps (@supabase/ssr, @supabase/supabase-js, @line/liff, xlsx, qrcode, clsx, zod, next-themes, next-intl)
+- [ ] `lib/llm.ts`: fix infinite retry, add timeout, add Zod validation
+- [ ] `lib/planner-generator.ts`: fix URL.createObjectURL → server Buffer + Supabase Storage
+- [ ] `lib/qr-generator.ts`: fix CRC16, fix malformed PromptPay string
+- [ ] `lib/sheet-builder.ts`: remove console.logs, ensure server-compatible
+- [ ] `lib/supabase/server.ts`: fix silent catch{}, add env validation
+- [ ] `lib/supabase/client.ts`: add env validation
+- [ ] `app/api/auth/line/route.ts`: create real Supabase session for LINE users
+- [ ] `app/api/auth/callback/route.ts`: fix open redirect (next param)
+- [ ] `app/api/payment/webhook/route.ts`: enable signature verification, remove/gate simulation PUT
+- [ ] `app/api/payment/create-qr/route.ts`: fix DB insert swallow, use crypto.randomUUID
+- [ ] `app/api/line/share-flex/route.ts`: add auth check
+- [ ] `app/api/planner/generate/route.ts`: fix server-side generation pipeline
+- [ ] `app/api/planner/download/[id]/route.ts`: return Supabase Storage signed URL
+- [ ] `app/api/blueprint/route.ts`: add pagination, validate spirit_animal enum
+- **STATUS:** [ ] PENDING
+
+### QZ-03: Quiz Psychologist
+- [ ] `lib/quiz-engine.ts`: fix QuizState.phase type (add 'intro'), improve scoring range
+- [ ] `lib/quiz-data.ts`: ensure all 22 questions have proper axis weights
+- [ ] `lib/archetype-map.ts`: remove unused variables, fix getArchetypeCode fallback
+- [ ] `lib/quiz-prompts.ts` (NEW): rich prompt templates for AI personality narrative (TH/EN/ZH)
+- [ ] `app/api/quiz/step/route.ts`: fix answers array reset (load from DB), fix custom/minigame modes
+- [ ] `app/api/quiz/complete/route.ts`: integrate AI narrative generation, Zod validate LLM output
+- [ ] `app/api/quiz/profile/route.ts`: fix system prompt duplication, fix profile JSON regex, fix completion detection
+- **STATUS:** [ ] PENDING
+
+### DS-04: Notioneer (Design System)
+- [x] `app/globals.css`: full dark mode variable system (html[data-theme="dark"]), reduced-motion, fix invalid CSS (ring->outline)
+- [x] `components/ui/zen-button.tsx`: ARIA labels, dark mode classes, reduced-motion
+- [x] `components/ui/zen-card.tsx`: ARIA roles, dark mode, fix double border
+- [x] `components/ui/zen-input.tsx`: ARIA, dark mode, fix focus ring
+- [x] `components/ui/zen-nav.tsx`: dark mode, ARIA landmark, mobile responsive
+- [x] `components/ui/zen-badge.tsx`: dark mode, ARIA
+- [x] `components/ui/theme-toggle.tsx` (NEW): sun/moon toggle, next-themes, accessible
+- [x] `components/ui/language-switcher.tsx` (NEW): EN/TH/ZH buttons, sets NEXT_LOCALE cookie
+- **STATUS:** [x] COMPLETE
+
+### I18N-05: i18n Architect
+- [x] `i18n/request.ts` (NEW): next-intl getRequestConfig reading NEXT_LOCALE cookie
+- [x] `messages/en.json` (NEW): complete English translations per SSOT key contract
+- [x] `messages/th.json` (NEW): complete Thai translations
+- [x] `messages/zh.json` (NEW): complete Simplified Chinese translations
+- [x] `lib/animal-data.ts` (NEW): canonical ANIMALS record with nameTh/nameEn/nameZh, fix fox entry
+- **STATUS:** [x] COMPLETE
+
+### INF-06: Infrastructure Engineer
+- [x] `next.config.ts`: next-intl plugin, image domains (supabase storage, line profile pics), security headers
+- [x] `middleware.ts`: remove dead lib/supabase/middleware.ts reference, clean up, ensure auth protection correct
+- [x] `.env.example` (NEW): document all required env vars
+- [x] `lib/utils.ts`: add tailwind-merge (twMerge + clsx pattern: `cn()` helper)
+- [x] `tsconfig.json`: verified — strict: true, @/* path alias correct, no additional aliases needed
+- **STATUS:** [x] COMPLETE
+- **NOTE:** tailwind-merge is NOT in package.json yet — BE-02 must add it as a dependency
+
+### QF-07: Quiz Flow Agent
+- [ ] `components/quiz/quiz-card.tsx`: i18n, dark mode, ARIA, define `animate-shimmer` keyframe
+- [ ] `components/quiz/animal-card.tsx`: use lib/animal-data.ts, i18n animal names, dark mode
+- [ ] `components/quiz/progress-dots.tsx`: fix conditional style bug, dark mode, ARIA
+- [ ] `components/quiz/axis-indicator.tsx`: dark mode, ARIA
+- [ ] `components/quiz/chat-bubble.tsx`: dark mode, ARIA
+- [ ] `app/quiz/page.tsx`: i18n, dark mode, use ThemeToggle + LanguageSwitcher in nav
+- [ ] `app/quiz/[mode]/page.tsx`: sessionStorage persistence for quiz state, i18n, dark mode
+- [ ] `app/quiz/reveal/page.tsx`: fix fox name (use animal-data.ts), replace alert() with toast/inline feedback, i18n
+- [ ] `app/quiz/profile/page.tsx`: i18n, dark mode, fix auto-redirect (add cancel button)
+- [ ] `app/(auth)/login/page.tsx`: i18n, dark mode, fix window.location.href → router.push
+- [ ] `app/(auth)/signup/page.tsx`: i18n, dark mode
+- **STATUS:** [ ] PENDING
+
+### FP-08: Feature Pages Agent
+- [ ] `app/layout.tsx`: add ThemeProvider (next-themes) + NextIntlClientProvider, ThemeToggle + LanguageSwitcher in global nav
+- [ ] `app/(app)/layout.tsx`: mount ZenBottomNav (mobile) + ZenSidebar (desktop) as actual shared app shell
+- [ ] `components/dashboard/heatmap.tsx`: dark mode, i18n labels, fix month alignment
+- [ ] `components/dashboard/stats-grid.tsx`: dark mode, i18n, use real streak data (or clear stub with TODO comment)
+- [ ] `components/dashboard/animal-profile.tsx`: use lib/animal-data.ts, dark mode, i18n
+- [ ] `components/dashboard/planner-history.tsx`: dark mode, i18n
+- [ ] `components/planner/tool-grid.tsx`: add search/filter, dark mode, i18n
+- [ ] `components/planner/tool-card.tsx`: dark mode, i18n
+- [ ] `components/planner/special-tool-previews.tsx`: dark mode
+- [ ] `components/planner/customization-panel.tsx`: sync color scheme IDs with blueprint/customize/page.tsx, dark mode, i18n
+- [ ] `components/planner/preview-mini.tsx`: dark mode
+- [ ] `components/export/share-card.tsx`: fix LINE icon SVG, fix silent Facebook/Twitter handlers, dark mode, i18n
+- [ ] `components/export/download-card.tsx`: fix CSV option (disable or implement), dark mode, i18n
+- [ ] `components/export/generation-progress.tsx`: dark mode, i18n
+- [ ] `components/liff/line-login-button.tsx`: dark mode
+- [ ] `components/liff/share-animal-button.tsx`: dark mode
+- [ ] `app/(app)/dashboard/page.tsx`: i18n, dark mode
+- [ ] `app/(app)/blueprint/page.tsx`: fix hardcoded "lion", i18n, dark mode
+- [ ] `app/(app)/blueprint/customize/page.tsx`: sync customization IDs, i18n, dark mode
+- [ ] `app/(app)/generate/page.tsx`: i18n, dark mode
+- [ ] `app/(app)/generate/done/page.tsx`: fix hardcoded "8 tools", fix CSV toggle, i18n, dark mode
+- [ ] `app/(app)/profile/page.tsx`: replace alert("coming soon") with settings page link, i18n, dark mode
+- [ ] `app/(app)/payment/page.tsx`: i18n, dark mode
+- [ ] `app/(app)/stats/page.tsx`: i18n, dark mode
+- [ ] `app/(app)/tools/page.tsx`: i18n, dark mode
+- [ ] `app/(app)/settings/page.tsx` (NEW): real settings page (language, theme, account)
+- [ ] `app/page.tsx`: landing/splash, i18n, dark mode
+- **STATUS:** [ ] PENDING
+
+---
+
+## Wave 2 — Integration QA (after Wave 1 complete)
+
+### INT-09: Integration QA
+- [ ] Read all changed files, check for TypeScript errors across boundaries
+- [ ] Fix any import path issues between agents' outputs
+- [ ] Verify i18n keys in pages match messages/*.json (no missing keys)
+- [ ] Verify all new components are properly exported/imported
+- [ ] Run `npm install` to install new deps
+- [ ] Run `npm run build` — fix all errors
+- [ ] Verify build output clean (zero TypeScript errors, zero warnings that block)
+- **STATUS:** [ ] PENDING
+
+---
+
+## Wave 3 — Devil's Advocate (after Wave 2 complete)
+
+### DA-10: Devil's Advocate
+- [ ] Re-run full audit against P0-P3 issue list from Session 2
+- [ ] Score each feature domain 0-100
+- [ ] Verify dark mode works across all pages
+- [ ] Verify i18n: all visible text translated in all 3 languages
+- [ ] Verify LINE auth flow creates session
+- [ ] Verify planner download works
+- [ ] Verify quiz AI narrative generates
+- [ ] Verify payment webhook is secured
+- [ ] Target: all domains ≥ 95/100, no P0 or P1 remaining
+- **STATUS:** [ ] PENDING
+
+---
+
+## Sprint Completion Gate
+- [ ] Wave 1: All 8 agents COMPLETE
+- [ ] Wave 2: Build passes clean
+- [ ] Wave 3: DA score ≥ 99/100
+- [ ] All changes committed and pushed to claude/spawn-agent-fvw52

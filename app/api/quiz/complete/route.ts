@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { determineAnimal, generateInsight } from "@/lib/quiz-engine";
+import { generatePersonalityNarrative } from "@/lib/quiz-prompts";
 import type { AxisScores, SpiritAnimal } from "@/lib/types";
 
 export async function POST(request: NextRequest) {
@@ -29,6 +30,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing axis scores" }, { status: 400 });
     }
 
+    // Detect locale from Accept-Language header or query param
+    const acceptLanguage = request.headers.get("accept-language") ?? "";
+    const localeParam = request.nextUrl.searchParams.get("locale") ?? "";
+    let locale: "en" | "th" | "zh" = "th";
+    if (localeParam === "en" || localeParam === "zh") {
+      locale = localeParam;
+    } else if (localeParam === "th") {
+      locale = "th";
+    } else if (acceptLanguage.startsWith("zh")) {
+      locale = "zh";
+    } else if (acceptLanguage.startsWith("en")) {
+      locale = "en";
+    }
+
     // Calculate archetype if not provided
     let finalAnimal: SpiritAnimal;
     let finalScores: AxisScores;
@@ -37,7 +52,6 @@ export async function POST(request: NextRequest) {
     if (spiritAnimal) {
       finalAnimal = spiritAnimal;
       finalScores = axisScores;
-      // Generate insight
       insight = await generateInsight(finalAnimal, finalScores);
     } else {
       finalScores = axisScores;
@@ -47,6 +61,15 @@ export async function POST(request: NextRequest) {
 
     // Determine archetype code from animal
     const archetypeCode = getArchetypeCode(finalAnimal);
+
+    // Generate AI personality narrative
+    const archetypeTitle = getArchetypeTitle(finalAnimal);
+    const narrative = await generatePersonalityNarrative({
+      spiritAnimal: finalAnimal,
+      axisScores: finalScores,
+      archetypeTitle,
+      locale,
+    });
 
     // Update or create quiz session
     if (sessionId) {
@@ -59,6 +82,7 @@ export async function POST(request: NextRequest) {
           lifestyle_profile: lifestyleProfile,
           status: "complete",
           phase: "complete",
+          narrative: narrative,
         })
         .eq("id", sessionId);
 
@@ -91,6 +115,7 @@ export async function POST(request: NextRequest) {
       archetypeCode,
       axisScores: finalScores,
       insight,
+      narrative,
     });
   } catch (error) {
     console.error("Quiz complete error:", error);
@@ -120,5 +145,31 @@ function getArchetypeCode(animal: SpiritAnimal): string {
     butterfly: "NSSGKG",
     bamboo: "NAHHLG",
   };
-  return codes[animal];
+  // Fallback to first archetype code if animal not found (should not happen)
+  return codes[animal] ?? "DASESL";
+}
+
+/**
+ * Get human-readable archetype title for narrative generation
+ */
+function getArchetypeTitle(animal: SpiritAnimal): string {
+  const titles: Record<SpiritAnimal, string> = {
+    lion: "The Radiant Commander",
+    whale: "The Deep Thinker",
+    dolphin: "The Joyful Connector",
+    owl: "The Wise Observer",
+    fox: "The Clever Adaptor",
+    turtle: "The Steady Pace Keeper",
+    eagle: "The Visionary Soarer",
+    octopus: "The Creative Problem Solver",
+    mountain: "The Unshakable Anchor",
+    wolf: "The Loyal Pack Leader",
+    sakura: "The Gentle Bloomer",
+    cat: "The Graceful Independent",
+    crocodile: "The Strategic Hunter",
+    dove: "The Peaceful Harmonizer",
+    butterfly: "The Transformational Explorer",
+    bamboo: "The Steady Grower",
+  };
+  return titles[animal] ?? "The Unique Soul";
 }

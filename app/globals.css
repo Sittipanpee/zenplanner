@@ -56,6 +56,91 @@
 }
 
 /* ===========================================
+   DARK MODE — Manual Toggle
+   html[data-theme="dark"] is set by next-themes
+   =========================================== */
+
+html[data-theme="dark"] {
+  /* Core Palette — Dark Zen */
+  --zen-bg: #0f1117;
+  --zen-surface: #161b22;
+  --zen-surface-alt: #1e2530;
+  --zen-border: rgba(255, 255, 255, 0.08);
+  --zen-border-hover: rgba(255, 255, 255, 0.15);
+
+  /* Text */
+  --zen-text: #e8edf3;
+  --zen-text-secondary: #94a3b8;
+  --zen-text-muted: #64748b;
+
+  /* Accent Colors — Muted for dark context */
+  --zen-sage: #6a8f71;
+  --zen-sage-light: #8ab892;
+  --zen-earth: #a07a5c;
+  --zen-sky: #7993b5;
+  --zen-blossom: #c47470;
+  --zen-gold: #b8985e;
+  --zen-indigo: #5e6d94;
+  --zen-stone: #7d7873;
+
+  /* Shadows — darker, more diffuse */
+  --zen-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --zen-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --zen-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+  color-scheme: dark;
+}
+
+/* ===========================================
+   DARK MODE — System Preference (auto)
+   Applies when no explicit data-theme is set
+   =========================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --zen-bg: #0f1117;
+    --zen-surface: #161b22;
+    --zen-surface-alt: #1e2530;
+    --zen-border: rgba(255, 255, 255, 0.08);
+    --zen-border-hover: rgba(255, 255, 255, 0.15);
+
+    --zen-text: #e8edf3;
+    --zen-text-secondary: #94a3b8;
+    --zen-text-muted: #64748b;
+
+    --zen-sage: #6a8f71;
+    --zen-sage-light: #8ab892;
+    --zen-earth: #a07a5c;
+    --zen-sky: #7993b5;
+    --zen-blossom: #c47470;
+    --zen-gold: #b8985e;
+    --zen-indigo: #5e6d94;
+    --zen-stone: #7d7873;
+
+    --zen-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+    --zen-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+    --zen-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+    color-scheme: dark;
+  }
+}
+
+/* ===========================================
+   REDUCED MOTION — Accessibility
+   =========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===========================================
    TAILWIND v4 THEME MAPPING
    =========================================== */
 
@@ -176,6 +261,50 @@
 .animate-zen-card-hover { animation: zen-card-hover 0.3s ease-out; }
 .animate-zen-glow-pulse { animation: zen-glow-pulse 1.5s ease-in-out infinite; }
 
+/* Shimmer animation (loading skeleton) */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, 0.1) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ===========================================
+   ZEN ICON BUTTON (used by ThemeToggle etc.)
+   =========================================== */
+
+.zen-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-height: var(--zen-touch-target);
+  min-width: var(--zen-touch-target);
+  padding: 6px;
+  border-radius: var(--zen-radius-md);
+  background: transparent;
+  color: var(--zen-text-secondary);
+  border: 1px solid var(--zen-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.zen-btn-icon:hover {
+  color: var(--zen-text);
+  background: var(--zen-surface-alt);
+  border-color: var(--zen-border-hover);
+}
+
+.zen-btn-icon:focus-visible {
+  outline: 2px solid var(--zen-sage);
+  outline-offset: 2px;
+}
+
 /* ===========================================
    ZEN UTILITY CLASSES
    =========================================== */
@@ -224,8 +353,8 @@
 }
 
 .zen-input:focus {
-  outline: none;
-  ring: 2px solid var(--zen-sage);
+  outline: 2px solid var(--zen-sage);
+  outline-offset: -1px;
 }
 
 .zen-bottom-bar {

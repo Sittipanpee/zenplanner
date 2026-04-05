@@ -1,0 +1,206 @@
+{
+  "common": {
+    "app": {
+      "name": "ZenPlanner",
+      "tagline": "วางแผนด้วยจิตวิญญาณของคุณ"
+    },
+    "nav": {
+      "dashboard": "แดชบอร์ด",
+      "quiz": "แบบทดสอบ",
+      "planner": "แผน",
+      "profile": "โปรไฟล์",
+      "settings": "การตั้งค่า",
+      "logout": "ออกจากระบบ",
+      "login": "เข้าสู่ระบบ"
+    },
+    "actions": {
+      "continue": "ดำเนินการต่อ",
+      "back": "ย้อนกลับ",
+      "save": "บันทึก",
+      "cancel": "ยกเลิก",
+      "generate": "สร้าง",
+      "download": "ดาวน์โหลด",
+      "share": "แชร์",
+      "copy": "คัดลอกลิงก์",
+      "copied": "คัดลอกแล้ว!",
+      "loading": "กำลังโหลด...",
+      "error": "เกิดข้อผิดพลาด",
+      "retry": "ลองอีกครั้ง",
+      "close": "ปิด",
+      "next": "ถัดไป",
+      "skip": "ข้าม",
+      "done": "เสร็จสิ้น"
+    },
+    "theme": {
+      "light": "โหมดกลางวัน",
+      "dark": "โหมดกลางคืน",
+      "system": "ตามระบบ"
+    },
+    "language": {
+      "en": "English",
+      "th": "ไทย",
+      "zh": "中文"
+    },
+    "errors": {
+      "notFound": "ไม่พบหน้านี้",
+      "serverError": "เซิร์ฟเวอร์มีปัญหา กรุณาลองใหม่ภายหลัง",
+      "unauthorized": "กรุณาเข้าสู่ระบบก่อนดำเนินการต่อ",
+      "networkError": "ไม่สามารถเชื่อมต่อได้ กรุณาตรวจสอบอินเทอร์เน็ต"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "ยินดีต้อนรับกลับ",
+      "subtitle": "เข้าสู่ระบบเพื่อวางแผนต่อจากที่ค้างไว้",
+      "lineButton": "เข้าสู่ระบบด้วย LINE",
+      "githubButton": "เข้าสู่ระบบด้วย GitHub",
+      "noAccount": "ยังไม่มีบัญชี?",
+      "signUp": "สมัครสมาชิก",
+      "orDivider": "หรือ"
+    },
+    "signup": {
+      "title": "สร้างบัญชีใหม่",
+      "hasAccount": "มีบัญชีอยู่แล้ว?",
+      "signIn": "เข้าสู่ระบบ"
+    }
+  },
+  "quiz": {
+    "home": {
+      "title": "ค้นพบสัตว์นำโชคของคุณ",
+      "subtitle": "แบบทดสอบสั้น ๆ เพื่อเผยบุคลิกการวางแผนที่เป็นเอกลักษณ์ของคุณ",
+      "startButton": "เริ่มทำแบบทดสอบ",
+      "modeClassic": "แบบคลาสสิก",
+      "modeChat": "แบบสนทนา",
+      "modeGame": "มินิเกม",
+      "estimatedTime": "ประมาณ 3 นาที"
+    },
+    "question": {
+      "progress": "คำถามที่ {current} จาก {total}",
+      "back": "คำถามก่อนหน้า"
+    },
+    "reveal": {
+      "title": "สัตว์นำโชคของคุณคือ",
+      "subtitle": "ต้นแบบนี้สะท้อนถึงวิธีที่คุณวางแผนและใช้ชีวิตได้อย่างเป็นธรรมชาติ",
+      "share": "แชร์ผลลัพธ์",
+      "takeAgain": "ทำแบบทดสอบอีกครั้ง",
+      "viewPlanner": "สร้างแผนของฉัน",
+      "copied": "คัดลอกลิงก์เรียบร้อยแล้ว!",
+      "copyError": "ไม่สามารถคัดลอกได้ กรุณาคัดลอก URL ด้วยตนเอง"
+    },
+    "profile": {
+      "title": "เล่าให้เราฟังเกี่ยวกับไลฟ์สไตล์ของคุณ",
+      "chatPlaceholder": "บอกเล่าเกี่ยวกับวันทั่วไปของคุณ เป้าหมาย หรืออะไรก็ตามที่อยู่ในใจ...",
+      "send": "ส่ง",
+      "analyzing": "กำลังวิเคราะห์โปรไฟล์ของคุณ...",
+      "complete": "โปรไฟล์สมบูรณ์แล้ว"
+    },
+    "summary": {
+      "title": "โปรไฟล์การวางแผนของคุณ",
+      "traits": "ลักษณะเด่น",
+      "strengths": "จุดแข็งของคุณ",
+      "recommendation": "เครื่องมือที่แนะนำ"
+    }
+  },
+  "planner": {
+    "blueprint": {
+      "title": "สร้าง Blueprint ของคุณ",
+      "subtitle": "เลือกเครื่องมือที่เหมาะกับชีวิตคุณ",
+      "spiritAnimal": "สัตว์นำโชคของคุณ",
+      "selectedTools": "เลือกแล้ว {count} เครื่องมือ",
+      "customize": "ปรับแต่ง",
+      "generate": "สร้างแผน",
+      "noAnimal": "ทำแบบทดสอบให้เสร็จก่อน เพื่อปลดล็อก Blueprint ส่วนตัวของคุณ"
+    },
+    "toolGrid": {
+      "searchPlaceholder": "ค้นหาเครื่องมือ...",
+      "allCategories": "ทุกหมวดหมู่",
+      "noResults": "ไม่พบเครื่องมือ",
+      "selected": "เลือกแล้ว",
+      "addTool": "เพิ่ม",
+      "removeTool": "ลบออก"
+    },
+    "customize": {
+      "title": "ปรับแต่งแผนของคุณ",
+      "colorScheme": "ชุดสี",
+      "layout": "เลย์เอาต์",
+      "paperSize": "ขนาดกระดาษ",
+      "preview": "ตัวอย่าง"
+    },
+    "generate": {
+      "title": "กำลังสร้างแผนของคุณ",
+      "step1": "กำลังเตรียม Blueprint...",
+      "step2": "กำลังสร้างหน้ารายวัน...",
+      "step3": "กำลังเพิ่มตัวติดตามนิสัย...",
+      "step4": "กำลังใส่รายละเอียดส่วนตัว...",
+      "step5": "เกือบเสร็จแล้ว..."
+    },
+    "done": {
+      "title": "แผนของคุณพร้อมแล้ว!",
+      "subtitle": "ดาวน์โหลดหรือแชร์ให้เพื่อน",
+      "downloadExcel": "ดาวน์โหลด Excel",
+      "downloadSheets": "เปิดใน Google Sheets",
+      "shareTitle": "แชร์",
+      "shareLine": "แชร์ทาง LINE",
+      "shareFacebook": "แชร์ทาง Facebook",
+      "shareTwitter": "แชร์ทาง X (Twitter)",
+      "copyLink": "คัดลอกลิงก์"
+    },
+    "payment": {
+      "title": "ปลดล็อกแผนของคุณ",
+      "subtitle": "ชำระครั้งเดียว — เป็นของคุณตลอดไป",
+      "amount": "฿{amount}",
+      "scan": "สแกนเพื่อชำระ",
+      "waiting": "รอการชำระเงิน...",
+      "success": "ชำระเงินสำเร็จ!",
+      "failed": "การชำระเงินล้มเหลว",
+      "retry": "ลองอีกครั้ง"
+    }
+  },
+  "dashboard": {
+    "title": "แดชบอร์ด",
+    "welcome": "ยินดีต้อนรับ, {name}",
+    "stats": {
+      "currentStreak": "สถิติต่อเนื่องปัจจุบัน",
+      "longestStreak": "สถิติต่อเนื่องสูงสุด",
+      "plannersCreated": "แผนที่สร้างแล้ว",
+      "toolsUsed": "เครื่องมือที่ใช้",
+      "daysActive": "วันที่ใช้งาน",
+      "planners": "{count} แผน"
+    },
+    "heatmap": {
+      "title": "กิจกรรม",
+      "less": "น้อย",
+      "more": "มาก",
+      "tooltip": "{count} กิจกรรม เมื่อ {date}",
+      "empty": "ยังไม่มีกิจกรรม"
+    },
+    "recentPlanners": {
+      "title": "แผนล่าสุด",
+      "empty": "ยังไม่มีแผน",
+      "createFirst": "สร้างแผนแรกของคุณ",
+      "viewAll": "ดูทั้งหมด"
+    },
+    "quickActions": {
+      "newPlanner": "สร้างแผนใหม่",
+      "retakeQuiz": "ทำแบบทดสอบอีกครั้ง",
+      "viewStats": "ดูสถิติ"
+    }
+  },
+  "profile": {
+    "title": "โปรไฟล์ของคุณ",
+    "spiritAnimal": "สัตว์นำโชค",
+    "editProfile": "แก้ไขโปรไฟล์",
+    "planningStyle": "สไตล์การวางแผน",
+    "keyTraits": "ลักษณะเด่น",
+    "settings": {
+      "title": "การตั้งค่า",
+      "notifications": "การแจ้งเตือน",
+      "privacy": "ความเป็นส่วนตัว",
+      "language": "ภาษา",
+      "theme": "ธีม",
+      "account": "บัญชี",
+      "signOut": "ออกจากระบบ",
+      "deleteAccount": "ลบบัญชี"
+    }
+  }
+}

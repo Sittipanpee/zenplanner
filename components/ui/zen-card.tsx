@@ -7,6 +7,8 @@ import type { HTMLAttributes, ReactNode } from "react";
 export interface ZenCardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "interactive" | "highlight";
   padding?: "none" | "sm" | "md" | "lg";
+  /** ARIA role: "article" for content cards, "region" for sections */
+  role?: "article" | "region" | "group" | string;
   children: ReactNode;
 }
 
@@ -14,12 +16,14 @@ export function ZenCard({
   className = "",
   variant = "default",
   padding = "md",
+  role,
   children,
   ...props
 }: ZenCardProps) {
+  /* Fix: removed duplicate border from variants — zen-card utility class already applies border */
   const variants = {
-    default: "border border-zen-border",
-    interactive: "border border-zen-border hover:border-zen-border-hover hover:shadow-lg transition-all duration-200 cursor-pointer",
+    default: "",
+    interactive: "hover:border-zen-border-hover hover:shadow-lg transition-all duration-200 cursor-pointer",
     highlight: "border-2 border-zen-sage shadow-md",
   };
 
@@ -32,6 +36,7 @@ export function ZenCard({
 
   return (
     <div
+      role={role}
       className={`
         zen-card bg-zen-surface rounded-zen-lg shadow-zen-md
         ${variants[variant]}
