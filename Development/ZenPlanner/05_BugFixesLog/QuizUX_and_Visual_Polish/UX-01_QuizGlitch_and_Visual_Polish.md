@@ -1,7 +1,7 @@
 # UX-01 — Quiz Glitch & Visual Polish Fix
 **Phase:** 6 (Post-Sprint Polish)
 **Team:** Arcade
-**Status:** [~] IN PROGRESS
+**Status:** [x] Complete
 **Depends on:** None
 **Blocks:** None
 
@@ -64,14 +64,14 @@ Fix 5 P1 UX bugs and 7 P2 visual issues identified in Session 6 audit.
 - **Fix:** Add spirit animal emoji 🌿 or a small icon before the "ZenPlanner" wordmark
 
 ## Acceptance Criteria
-- [ ] Clicking a quiz answer transitions smoothly — no flash of old question
-- [ ] Quiz page shows one progress indicator only (the card's internal bar)
-- [ ] Landing page cards have distinct, specific descriptions
-- [ ] Hero brand name has visual weight / presence
-- [ ] Quiz card uses only zen design tokens (no zinc overrides)
-- [ ] Feature highlights have card containers
-- [ ] Build passes clean after changes
-- [ ] No console.log in production code
+- [x] Clicking a quiz answer transitions smoothly — no flash of old question
+- [x] Quiz page shows one progress indicator only (the card's internal bar)
+- [x] Landing page cards have distinct, specific descriptions
+- [x] Hero brand name has visual weight / presence
+- [x] Quiz card uses only zen design tokens (no zinc overrides)
+- [x] Feature highlights have card containers
+- [x] Build passes clean after changes
+- [x] No console.log in production code
 
 ## Boundaries
 - Do NOT touch: quiz scoring logic, i18n message files (add keys only if needed), database logic, API routes
