@@ -29,7 +29,7 @@ export default async function HomePage() {
       >
         <div className="text-6xl mb-6 animate-zen-float">&#127807;</div>
         <h1
-          className="text-5xl md:text-7xl font-light mb-4 text-zen-sage"
+          className="text-5xl md:text-7xl font-light mb-4 text-zen-text"
           style={{ fontFamily: 'var(--zen-font-display)' }}
         >
           {t('common.app.name')}
@@ -52,7 +52,7 @@ export default async function HomePage() {
       <section className="w-full max-w-4xl px-4 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Feature 1: Spirit Animal Quiz */}
-          <div className="text-center space-y-3 p-6">
+          <div className="text-center space-y-3 p-6 bg-zen-surface border border-zen-border rounded-2xl hover:shadow-zen-md transition-shadow">
             <div className="text-4xl">&#129517;</div>
             <h2
               className="text-xl font-semibold text-zen-text"
@@ -66,7 +66,7 @@ export default async function HomePage() {
           </div>
 
           {/* Feature 2: Smart Planner */}
-          <div className="text-center space-y-3 p-6">
+          <div className="text-center space-y-3 p-6 bg-zen-surface border border-zen-border rounded-2xl hover:shadow-zen-md transition-shadow">
             <div className="text-4xl">&#128203;</div>
             <h2
               className="text-xl font-semibold text-zen-text"
@@ -80,7 +80,7 @@ export default async function HomePage() {
           </div>
 
           {/* Feature 3: 3 Languages */}
-          <div className="text-center space-y-3 p-6">
+          <div className="text-center space-y-3 p-6 bg-zen-surface border border-zen-border rounded-2xl hover:shadow-zen-md transition-shadow">
             <div className="text-4xl">&#127759;</div>
             <h2
               className="text-xl font-semibold text-zen-text"
@@ -100,7 +100,7 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Mode 1: Spirit Animal Quiz */}
           <Link href="/quiz" className="w-full text-left group block">
-            <div className="bg-zen-surface border-2 border-zen-border rounded-zen-xl p-6 md:p-8 transition-all duration-200 hover:border-zen-gold hover:shadow-zen-lg hover:-translate-y-1">
+            <div className="bg-zen-surface border-2 border-zen-border rounded-zen-xl p-6 md:p-8 transition-all duration-200 hover:border-zen-sage hover:shadow-zen-lg hover:-translate-y-1">
               <div className="flex items-center gap-4 md:gap-5">
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-zen-gold/10 rounded-full flex items-center justify-center shrink-0">
                   <Sparkles className="w-7 h-7 md:w-8 md:h-8 text-zen-gold" />
@@ -110,7 +110,7 @@ export default async function HomePage() {
                     {t('common.nav.quiz')}
                   </h2>
                   <p className="text-sm md:text-base text-zen-text-secondary mt-1">
-                    {t('common.app.tagline')}
+                    {t('landing.card1.desc')}
                   </p>
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default async function HomePage() {
                     {t('common.nav.planner')}
                   </h2>
                   <p className="text-sm md:text-base text-zen-text-secondary mt-1">
-                    {t('common.app.tagline')}
+                    {t('landing.card2.desc')}
                   </p>
                 </div>
               </div>

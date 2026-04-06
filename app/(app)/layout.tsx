@@ -55,7 +55,9 @@ export default function AppLayout({
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex md:fixed md:left-0 md:top-0 md:h-screen md:w-64 bg-zen-surface border-r border-zen-border flex-col z-20">
         <div className="p-6 border-b border-zen-border">
-          <h1 className="font-display text-2xl font-bold text-zen-sage">ZenPlanner</h1>
+          <h1 className="font-display text-2xl font-bold text-zen-sage flex items-center gap-2">
+            <span aria-hidden="true">&#127807;</span>ZenPlanner
+          </h1>
         </div>
         <nav className="flex-1 p-4">
           {NAV_ITEMS.map((item) => {

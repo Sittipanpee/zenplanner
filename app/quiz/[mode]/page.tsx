@@ -9,7 +9,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { QuizCard, QuizProgress } from "@/components/quiz/quiz-card";
+import { QuizCard } from "@/components/quiz/quiz-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { getAnimal } from "@/lib/animal-data";
 import { createClient } from "@/lib/supabase/client";
@@ -80,9 +80,6 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
 
     setAnswers(newAnswers);
 
-    // Simulate delay for effect
-    await new Promise((r) => setTimeout(r, 500));
-
     if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
       setCurrentQuestion(newQuestion);
     } else {
@@ -150,7 +147,7 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Quiz saved successfully:", data);
+
       } else {
         console.error("Failed to save quiz:", await response.text());
       }
@@ -190,23 +187,23 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
     const animalName = locale === "th" ? animalData.nameTh : locale === "zh" ? animalData.nameZh : animalData.nameEn;
 
     return (
-      <main className="min-h-screen bg-zen-bg dark:bg-zinc-950 flex flex-col items-center justify-center p-4">
+      <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-md text-center space-y-6 animate-zen-reveal">
           <div className="text-6xl mb-4">
             {animalData.emoji}
           </div>
-          <h1 className="font-display text-2xl font-bold text-zen-text dark:text-zinc-100">
+          <h1 className="font-display text-2xl font-bold text-zen-text">
             {t("reveal.title")}
           </h1>
           <h2 className="font-display text-4xl font-bold text-zen-sage capitalize">
             {animalName}
           </h2>
-          <p className="text-zen-text-secondary dark:text-zinc-400">
+          <p className="text-zen-text-secondary">
             {animalData.description}
           </p>
           {/* Saving status indicator */}
           {isSaving && (
-            <p className="text-sm text-zen-text-muted dark:text-zinc-500 flex items-center justify-center gap-2">
+            <p className="text-sm text-zen-text-muted flex items-center justify-center gap-2">
               <span className="w-2 h-2 bg-zen-sage rounded-full animate-pulse" aria-hidden="true" />
               {tCommon("actions.loading")}
             </p>
@@ -228,10 +225,9 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   const currentQ = QUIZ_QUESTIONS[currentQuestion];
 
   return (
-    <main className="min-h-screen bg-zen-bg dark:bg-zinc-950 flex flex-col items-center justify-center p-4">
-      <QuizProgress current={currentQuestion + 1} total={QUIZ_QUESTIONS.length} />
-
+    <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
       <QuizCard
+        key={currentQuestion}
         question={{
           id: currentQ.id,
           scenario: currentQ.scenario,
@@ -253,7 +249,7 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
           <button
             onClick={handlePrevious}
             disabled={isLoading}
-            className="flex items-center gap-1 text-zen-text-secondary dark:text-zinc-400 text-sm hover:text-zen-text dark:hover:text-zinc-200 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1 text-zen-text-secondary text-sm hover:text-zen-text disabled:opacity-50 transition-colors"
             aria-label={t("question.back")}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -262,7 +258,7 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
         )}
         <button
           onClick={() => router.push("/quiz")}
-          className="text-zen-text-muted dark:text-zinc-500 text-sm hover:underline"
+          className="text-zen-text-muted text-sm hover:underline"
         >
           {tCommon("actions.cancel")}
         </button>

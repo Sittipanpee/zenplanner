@@ -64,6 +64,12 @@
     "feature3": {
       "title": "3 Languages",
       "desc": "Full Thai, English, and Chinese support"
+    },
+    "card1": {
+      "desc": "Take the 22-question spirit animal quiz and discover your planning archetype"
+    },
+    "card2": {
+      "desc": "Build a custom planner with tools tailored to your spirit animal"
     }
   },
   "auth": {
@@ -94,7 +100,8 @@
     },
     "question": {
       "progress": "Question {current} of {total}",
-      "back": "Previous question"
+      "back": "Previous question",
+      "hint": "Choose the answer that feels most natural to you"
     },
     "reveal": {
       "title": "Your spirit animal is",
