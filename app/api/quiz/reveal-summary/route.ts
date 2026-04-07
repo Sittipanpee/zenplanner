@@ -15,7 +15,90 @@ const LANGUAGE_INSTRUCTION: Record<"en" | "th" | "zh", string> = {
   zh: "全部用中文书写。",
 };
 
+// ---------- Rate limiting (in-memory, per-IP) ----------
+const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+
+function getClientIp(request: NextRequest): string {
+  const xff = request.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  const realIp = request.headers.get("x-real-ip");
+  if (realIp) return realIp.trim();
+  return "unknown";
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitStore.get(ip);
+  if (!entry || entry.resetAt <= now) {
+    rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) return false;
+  entry.count += 1;
+  return true;
+}
+
+// ---------- Axis description helpers ----------
+function clampScore(raw: string | null): number {
+  const n = Number(raw ?? 50);
+  if (!Number.isFinite(n)) return 50;
+  return Math.min(100, Math.max(0, n));
+}
+
+type AxisKey = "energy" | "planning" | "social" | "decision" | "focus" | "drive";
+
+const AXIS_PHRASES: Record<AxisKey, { high: string; low: string; mid: string }> = {
+  energy: {
+    high: "charges up early, peak clarity before noon",
+    low: "thinks deepest when the world quiets down",
+    mid: "energy is contextual — depends on the task",
+  },
+  planning: {
+    high: "maps the route before walking",
+    low: "finds the way by moving",
+    mid: "plans when stakes are high, improvises when they're low",
+  },
+  social: {
+    high: "other people's energy is fuel",
+    low: "does best thinking alone",
+    mid: "calibrates between collaboration and solitude",
+  },
+  decision: {
+    high: "makes the call and moves on",
+    low: "turns the problem over until it clicks",
+    mid: "fast on small things, slow on what matters",
+  },
+  focus: {
+    high: "goes deep on one thing at a time",
+    low: "works best across parallel tracks",
+    mid: "focus adapts to the task",
+  },
+  drive: {
+    high: "wants to reach something specific",
+    low: "motivated by process and feeling, not just outcome",
+    mid: "driven by both progress and meaning",
+  },
+};
+
+function describeAxis(axis: AxisKey, value: number): string {
+  const phrases = AXIS_PHRASES[axis];
+  if (value > 65) return phrases.high;
+  if (value < 40) return phrases.low;
+  return phrases.mid;
+}
+
 export async function GET(request: NextRequest) {
+  // Rate limit check
+  const ip = getClientIp(request);
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429 }
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const animal = searchParams.get("animal") as SpiritAnimal | null;
   const locale = (searchParams.get("locale") ?? "th") as "en" | "th" | "zh";
@@ -24,12 +107,13 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Missing animal" }, { status: 400 });
   }
 
-  const energy   = Number(searchParams.get("energy")   ?? 50);
-  const planning = Number(searchParams.get("planning") ?? 50);
-  const social   = Number(searchParams.get("social")   ?? 50);
-  const decision = Number(searchParams.get("decision") ?? 50);
-  const focus    = Number(searchParams.get("focus")    ?? 50);
-  const drive    = Number(searchParams.get("drive")    ?? 50);
+  // Server-side clamp every axis to [0, 100]
+  const energy   = clampScore(searchParams.get("energy"));
+  const planning = clampScore(searchParams.get("planning"));
+  const social   = clampScore(searchParams.get("social"));
+  const decision = clampScore(searchParams.get("decision"));
+  const focus    = clampScore(searchParams.get("focus"));
+  const drive    = clampScore(searchParams.get("drive"));
 
   const animalData = getAnimal(animal);
   const animalName =
@@ -37,25 +121,33 @@ export async function GET(request: NextRequest) {
     locale === "zh" ? animalData.nameZh :
     animalData.nameEn;
 
-  const systemPrompt = `You are a warm, insightful spirit guide for ZenPlanner. ${LANGUAGE_INSTRUCTION[locale]}
+  // Build plain-language axis descriptions
+  const descriptions = [
+    `- Energy: ${describeAxis("energy", energy)}`,
+    `- Planning: ${describeAxis("planning", planning)}`,
+    `- Social: ${describeAxis("social", social)}`,
+    `- Decision-making: ${describeAxis("decision", decision)}`,
+    `- Focus: ${describeAxis("focus", focus)}`,
+    `- Drive: ${describeAxis("drive", drive)}`,
+  ].join("\n");
 
-Write a personal 2–3 sentence planning insight for someone whose spirit animal is ${animalName} (${animalData.archetypeTitle}).
+  const systemPrompt = `You are a Narrative Designer writing personal planning insights for ZenPlanner. ${LANGUAGE_INSTRUCTION[locale]}
 
-Their axis profile:
-- Energy: ${energy}/100 (${energy > 60 ? "morning person, high initiative" : "night owl, reflective"})
-- Planning: ${planning}/100 (${planning > 60 ? "structured, detail-oriented" : "flexible, spontaneous"})
-- Social: ${social}/100 (${social > 60 ? "energised by people" : "energised by solitude"})
-- Decision: ${decision}/100 (${decision > 60 ? "decisive, action-oriented" : "reflective, careful"})
-- Focus: ${focus}/100 (${focus > 60 ? "deep single focus" : "broad multi-track"})
-- Drive: ${drive}/100 (${drive > 60 ? "achievement-oriented" : "seeks balance and harmony"})
+You are writing for a real person whose archetype is ${animalName} (${animalData.archetypeTitle}). Their lived patterns, in plain language:
+${descriptions}
 
-Make it feel personal, warm, and specific to their archetype. No markdown, no bullet points. Pure prose only.`;
+Write 2 to 3 sentences of warm, specific prose that reference AT LEAST 2 of the descriptions above — translated naturally into the target language, not quoted verbatim. Make it feel like the writer truly sees this person.
+
+Hard rules:
+- Do NOT name the animal — it is already shown above the text.
+- Do NOT use bullet points, lists, headings, or markdown of any kind. Pure prose only.
+- End with one natural sentence suggesting that a personalised planner can support how they actually work.`;
 
   try {
     const summary = await callLLM(
       systemPrompt,
-      [{ role: "user", content: "Generate my planning insight." }],
-      { model: "gemini-flash-lite-3.1", temperature: 0.75, maxTokens: 200 }
+      [{ role: "user", content: "Write the insight." }],
+      { model: "gemini-flash-lite-3.1", temperature: 0.75, maxTokens: 220 }
     );
     return NextResponse.json({ summary: summary.trim() });
   } catch {

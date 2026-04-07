@@ -3,7 +3,7 @@
  * Handles quiz logic, state management, and animal determination
  */
 
-import { callLLM, callLLMJson, QUIZ_SYSTEM_PROMPT, INSIGHT_SYSTEM_PROMPT } from "./llm";
+import { callLLM, INSIGHT_SYSTEM_PROMPT } from "./llm";
 import { getDominantAnimal, calculateToolRecommendations } from "./archetype-map";
 import type { AxisScores, LifestyleProfile, SpiritAnimal } from "./types";
 import { QUIZ_DATA } from "./quiz-data";

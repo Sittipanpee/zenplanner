@@ -15,8 +15,9 @@ import { getAnimal, getAnimalName } from "@/lib/animal-data";
 import { ArrowLeft, ArrowRight, Sparkles, Loader2 } from "lucide-react";
 import type { ToolId, BlueprintCustomization, SpiritAnimal } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
+import { ANIMAL_TOOLS } from "@/lib/archetype-map";
 
-// Default tool recommendations based on common patterns
+// Default tool recommendations used when the user has no spirit animal yet
 const DEFAULT_TOOLS: ToolId[] = [
   "daily_power_block",
   "weekly_compass",
@@ -56,8 +57,10 @@ export default function BlueprintPage() {
             .eq("id", user.id)
             .single();
 
+          let resolvedAnimal: SpiritAnimal | null = null;
           if (profile?.spirit_animal) {
-            setSpiritAnimal(profile.spirit_animal as SpiritAnimal);
+            resolvedAnimal = profile.spirit_animal as SpiritAnimal;
+            setSpiritAnimal(resolvedAnimal);
           }
 
           const { data: blueprints } = await supabase
@@ -74,6 +77,9 @@ export default function BlueprintPage() {
             if (blueprints.customization) {
               setCustomization(blueprints.customization);
             }
+          } else if (resolvedAnimal && ANIMAL_TOOLS[resolvedAnimal]?.length) {
+            // No saved blueprint yet — pre-select tools tailored to the user's spirit animal
+            setSelectedTools(ANIMAL_TOOLS[resolvedAnimal]);
           }
         }
       } catch (error) {

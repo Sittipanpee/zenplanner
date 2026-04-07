@@ -113,7 +113,25 @@
       "copyError": "复制失败，请手动复制链接",
       "aiInsight": {
         "title": "你的规划洞察",
-        "loading": "正在生成你的洞察..."
+        "loading": "正在生成你的洞察...",
+        "unavailable": "无法生成洞察 — 请重新完成测验"
+      },
+      "stats": {
+        "title": "档案统计",
+        "energy": "精力",
+        "planning": "规划",
+        "social": "社交",
+        "decision": "决策",
+        "focus": "专注",
+        "drive": "驱动力",
+        "descriptors": {
+          "energy":   { "high": "清晨型",     "mid": "弹性作息",   "low": "夜猫子" },
+          "planning": { "high": "提前规划",   "mid": "灵活应变",   "low": "随性而为" },
+          "social":   { "high": "从他人获能", "mid": "选择性社交", "low": "独处最佳" },
+          "decision": { "high": "果断决策",   "mid": "均衡考量",   "low": "深思熟虑" },
+          "focus":    { "high": "深度专注",   "mid": "随情境调整", "low": "多线并进" },
+          "drive":    { "high": "目标导向",   "mid": "重视进展",   "low": "享受过程" }
+        }
       }
     },
     "profile": {

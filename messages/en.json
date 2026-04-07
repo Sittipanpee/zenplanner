@@ -113,7 +113,25 @@
       "copyError": "Could not copy — please copy the URL manually",
       "aiInsight": {
         "title": "Your planning insight",
-        "loading": "Generating your insight..."
+        "loading": "Generating your insight...",
+        "unavailable": "Couldn't generate your insight — try retaking the quiz"
+      },
+      "stats": {
+        "title": "Profile Stats",
+        "energy": "Energy",
+        "planning": "Planning",
+        "social": "Social",
+        "decision": "Decision",
+        "focus": "Focus",
+        "drive": "Drive",
+        "descriptors": {
+          "energy":   { "high": "Early Riser",        "mid": "Flexible",        "low": "Night Owl" },
+          "planning": { "high": "Plans Ahead",         "mid": "Adaptive",        "low": "Spontaneous" },
+          "social":   { "high": "Energized by Others", "mid": "Selective",       "low": "Solo Best" },
+          "decision": { "high": "Decisive",            "mid": "Balanced",        "low": "Deliberate" },
+          "focus":    { "high": "Deep Focus",          "mid": "Contextual",      "low": "Multi-Track" },
+          "drive":    { "high": "Goal-Driven",         "mid": "Progress-Minded", "low": "Process-Focused" }
+        }
       }
     },
     "profile": {

@@ -7,6 +7,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { QuizCard } from "@/components/quiz/quiz-card";
@@ -29,7 +30,7 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   const [answers, setAnswers] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ animal: string; scores: AxisScores } | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [saveState, setSaveState] = useState<"saving" | "saved" | "error">("saving");
   const router = useRouter();
   const supabase = createClient();
   const t = useTranslations("quiz");
@@ -125,13 +126,11 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   }, [currentQuestion, answers, mode]);
 
   const saveQuizResult = async (animal: string, scores: AxisScores) => {
-    setIsSaving(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
-        console.log("[SKIP] User not logged in, skipping quiz save");
-        setIsSaving(false);
+        setSaveState("saved");
         return;
       }
 
@@ -146,15 +145,15 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
       });
 
       if (response.ok) {
-        const data = await response.json();
-
+        await response.json();
+        setSaveState("saved");
       } else {
         console.error("Failed to save quiz:", await response.text());
+        setSaveState("error");
       }
     } catch (error) {
       console.error("Error saving quiz result:", error);
-    } finally {
-      setIsSaving(false);
+      setSaveState("error");
     }
   };
 
@@ -162,12 +161,15 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
     const scores: AxisScores = { energy: 50, planning: 50, social: 50, decision: 50, focus: 50, drive: 50 };
 
     ans.forEach((a, idx) => {
-      const option = QUIZ_QUESTIONS[idx]?.options[a];
+      const question = QUIZ_QUESTIONS[idx];
+      const option = question?.options[a];
       if (option?.score) {
+        const focusAxis = question.axisFocus;
         Object.entries(option.score).forEach(([k, v]) => {
           if (k in scores && v !== undefined) {
             const key = k as keyof AxisScores;
-            scores[key] = Math.min(100, Math.max(0, scores[key] + v / 3));
+            const weight = k === focusAxis ? 1.0 : 0.3;
+            scores[key] = Math.min(100, Math.max(0, scores[key] + (v / 3) * weight));
           }
         });
       }
@@ -202,16 +204,36 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
             {animalData.description}
           </p>
           {/* Saving status indicator */}
-          {isSaving && (
+          {saveState === "saving" && (
             <p className="text-sm text-zen-text-muted flex items-center justify-center gap-2">
               <span className="w-2 h-2 bg-zen-sage rounded-full animate-pulse" aria-hidden="true" />
               {tCommon("actions.loading")}
             </p>
           )}
-          {!isSaving && (
+          {saveState === "saved" && (
             <p className="text-sm text-zen-sage flex items-center justify-center gap-2">
               <span className="w-2 h-2 bg-zen-sage rounded-full" aria-hidden="true" />
               {tCommon("actions.done")}
+            </p>
+          )}
+          {saveState === "error" && result && (
+            <p className="text-sm text-red-500 flex items-center justify-center gap-2 flex-wrap">
+              <span className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0" aria-hidden="true" />
+              {tCommon("errors.serverError")}
+              <Link
+                href={`/quiz/reveal?${new URLSearchParams({
+                  animal: result.animal,
+                  energy: String(Math.round(result.scores.energy)),
+                  planning: String(Math.round(result.scores.planning)),
+                  social: String(Math.round(result.scores.social)),
+                  decision: String(Math.round(result.scores.decision)),
+                  focus: String(Math.round(result.scores.focus)),
+                  drive: String(Math.round(result.scores.drive)),
+                }).toString()}`}
+                className="underline ml-1 text-red-400 hover:text-red-300"
+              >
+                {tCommon("actions.continue")}
+              </Link>
             </p>
           )}
           <ZenButton fullWidth onClick={() => {
@@ -243,9 +265,8 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
         question={{
           id: currentQ.id,
           scenario: currentQ.scenario,
-          options: currentQ.options.map((opt, i) => ({
+          options: currentQ.options.map((opt) => ({
             text: opt.label,
-            emoji: ["🔥", "🌊", "☕", "🤝"][i] || "✨",
             score: opt.score,
           })),
         }}
