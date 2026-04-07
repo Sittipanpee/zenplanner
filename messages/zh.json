@@ -104,7 +104,7 @@
       "hint": "选择最符合你自然反应的答案"
     },
     "reveal": {
-      "title": "你的精神动物是",
+      "title": "与你最契合的是",
       "subtitle": "这个原型反映了你天然的规划方式和生活态度",
       "share": "分享结果",
       "takeAgain": "重新测验",
@@ -115,6 +115,13 @@
         "title": "你的规划洞察",
         "loading": "正在生成你的洞察...",
         "unavailable": "无法生成洞察 — 请重新完成测验"
+      },
+      "matches": {
+        "title": "其他相近的原型",
+        "primary": "最契合",
+        "secondary": "次契合",
+        "tertiary": "再次契合",
+        "hybridHint": "你是 {primary} 与 {secondary} 的混合型 — 两种原型都强烈共鸣"
       },
       "stats": {
         "title": "档案统计",

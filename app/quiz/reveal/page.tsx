@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { getAnimal } from "@/lib/animal-data";
+import { getRankedAnimals } from "@/lib/archetype-map";
 import type { SpiritAnimal } from "@/lib/types";
 import { ZenCard } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
@@ -50,6 +51,11 @@ function QuizRevealContent() {
   };
 
   const getLevel = (s: number) => s > 65 ? "high" : s < 40 ? "low" : "mid";
+
+  // Compute top-3 closest archetypes (z-score normalized Manhattan distance)
+  const ranked = getRankedAnimals(scores).slice(0, 3);
+  // Hybrid hint: if zDistance gap between #1 and #2 is small, surface it
+  const isHybrid = ranked.length >= 2 && (ranked[1].zDistance - ranked[0].zDistance) < 1.5;
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
@@ -176,6 +182,59 @@ function QuizRevealContent() {
             <p className="text-zen-text dark:text-zinc-200 text-sm leading-relaxed">{aiSummary}</p>
           ) : (
             <p className="text-xs text-zen-text-muted dark:text-zinc-500">{t("reveal.aiInsight.unavailable")}</p>
+          )}
+        </ZenCard>
+      </div>
+
+      {/* Top-3 Matches Card */}
+      <div className="max-w-md mx-auto px-4 pt-4">
+        <ZenCard className="p-5">
+          <p className="text-xs font-semibold text-zen-sage uppercase tracking-widest mb-3">
+            {t("reveal.matches.title")}
+          </p>
+          <div className="space-y-2">
+            {ranked.map((m, i) => {
+              const a = getAnimal(m.animal);
+              const name = locale === "th" ? a.nameTh : locale === "zh" ? a.nameZh : a.nameEn;
+              const tierKey = i === 0 ? "primary" : i === 1 ? "secondary" : "tertiary";
+              return (
+                <div
+                  key={m.animal}
+                  className={`flex items-center gap-3 p-2 rounded-lg ${
+                    i === 0 ? "bg-zen-sage/10 dark:bg-zen-sage/20" : ""
+                  }`}
+                >
+                  <span className="text-2xl flex-shrink-0">{a.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-zen-text dark:text-zinc-100 truncate">
+                      {name}
+                    </p>
+                    <p className="text-xs text-zen-text-muted dark:text-zinc-500">
+                      {t(`reveal.matches.${tierKey}`)}
+                    </p>
+                  </div>
+                  <span className="text-xs text-zen-text-muted dark:text-zinc-500 tabular-nums flex-shrink-0">
+                    {m.distance}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+          {isHybrid && (
+            <p className="mt-3 text-xs text-zen-sage dark:text-zen-sage-light italic">
+              {t("reveal.matches.hybridHint", {
+                primary: locale === "th"
+                  ? getAnimal(ranked[0].animal).nameTh
+                  : locale === "zh"
+                  ? getAnimal(ranked[0].animal).nameZh
+                  : getAnimal(ranked[0].animal).nameEn,
+                secondary: locale === "th"
+                  ? getAnimal(ranked[1].animal).nameTh
+                  : locale === "zh"
+                  ? getAnimal(ranked[1].animal).nameZh
+                  : getAnimal(ranked[1].animal).nameEn,
+              })}
+            </p>
           )}
         </ZenCard>
       </div>

@@ -104,7 +104,7 @@
       "hint": "Choose the answer that feels most natural to you"
     },
     "reveal": {
-      "title": "Your spirit animal is",
+      "title": "Your closest match is",
       "subtitle": "This archetype reflects how you naturally approach planning and life",
       "share": "Share your result",
       "takeAgain": "Retake quiz",
@@ -115,6 +115,13 @@
         "title": "Your planning insight",
         "loading": "Generating your insight...",
         "unavailable": "Couldn't generate your insight — try retaking the quiz"
+      },
+      "matches": {
+        "title": "Other close matches",
+        "primary": "Closest match",
+        "secondary": "Secondary",
+        "tertiary": "Tertiary",
+        "hybridHint": "You're a {primary}-{secondary} hybrid — both archetypes resonate strongly"
       },
       "stats": {
         "title": "Profile Stats",
