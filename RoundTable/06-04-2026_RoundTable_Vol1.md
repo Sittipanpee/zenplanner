@@ -54,3 +54,13 @@
 
 ### AM — AstonMartin
 "Commander has given explicit instruction to deploy and merge into main. Proceeding. Branch: claude/spawn-agent-fvw52. All acceptance criteria are met — build clean, 0 P0, 0 P1, UX-01 complete."
+
+---
+
+## Session 8 — Vercel Deploy
+**Date:** 06-04-2026
+**Participants:** AM
+**Status:** OPEN
+
+### AM — AstonMartin
+"Commander has issued Vercel deploy instruction. Checking CLI availability and project config before proceeding."
