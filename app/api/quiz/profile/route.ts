@@ -17,7 +17,7 @@ const LifestyleProfileSchema = z.object({
   energy_pattern: z.string().min(1),
   goals: z.array(z.string()).min(1),
   obstacles: z.array(z.string()).min(1),
-  preferences: z.record(z.unknown()).optional().default({}),
+  preferences: z.record(z.string(), z.unknown()).optional().default({}),
 });
 
 export async function POST(request: NextRequest) {

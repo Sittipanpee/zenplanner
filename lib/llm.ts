@@ -119,7 +119,7 @@ export async function callLLMJson<T>(
     return parsed as T;
   } catch (e) {
     if (e instanceof z.ZodError) {
-      throw new Error(`LLM response failed schema validation: ${e.errors.map((err) => err.message).join(", ")}`);
+      throw new Error(`LLM response failed schema validation: ${e.issues.map((err: { message: string }) => err.message).join(", ")}`);
     }
     throw new Error(`Invalid JSON response: ${result.slice(0, 200)}`);
   }
