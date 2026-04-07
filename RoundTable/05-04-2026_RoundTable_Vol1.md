@@ -127,3 +127,34 @@ Production sprint complete. All waves delivered.
 - SPRINT_SSOT.md + SPRINT_TODO.md finalized
 - SPRINT-01_Production_Award_Sprint.md status: Complete
 - **Reason:** Sprint goal achieved — production-grade, 3-language, dark mode, zero critical bugs, clean build.
+
+---
+
+## Session 6 — Governed Commit: Promote Current State to main
+
+**Date:** 07-04-2026
+**Commander:** Sittipan (Overseer callsign)
+**Action:** `/git commit` — force commit to protected branch `main`
+
+### Safety Gate Status
+- **S2 Branch Protection:** main is protected — `--force` required (Commander directive)
+- **S4 Sensitive Scan:** `.claude_backup_before_uniops/settings.json` checked — no credentials, safe to include
+- **Ticket Gate (C1):** No Development/ ticket covers these changes — Commander waiver applied (explicit directive)
+
+### Staged Changes
+| File | Status |
+|------|--------|
+| app/layout.tsx | Modified (staged + unstaged) |
+| lib/liff.ts | Modified (unstaged) |
+| middleware.ts | Modified (staged) |
+| next.config.ts | Modified (staged + unstaged) |
+| package-lock.json | Modified (staged + unstaged) |
+| package.json | Modified (staged + unstaged) |
+
+### Untracked Files (pending Commander scope confirmation)
+- `.claude_backup_before_uniops/` — backup of .claude dir
+- `GEMINI.md`, `hybrid_erd.html`, `openclaw_prompt.txt` — AI/ERD docs
+- `public/manifest.json`, `public/sw.js`, `public/register-sw.js` — PWA files
+- `public/icon-192.png`, `public/icon-512.png` — PWA icons
+- `scripts/generate-icons.js` — icon generation script
+- `test-results/` — test output folder

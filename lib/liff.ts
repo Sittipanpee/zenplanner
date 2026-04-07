@@ -71,9 +71,11 @@ export async function initLIFF(): Promise<void> {
 
   const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
 
-  if (!liffId) {
-    console.warn('[LIFF] NEXT_PUBLIC_LIFF_ID not configured. LIFF features disabled.');
-    // Create mock instance
+  // Real LIFF IDs are numeric-alphanumeric, e.g. "1234567890-AbcDef12"
+  const isRealLiffId = !!liffId && /^\d+-\w+$/.test(liffId);
+
+  if (!isRealLiffId) {
+    console.warn('[LIFF] NEXT_PUBLIC_LIFF_ID not configured or is a placeholder. LIFF features disabled.');
     liffInstance = createMockLiff();
     isInitialized = true;
     return;
