@@ -158,23 +158,33 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   };
 
   const calculateScores = (ans: number[]): AxisScores => {
-    const scores: AxisScores = { energy: 50, planning: 50, social: 50, decision: 50, focus: 50, drive: 50 };
+    // Each option's score values are 0–100 *target levels* per axis.
+    // Compute a weighted average across all answered questions.
+    // Focus axis gets full weight (1.0); off-focus axes get reduced weight (0.3).
+    const sums: AxisScores = { energy: 0, planning: 0, social: 0, decision: 0, focus: 0, drive: 0 };
+    const weightTotals: AxisScores = { energy: 0, planning: 0, social: 0, decision: 0, focus: 0, drive: 0 };
 
     ans.forEach((a, idx) => {
       const question = QUIZ_QUESTIONS[idx];
       const option = question?.options[a];
-      if (option?.score) {
-        const focusAxis = question.axisFocus;
-        Object.entries(option.score).forEach(([k, v]) => {
-          if (k in scores && v !== undefined) {
-            const key = k as keyof AxisScores;
-            const weight = k === focusAxis ? 1.0 : 0.3;
-            scores[key] = Math.min(100, Math.max(0, scores[key] + (v / 3) * weight));
-          }
-        });
-      }
+      if (!option?.score) return;
+      const focusAxis = question.axisFocus;
+      Object.entries(option.score).forEach(([k, v]) => {
+        if (k in sums && v !== undefined) {
+          const key = k as keyof AxisScores;
+          const weight = k === focusAxis ? 1.0 : 0.3;
+          sums[key] += v * weight;
+          weightTotals[key] += weight;
+        }
+      });
     });
 
+    const scores: AxisScores = { energy: 50, planning: 50, social: 50, decision: 50, focus: 50, drive: 50 };
+    (Object.keys(scores) as (keyof AxisScores)[]).forEach((k) => {
+      if (weightTotals[k] > 0) {
+        scores[k] = Math.round(Math.min(100, Math.max(0, sums[k] / weightTotals[k])));
+      }
+    });
     return scores;
   };
 
