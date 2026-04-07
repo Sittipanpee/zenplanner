@@ -22,6 +22,9 @@ export interface QuizState {
   lifestyleProfile: LifestyleProfile | null;
 }
 
+// Re-export QuizPhase including 'intro' for callers
+export type QuizPhase = "intro" | "quiz" | "reveal" | "profiling" | "complete";
+
 // Quiz questions for minigame mode - imported from quiz-data.ts (22 questions in Thai)
 const QUIZ_QUESTIONS = QUIZ_DATA.map((q) => ({
   id: q.id,

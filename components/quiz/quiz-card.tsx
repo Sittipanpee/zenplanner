@@ -1,13 +1,13 @@
 /**
  * Quiz Card Component
- * Animated card for quiz questions
+ * Animated card for quiz questions with i18n, dark mode, and ARIA support
  */
 
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ZenCard } from "@/components/ui/zen-card";
-import { ZenButton } from "@/components/ui/zen-button";
 import { Sparkles, ArrowRight, Zap } from "lucide-react";
 
 export interface QuizQuestion {
@@ -44,6 +44,7 @@ export function QuizCard({
 }: QuizCardProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const t = useTranslations("quiz");
 
   const progressPercent = (questionNumber / totalQuestions) * 100;
 
@@ -62,23 +63,33 @@ export function QuizCard({
   };
 
   return (
-    <div className={`w-full max-w-md mx-auto ${isAnimatingOut ? 'animate-zen-slide-out-left' : 'animate-zen-slide-up'}`}>
+    <div
+      role="region"
+      aria-label={t("question.progress", { current: questionNumber, total: totalQuestions })}
+      className={`w-full max-w-md mx-auto ${isAnimatingOut ? 'animate-zen-slide-out-left' : 'animate-zen-slide-up'}`}
+    >
       {/* Progress */}
       <div className="mb-6">
         <div className="flex justify-between text-sm text-zen-text-secondary mb-2">
           <span className="flex items-center gap-2">
             <Zap className="w-4 h-4 text-zen-gold" />
-            คำถามที่ {questionNumber}/{totalQuestions}
+            {t("question.progress", { current: questionNumber, total: totalQuestions })}
           </span>
           <span className="font-semibold text-zen-sage">{Math.round(progressPercent)}%</span>
         </div>
         {/* Animated progress bar */}
-        <div className="h-3 bg-zen-surface-alt rounded-full overflow-hidden relative">
+        <div
+          className="h-3 bg-zen-surface-alt rounded-full overflow-hidden relative"
+          role="progressbar"
+          aria-valuenow={Math.round(progressPercent)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
           <div
             className="h-full bg-gradient-to-r from-zen-sage to-zen-sage-light rounded-full transition-all duration-500 ease-out animate-zen-glow-pulse"
             style={{ width: `${progressPercent}%` }}
           />
-          {/* Shimmer effect */}
+          {/* Shimmer effect — uses animate-shimmer defined in globals.css */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shimmer" />
         </div>
       </div>
@@ -97,12 +108,14 @@ export function QuizCard({
         </h2>
 
         {/* Options */}
-        <div className="space-y-3">
+        <div className="space-y-3" role="radiogroup" aria-label={question.scenario}>
           {question.options.map((option, index) => (
             <button
               key={index}
               onClick={() => handleAnswer(index)}
               disabled={isLoading}
+              role="radio"
+              aria-checked={selectedIndex === index}
               className={`
                 w-full p-4 text-left rounded-xl border-2 border-zen-border
                 hover:border-zen-sage hover:bg-zen-sage/5 hover:-translate-y-1
@@ -127,7 +140,7 @@ export function QuizCard({
 
       {/* Hint text */}
       <p className="text-center text-xs text-zen-text-muted mt-4 animate-zen-fade-in">
-        แต่ละคำตอบจะบอกเล่าสไตล์การวางแผนของคุณ
+        {t("question.hint")}
       </p>
     </div>
   );
@@ -146,7 +159,14 @@ export function QuizProgress({
   spiritAnimal?: string;
 }) {
   return (
-    <div className="flex items-center justify-center gap-2 mb-4">
+    <div
+      className="flex items-center justify-center gap-2 mb-4"
+      role="progressbar"
+      aria-valuenow={current}
+      aria-valuemin={0}
+      aria-valuemax={total}
+      aria-label={`Question ${current} of ${total}`}
+    >
       {Array.from({ length: total }).map((_, i) => (
         <div
           key={i}

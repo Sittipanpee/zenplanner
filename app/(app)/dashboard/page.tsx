@@ -7,14 +7,16 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { ZenCard, ZenCardHeader, ZenCardContent } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { ZenStatusBadge } from "@/components/ui/zen-badge";
 import { Heatmap } from "@/components/dashboard/heatmap";
+import { getAnimal, getAnimalName } from "@/lib/animal-data";
 import Link from "next/link";
 import { Home, Sparkles, LayoutGrid, BarChart3, Target, TrendingUp, CheckCircle2, Circle, Plus, Minus, Zap, Flame, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import type { ActivityLog } from "@/lib/types";
+import type { ActivityLog, SpiritAnimal } from "@/lib/types";
 
 interface HabitItem {
   id: string;
@@ -54,31 +56,12 @@ function setLocalStorage<T>(key: string, value: T): void {
   }
 }
 
-// Helper to get Thai name for animal
-function getAnimalName(animal: string): string {
-  const animalNames: Record<string, string> = {
-    lion: "สิงโต",
-    whale: "วาฬ",
-    dolphin: "โลมา",
-    owl: "นกฮูก",
-    fox: "จิ้งจอก",
-    turtle: "เต่า",
-    eagle: "อินทรี",
-    octopus: "ปลาหมึก",
-    mountain: "ภูเขา",
-    wolf: "หมาป่า",
-    sakura: "ซากุระ",
-    cat: "แมว",
-    crocodile: "จระเข้",
-    dove: "นกพิราบ",
-    butterfly: "ผีเสื้อ",
-    bamboo: "ไผ่",
-  };
-  return animalNames[animal] || animal;
-}
+// getAnimalName and getAnimal imported from @/lib/animal-data
 
 export default function DashboardPage() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
+  const t = useTranslations('dashboard');
+  const locale = useLocale();
 
   // State for user's selected tools from Blueprint
   // Initialize with default tools if no saved data
@@ -119,14 +102,11 @@ export default function DashboardPage() {
             .order("created_at", { ascending: false })
             .limit(1);
 
-          console.log("Blueprint fetch result:", { blueprints, error });
-
           if (!error && blueprints && blueprints.length > 0) {
             const blueprint = blueprints[0];
             if (blueprint.tool_selection && Array.isArray(blueprint.tool_selection)) {
               setSelectedTools(blueprint.tool_selection as string[]);
               setHasBlueprint(true);
-              console.log("Tools loaded from Supabase:", blueprint.tool_selection);
               return;
             }
           }
@@ -138,7 +118,6 @@ export default function DashboardPage() {
           try {
             const tools = JSON.parse(savedTools);
             setSelectedTools(tools);
-            console.log("Tools loaded from localStorage:", tools);
           } catch {
             // Use defaults
           }
@@ -373,15 +352,21 @@ export default function DashboardPage() {
     let temp = 0;
 
     // Check consecutive days from today
+    // Allow today to have no activity (grace period — streak counts from yesterday)
     const today = new Date();
+    let streakStarted = false;
     for (let i = 0; i < 365; i++) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().split("T")[0];
 
       if (datesWithActivity.has(dateStr)) {
-        if (i === 0 || current > 0) current++;
-      } else if (i > 0) {
+        current++;
+        streakStarted = true;
+      } else if (i === 0) {
+        // Today has no activity — skip, check yesterday
+        continue;
+      } else {
         break;
       }
     }
@@ -438,16 +423,14 @@ export default function DashboardPage() {
           .select("*", { count: "exact", head: true })
           .eq("user_id", user.id);
 
-        // Animal emoji mapping
-        const animalEmojis: Record<string, string> = {
-          lion: "🦁", whale: "🐋", dolphin: "🐬", owl: "🦉", fox: "🦊",
-          turtle: "🐢", eagle: "🦅", octopus: "🐙", mountain: "🏔️", wolf: "🐺",
-          sakura: "🌸", cat: "🐱", crocodile: "🐊", dove: "🕊️", butterfly: "🦋", bamboo: "🌿"
-        };
+        // Use canonical animal data from lib/animal-data
+        const animalEmoji = profile?.spirit_animal
+          ? getAnimal(profile.spirit_animal as SpiritAnimal)?.emoji || "🦁"
+          : "🦁";
 
         setUserStats(prev => ({
           spiritAnimal: profile?.spirit_animal || null,
-          spiritAnimalEmoji: profile?.spirit_animal ? animalEmojis[profile.spirit_animal] || "🦁" : "🦁",
+          spiritAnimalEmoji: animalEmoji,
           quizzesCompleted: quizCount || 0,
           plannersCreated: plannerCount || 0,
           currentStreak: prev.currentStreak,
@@ -463,16 +446,14 @@ export default function DashboardPage() {
     fetchUserData();
   }, [supabase, currentStreak, bestStreak]);
 
-  const recentActivity = [
-    { type: "quiz", title: "ทำ Quiz สัตว์ประจำตัว", date: "วันนี้", status: "completed" as const },
-    { type: "planner", title: "สร้าง Planner", date: "เมื่อวาน", status: "completed" as const },
-  ];
+  // TODO: Fetch from activity_log table
+  const recentActivity: { type: string; title: string; date: string; status: "completed" | "pending" }[] = [];
 
   const quickActions = [
-    { icon: <Sparkles className="w-6 h-6" />, label: "ทำ Quiz", href: "/quiz", color: "bg-zen-gold/10 text-zen-gold" },
-    { icon: <Target className="w-6 h-6" />, label: "สร้าง Planner", href: "/blueprint", color: "bg-zen-sage/10 text-zen-sage" },
-    { icon: <LayoutGrid className="w-6 h-6" />, label: "เครื่องมือ", href: "/tools", color: "bg-zen-sky/10 text-zen-sky" },
-    { icon: <BarChart3 className="w-6 h-6" />, label: "สถิติ", href: "/stats", color: "bg-zen-earth/10 text-zen-earth" },
+    { icon: <Sparkles className="w-6 h-6" />, label: t('quickActions.takeQuiz'), href: "/quiz", color: "bg-zen-gold/10 text-zen-gold" },
+    { icon: <Target className="w-6 h-6" />, label: t('quickActions.createPlanner'), href: "/blueprint", color: "bg-zen-sage/10 text-zen-sage" },
+    { icon: <LayoutGrid className="w-6 h-6" />, label: t('quickActions.tools'), href: "/tools", color: "bg-zen-sky/10 text-zen-sky" },
+    { icon: <BarChart3 className="w-6 h-6" />, label: t('quickActions.statistics'), href: "/stats", color: "bg-zen-earth/10 text-zen-earth" },
   ];
 
   const moodEmojis = ["😫", "😕", "😐", "🙂", "😄"];
@@ -488,8 +469,10 @@ export default function DashboardPage() {
               {userStats.spiritAnimalEmoji}
             </div>
             <div>
-              <h1 className="font-display text-2xl md:text-3xl font-bold text-zen-text">สวัสดี! 👋</h1>
-              <p className="text-zen-text-secondary">สัตว์ประจำตัว: {userStats.spiritAnimal ? getAnimalName(userStats.spiritAnimal) : 'ยังไม่ทราบ'}</p>
+              <h1 className="font-display text-2xl md:text-3xl font-bold text-zen-text">
+                {userStats.spiritAnimalEmoji} {userStats.spiritAnimal ? getAnimalName(userStats.spiritAnimal as SpiritAnimal, locale as 'en' | 'th' | 'zh') : ''}
+              </h1>
+              <p className="text-zen-text-secondary">{userStats.spiritAnimal ? getAnimal(userStats.spiritAnimal as SpiritAnimal)?.archetypeTitle : t('quickActions.retakeQuiz')}</p>
             </div>
           </div>
         </div>
@@ -501,18 +484,18 @@ export default function DashboardPage() {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-2xl md:text-3xl font-bold text-zen-sage">{userStats.quizzesCompleted}</p>
-              <p className="text-sm text-zen-text-secondary">Quiz ที่ทำ</p>
+              <p className="text-sm text-zen-text-secondary">{t('quizzes')}</p>
             </div>
             <div>
               <p className="text-2xl md:text-3xl font-bold text-zen-sage">{userStats.plannersCreated}</p>
-              <p className="text-sm text-zen-text-secondary">Planner</p>
+              <p className="text-sm text-zen-text-secondary">{t('planner')}</p>
             </div>
             <div>
               <p className="text-2xl md:text-3xl font-bold text-zen-gold flex items-center justify-center gap-1">
                 <Flame className="w-6 h-6" />
                 {currentStreak}
               </p>
-              <p className="text-sm text-zen-text-secondary">วันต่อเนื่อง</p>
+              <p className="text-sm text-zen-text-secondary">{t('consecutiveDays')}</p>
             </div>
           </div>
         </ZenCard>
@@ -528,13 +511,13 @@ export default function DashboardPage() {
             <div>
               <h2 className="font-semibold text-zen-text mb-3 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-zen-gold" />
-                อารมณ์วันนี้
+                {t('mood.title')}
               </h2>
               <ZenCard className="mb-4">
                 <div className="space-y-4">
                   {/* Mood selector */}
                   <div>
-                    <p className="text-sm text-zen-text-secondary mb-2">ความรู้สึกของคุณวันนี้</p>
+                    <p className="text-sm text-zen-text-secondary mb-2">{t('mood.howAreYou')}</p>
                     <div className="flex justify-between">
                       {moodEmojis.map((emoji, idx) => (
                         <button
@@ -553,7 +536,7 @@ export default function DashboardPage() {
                   </div>
                   {/* Energy selector */}
                   <div>
-                    <p className="text-sm text-zen-text-secondary mb-2">ระดับพลัง</p>
+                    <p className="text-sm text-zen-text-secondary mb-2">{t('mood.energyLevel')}</p>
                     <div className="flex justify-between">
                       {energyBars.map((bar, idx) => (
                         <button
@@ -580,13 +563,13 @@ export default function DashboardPage() {
             <div>
               <h2 className="font-semibold text-zen-text mb-3 flex items-center gap-2">
                 <Target className="w-5 h-5 text-zen-sage" />
-                ลำดับความสำคัญวันนี้
+                {t('priorities.title')}
               </h2>
               <ZenCard className="mb-3">
                 <div className="space-y-2">
                   {priorities.length === 0 ? (
                     <p className="text-sm text-zen-text-muted text-center py-4">
-                      ยังไม่มีลำดับความสำคัญ ลองเพิ่มดูสิ!
+                      {t('priorities.empty')}
                     </p>
                   ) : (
                     priorities.map((priority) => (
@@ -618,7 +601,7 @@ export default function DashboardPage() {
                   value={newPriority}
                   onChange={(e) => setNewPriority(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && addPriority()}
-                  placeholder="เพิ่มลำดับความสำคัญ..."
+                  placeholder={t('priorities.placeholder')}
                   className="flex-1 px-4 py-2 border border-zen-border rounded-full text-zen-text bg-zen-surface focus:outline-none focus:ring-2 focus:ring-zen-sage"
                 />
                 <button
@@ -636,12 +619,12 @@ export default function DashboardPage() {
             <div>
               <h2 className="font-semibold text-zen-text mb-3 flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-zen-sky" />
-                ติดตามนิสัย
+                {t('habits.title')}
               </h2>
               <ZenCard className="mb-3">
                 {habits.length === 0 ? (
                   <p className="text-sm text-zen-text-muted text-center py-4">
-                    ยังไม่มีนิสัยที่ติดตาม ลองเพิ่มดูสิ!
+                    {t('habits.empty')}
                   </p>
                 ) : (
                   <>
@@ -650,11 +633,11 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-2">
                         <Flame className="w-5 h-5 text-zen-gold" />
                         <span className="font-medium text-zen-text">
-                          {habits.filter(h => h.completed).length}/{habits.length} วันนี้
+                          {habits.filter(h => h.completed).length}/{habits.length} {t('habits.today')}
                         </span>
                       </div>
                       <div className="text-sm text-zen-text-secondary">
-                        Best: {bestStreak} วัน
+                        {t('habits.best')}: {bestStreak} {t('habits.days')}
                       </div>
                     </div>
 
@@ -688,7 +671,7 @@ export default function DashboardPage() {
 
                     {/* Habit heatmap visualization - GitHub-style tiles */}
                     <div className="mt-4 pt-3 border-t border-zen-border">
-                      <p className="text-xs text-zen-text-muted mb-2">ภาพรวม 30 วัน</p>
+                      <p className="text-xs text-zen-text-muted mb-2">{t('overview30')}</p>
                       <HabitHeatmap habitActivity={habitActivity} />
                     </div>
                   </>
@@ -701,7 +684,7 @@ export default function DashboardPage() {
                   value={newHabit}
                   onChange={(e) => setNewHabit(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && addHabit()}
-                  placeholder="เพิ่มนิสัยใหม่..."
+                  placeholder={t('habits.placeholder')}
                   className="flex-1 px-4 py-2 border border-zen-border rounded-full text-zen-text bg-zen-surface focus:outline-none focus:ring-2 focus:ring-zen-sky"
                 />
                 <button
@@ -721,9 +704,9 @@ export default function DashboardPage() {
             {(hasBlueprint || selectedTools.length > 0) ? (
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="font-semibold text-zen-text">เครื่องมือ Planner ของคุณ</h2>
+                  <h2 className="font-semibold text-zen-text">{t('plannerTools.title')}</h2>
                   <Link href="/blueprint" className="text-sm text-zen-sage hover:underline">
-                    {selectedTools.length > 0 ? 'แก้ไข' : 'สร้าง'}
+                    {selectedTools.length > 0 ? t('tools.edit') : t('tools.create')}
                   </Link>
                 </div>
                 <ZenCard padding="sm">
@@ -739,15 +722,15 @@ export default function DashboardPage() {
                       ))}
                       {selectedTools.length > 8 && (
                         <span className="px-2 py-1 bg-zen-surface-alt text-zen-text-muted text-xs rounded-lg">
-                          +{selectedTools.length - 8} อีก
+                          {t('tools.more', { count: selectedTools.length - 8 })}
                         </span>
                       )}
                     </div>
                   ) : (
                     <div className="text-center py-4">
-                      <p className="text-zen-text-muted mb-3">ยังไม่ได้สร้าง Planner</p>
+                      <p className="text-zen-text-muted mb-3">{t('plannerTools.noTools')}</p>
                       <Link href="/blueprint">
-                        <ZenButton size="sm">สร้าง Planner ของคุณ</ZenButton>
+                        <ZenButton size="sm">{t('plannerTools.customize')}</ZenButton>
                       </Link>
                     </div>
                   )}
@@ -756,16 +739,16 @@ export default function DashboardPage() {
             ) : (
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="font-semibold text-zen-text">เครื่องมือ Planner</h2>
+                  <h2 className="font-semibold text-zen-text">{t('plannerTools.title')}</h2>
                   <Link href="/blueprint" className="text-sm text-zen-sage hover:underline">
-                    สร้าง
+                    {t('plannerTools.customize')}
                   </Link>
                 </div>
                 <ZenCard padding="sm">
                   <div className="text-center py-4">
-                    <p className="text-zen-text-muted mb-3">สร้าง Planner เพื่อเริ่มต้น</p>
+                    <p className="text-zen-text-muted mb-3">{t('plannerTools.noTools')}</p>
                     <Link href="/blueprint">
-                      <ZenButton size="sm">ไปหน้า Blueprint</ZenButton>
+                      <ZenButton size="sm">{t('plannerTools.customize')}</ZenButton>
                     </Link>
                   </div>
                 </ZenCard>
@@ -774,7 +757,7 @@ export default function DashboardPage() {
 
             {/* Quick Actions */}
             <div>
-              <h2 className="font-semibold text-zen-text mb-3">ลัดเข้าใช้งาน</h2>
+              <h2 className="font-semibold text-zen-text mb-3">{t('quickActions.title')}</h2>
               <div className="grid grid-cols-2 gap-3">
                 {quickActions.map((action) => (
                   <Link
@@ -796,7 +779,7 @@ export default function DashboardPage() {
 
             {/* Recent Activity */}
             <div>
-              <h2 className="font-semibold text-zen-text mb-3">กิจกรรมล่าสุด</h2>
+              <h2 className="font-semibold text-zen-text mb-3">{t('recentActivity')}</h2>
               <ZenCard padding="sm">
                 {recentActivity.map((item, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border-b border-zen-border last:border-0">
@@ -815,7 +798,7 @@ export default function DashboardPage() {
               <Link href="/quiz">
                 <ZenButton fullWidth>
                   <Sparkles className="w-5 h-5 mr-2" />
-                  ค้นหาสัตว์ประจำตัวใหม่
+                  {t('findAnimal')}
                 </ZenButton>
               </Link>
             </div>
@@ -856,7 +839,7 @@ function HabitHeatmap({ habitActivity }: { habitActivity: ActivityLog[] }) {
   // Get color based on completion
   const getTileColor = (date: string) => {
     const count = habitByDate[date] || 0;
-    if (count === 0) return "bg-zen-bg";
+    if (count === 0) return "bg-zen-surface-alt";
     if (count <= 2) return "bg-zen-sage-light";
     if (count <= 4) return "bg-zen-sage";
     return "bg-zen-earth";

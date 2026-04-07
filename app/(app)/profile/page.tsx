@@ -1,149 +1,112 @@
 /**
  * Profile Page
+ * Uses canonical animal data from lib/animal-data.ts
+ * i18n + dark mode ready
  */
 
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { ZenCard } from "@/components/ui/zen-card";
-import { ZenButton } from "@/components/ui/zen-button";
-import { Settings, LogOut, Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-
-// Animal name mapping
-const animalNames: Record<string, string> = {
-  lion: "สิงโต",
-  whale: "วาฬ",
-  dolphin: "โลมา",
-  owl: "นกฮูก",
-  fox: "จิ้งจอก",
-  turtle: "เต่า",
-  eagle: "อินทรี",
-  octopus: "ปลาหมึก",
-  mountain: "ภูเขา",
-  wolf: "หมาป่า",
-  sakura: "ซากุระ",
-  cat: "แมว",
-  crocodile: "จระเข้",
-  dove: "นกพิราบ",
-  butterfly: "ผีเสื้อ",
-  bamboo: "ไผ่",
-};
-
-const animalEmojis: Record<string, string> = {
-  lion: "🦁",
-  whale: "🐋",
-  dolphin: "🐬",
-  owl: "🦉",
-  fox: "🦊",
-  turtle: "🐢",
-  eagle: "🦅",
-  octopus: "🐙",
-  mountain: "🏔️",
-  wolf: "🐺",
-  sakura: "🌸",
-  cat: "🐈",
-  crocodile: "🐊",
-  dove: "🕊️",
-  butterfly: "🦋",
-  bamboo: "🌿",
-};
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useTranslations, useLocale } from 'next-intl'
+import Link from 'next/link'
+import { ZenCard } from '@/components/ui/zen-card'
+import { ZenButton } from '@/components/ui/zen-button'
+import { Settings, LogOut, Loader2 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import { getAnimal, getAnimalName } from '@/lib/animal-data'
+import type { SpiritAnimal } from '@/lib/types'
 
 export default function ProfilePage() {
-  const router = useRouter();
-  const supabase = createClient();
+  const router = useRouter()
+  const supabase = createClient()
+  const t = useTranslations('profile')
+  const locale = useLocale() as 'en' | 'th' | 'zh'
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
   const [profile, setProfile] = useState<{
-    spiritAnimal: string | null;
-    createdAt: string | null;
+    spiritAnimal: string | null
+    createdAt: string | null
   }>({
     spiritAnimal: null,
     createdAt: null,
-  });
+  })
   const [stats, setStats] = useState({
     quizzesCompleted: 0,
     plannersCreated: 0,
     currentStreak: 0,
-  });
+  })
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-          router.push("/login");
-          return;
+          router.push('/login')
+          return
         }
 
-        // Fetch profile
         const { data: profileData } = await supabase
-          .from("profiles")
-          .select("spirit_animal, created_at")
-          .eq("id", user.id)
-          .single();
+          .from('profiles')
+          .select('spirit_animal, created_at')
+          .eq('id', user.id)
+          .single()
 
-        // Fetch quiz count
         const { count: quizCount } = await supabase
-          .from("quiz_sessions")
-          .select("*", { count: "exact", head: true })
-          .eq("user_id", user.id)
-          .eq("status", "complete");
+          .from('quiz_sessions')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('status', 'complete')
 
-        // Fetch planner count
         const { count: plannerCount } = await supabase
-          .from("planner_blueprints")
-          .select("*", { count: "exact", head: true })
-          .eq("user_id", user.id);
+          .from('planner_blueprints')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
 
         setProfile({
           spiritAnimal: profileData?.spirit_animal || null,
           createdAt: profileData?.created_at || null,
-        });
+        })
         setStats({
           quizzesCompleted: quizCount || 0,
           plannersCreated: plannerCount || 0,
-          currentStreak: 0, // Could calculate from activity_log
-        });
+          currentStreak: 0,
+        })
       } catch (error) {
-        console.error("Error fetching profile:", error);
+        console.error('Error fetching profile:', error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchProfile();
-  }, [supabase, router]);
+    fetchProfile()
+  }, [supabase, router])
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
-  };
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
-  const handleSettings = () => {
-    alert("Settings page coming soon!");
-  };
-
+  // Use canonical animal data
   const displayName = profile.spiritAnimal
-    ? animalNames[profile.spiritAnimal] || profile.spiritAnimal
-    : "ผู้ใช้";
+    ? getAnimalName(profile.spiritAnimal as SpiritAnimal, locale)
+    : t('title')
   const displayEmoji = profile.spiritAnimal
-    ? animalEmojis[profile.spiritAnimal] || "🧘"
-    : "🧘";
+    ? getAnimal(profile.spiritAnimal as SpiritAnimal).emoji
+    : '🧘'
   const memberSince = profile.createdAt
-    ? new Date(profile.createdAt).toLocaleDateString("th-TH", {
-        year: "numeric",
-        month: "long",
-      })
-    : "-";
+    ? new Date(profile.createdAt).toLocaleDateString(
+        locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US',
+        { year: 'numeric', month: 'long' }
+      )
+    : '-'
 
   if (isLoading) {
     return (
       <main className="min-h-screen bg-zen-bg flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-zen-sage" />
       </main>
-    );
+    )
   }
 
   return (
@@ -156,38 +119,41 @@ export default function ProfilePage() {
           <h1 className="font-display text-2xl md:text-3xl font-bold text-zen-text">
             {displayName}
           </h1>
-          <p className="text-zen-text-secondary">สมาชิกตั้งแต่ {memberSince}</p>
+          <p className="text-zen-text-secondary">{memberSince}</p>
         </div>
 
         <div className="space-y-4 max-w-sm mx-auto">
           <ZenCard>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-zen-text-secondary">Quiz ที่ทำ</span>
-                <span className="font-semibold">{stats.quizzesCompleted}</span>
+                <span className="text-zen-text-secondary">{t('spiritAnimal')}</span>
+                <span className="font-semibold">{profile.spiritAnimal ? `${displayEmoji} ${displayName}` : '-'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zen-text-secondary">Planner ที่สร้าง</span>
+                <span className="text-zen-text-secondary">{t('planningStyle')}</span>
                 <span className="font-semibold">{stats.plannersCreated}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zen-text-secondary">วันต่อเนื่อง</span>
+                <span className="text-zen-text-secondary">{t('keyTraits')}</span>
                 <span className="font-semibold text-zen-gold">{stats.currentStreak}</span>
               </div>
             </div>
           </ZenCard>
 
-          <ZenButton variant="secondary" fullWidth onClick={handleSettings}>
-            <Settings className="w-5 h-5 mr-2" />
-            ตั้งค่า
-          </ZenButton>
+          {/* Link to Settings — no more alert("coming soon") */}
+          <Link href="/settings">
+            <ZenButton variant="secondary" fullWidth>
+              <Settings className="w-5 h-5 mr-2" />
+              {t('settings.title')}
+            </ZenButton>
+          </Link>
 
           <ZenButton variant="ghost" fullWidth onClick={handleLogout}>
             <LogOut className="w-5 h-5 mr-2" />
-            ออกจากระบบ
+            {t('settings.signOut')}
           </ZenButton>
         </div>
       </div>
     </main>
-  );
+  )
 }

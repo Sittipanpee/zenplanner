@@ -1,13 +1,24 @@
+/**
+ * Signup Page
+ * With i18n, dark mode
+ */
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ZenButton } from "@/components/ui/zen-button";
 import { ZenInput } from "@/components/ui/zen-input";
 import { ZenCard } from "@/components/ui/zen-card";
+import ThemeToggle from "@/components/ui/theme-toggle";
+import LanguageSwitcher from "@/components/ui/language-switcher";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
+  const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,7 +32,7 @@ export default function SignupPage() {
     setSuccessMessage(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(tCommon("errors.serverError"));
       return;
     }
 
@@ -37,33 +48,39 @@ export default function SignupPage() {
       if (signUpError) throw signUpError;
 
       if (data.user && data.user.identities?.length === 0) {
-        setError("This user already exists. Please try logging in.");
+        setError(t("signup.hasAccount"));
       } else {
-        setSuccessMessage("Success! Please check your email to confirm your registration.");
+        setSuccessMessage(t("signup.title"));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Sign up failed");
+      setError(err instanceof Error ? err.message : tCommon("errors.serverError"));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
+    <main className="min-h-screen bg-zen-bg dark:bg-zinc-950 flex flex-col items-center justify-center p-4">
+      {/* Header with theme/language controls */}
+      <div className="fixed top-0 right-0 px-4 py-4 z-10 flex items-center gap-2">
+        <LanguageSwitcher />
+        <ThemeToggle />
+      </div>
+
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <h1 className="font-display text-4xl font-bold text-zen-sage mb-2">
-            Create Account
+            {t("signup.title")}
           </h1>
-          <p className="text-zen-text-secondary">
-            Begin your journey with ZenPlanner
+          <p className="text-zen-text-secondary dark:text-zinc-400">
+            {tCommon("app.tagline")}
           </p>
         </div>
 
-        <ZenCard padding="lg">
+        <ZenCard padding="lg" className="dark:bg-zinc-900 dark:border-zinc-700">
           <form onSubmit={handleSignUp} className="space-y-4">
             <ZenInput
-              label="อีเมล"
+              label="Email"
               type="email"
               placeholder="your@email.com"
               value={email}
@@ -71,28 +88,28 @@ export default function SignupPage() {
               required
             />
             <ZenInput
-              label="รหัสผ่าน"
+              label="Password"
               type="password"
-              placeholder="••••••••"
+              placeholder="--------"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
             <ZenInput
-              label="ยืนยันรหัสผ่าน"
+              label="Confirm Password"
               type="password"
-              placeholder="••••••••"
+              placeholder="--------"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
 
             {error && (
-              <p className="text-sm text-zen-blossom">{error}</p>
+              <p className="text-sm text-zen-blossom" role="alert">{error}</p>
             )}
 
             {successMessage && (
-              <p className="text-sm text-zen-sage">{successMessage}</p>
+              <p className="text-sm text-zen-sage" role="status">{successMessage}</p>
             )}
 
             <ZenButton
@@ -101,15 +118,15 @@ export default function SignupPage() {
               fullWidth
               isLoading={isLoading}
             >
-              สมัครสมาชิก
+              {t("signup.title")}
             </ZenButton>
           </form>
         </ZenCard>
 
-        <p className="text-center text-zen-text-secondary">
-          มีบัญชีอยู่แล้ว?{" "}
+        <p className="text-center text-zen-text-secondary dark:text-zinc-400">
+          {t("signup.hasAccount")}{" "}
           <Link href="/login" className="text-zen-sage font-medium hover:underline">
-            เข้าสู่ระบบ
+            {t("signup.signIn")}
           </Link>
         </p>
       </div>

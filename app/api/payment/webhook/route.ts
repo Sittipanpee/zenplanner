@@ -5,18 +5,43 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import crypto from "crypto";
+
+/**
+ * Verify webhook HMAC-SHA256 signature
+ */
+function verifyWebhookSignature(signature: string | null, body: string): boolean {
+  const secret = process.env.PAYMENT_WEBHOOK_SECRET;
+  if (!secret) {
+    console.error("PAYMENT_WEBHOOK_SECRET not configured");
+    return false;
+  }
+  if (!signature) return false;
+
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(body)
+    .digest("hex");
+
+  return crypto.timingSafeEqual(
+    Buffer.from(signature, "hex"),
+    Buffer.from(expected, "hex")
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const {
-      paymentId,
-      status,
-      amount,
-      transactionId,
-    } = body;
+    const rawBody = await request.text();
 
-    // Validate webhook
+    // Verify webhook signature (HMAC-SHA256)
+    const signature = request.headers.get("x-webhook-signature");
+    if (!verifyWebhookSignature(signature, rawBody)) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+    }
+
+    const body = JSON.parse(rawBody);
+    const { paymentId, status, amount, transactionId } = body;
+
     if (!paymentId || !status) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -24,16 +49,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // In production, verify the webhook signature
-    // const signature = request.headers.get("x-webhook-signature");
-    // if (!verifySignature(signature, body)) {
-    //   return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-    // }
-
-    // Initialize Supabase client
     const supabase = await createClient();
 
-    // Find the payment record
+    // Idempotency: check if payment already processed
     const { data: payment, error: paymentError } = await supabase
       .from("payments")
       .select("*")
@@ -46,6 +64,15 @@ export async function POST(request: NextRequest) {
         { error: "Payment not found" },
         { status: 404 }
       );
+    }
+
+    // If already in a terminal state, return success (idempotent)
+    if (payment.status === "completed" || payment.status === "failed") {
+      return NextResponse.json({
+        success: true,
+        message: "Payment already processed",
+        status: payment.status,
+      });
     }
 
     // Update payment status
@@ -67,7 +94,6 @@ export async function POST(request: NextRequest) {
 
     // If payment successful, trigger planner generation
     if (status === "success" && payment.blueprint_id) {
-      // Update blueprint status to confirmed
       await supabase
         .from("planner_blueprints")
         .update({ status: "confirmed" })
@@ -84,7 +110,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Get payment status
+// Get payment status (requires auth)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -99,10 +125,17 @@ export async function GET(request: NextRequest) {
 
     const supabase = await createClient();
 
+    // Auth check
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { data: payment, error } = await supabase
       .from("payments")
       .select("*")
       .eq("id", paymentId)
+      .eq("user_id", user.id)
       .single();
 
     if (error || !payment) {
@@ -128,8 +161,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Simulate payment for demo purposes
+// Simulate payment — DEVELOPMENT ONLY
 export async function PUT(request: NextRequest) {
+  if (process.env.NODE_ENV !== "development") {
+    return NextResponse.json(
+      { error: "Simulation only available in development" },
+      { status: 403 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { paymentId, simulate } = body;
@@ -143,7 +183,6 @@ export async function PUT(request: NextRequest) {
 
     const supabase = await createClient();
 
-    // Update payment status (simulated)
     const { error } = await supabase
       .from("payments")
       .update({
@@ -158,9 +197,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // If successful, also update the blueprint
     if (simulate === "success") {
-      // Find the payment to get blueprint_id
       const { data: payment } = await supabase
         .from("payments")
         .select("blueprint_id")

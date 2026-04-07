@@ -418,7 +418,7 @@ export function PreviewMini({ toolId, customization }: PreviewMiniProps) {
             {Array.from({ length: 53 * 7 }).map((_, i) => {
               // Deterministic "random" based on index
               const seed = (i * 7 + 3) % 10;
-              const bgColor = seed > 6 ? colors.bg : seed > 3 ? colors.border : "#E8E4DB";
+              const bgColor = seed > 6 ? colors.bg : seed > 3 ? colors.border : "var(--zen-surface-alt, #E8E4DB)";
               return (
                 <div
                   key={i}

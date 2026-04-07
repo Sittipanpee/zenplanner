@@ -7,6 +7,11 @@ import * as XLSX from "xlsx";
 import type { ToolId, PlannerBlueprint } from "./types";
 import { TOOL_INFO } from "./archetype-map";
 
+const DEBUG = process.env.DEBUG_MODE === "true";
+function dbg(...args: unknown[]) {
+  if (DEBUG) console.log("[DBG][sheet-builder]", ...args);
+}
+
 export interface SheetConfig {
   blueprint: PlannerBlueprint;
   format: "google_sheets" | "excel_vba";
@@ -16,21 +21,21 @@ export interface SheetConfig {
  * Generate planner workbook from blueprint
  */
 export async function generatePlannerWorkbook(config: SheetConfig): Promise<ArrayBuffer> {
-  console.log("generatePlannerWorkbook called");
+  dbg("generatePlannerWorkbook called");
   try {
   const { blueprint, format } = config;
 
   if (!blueprint) {
     throw new Error("Blueprint is undefined");
   }
-  console.log("Blueprint:", blueprint);
+  dbg("Blueprint:", blueprint);
   if (!blueprint.tool_selection || !Array.isArray(blueprint.tool_selection)) {
     throw new Error("Invalid tool_selection: " + JSON.stringify(blueprint.tool_selection));
   }
-  console.log("tool_selection:", blueprint.tool_selection);
+  dbg("tool_selection:", blueprint.tool_selection);
 
   const workbook = XLSX.utils.book_new();
-  console.log("Workbook created");
+  dbg("Workbook created");
 
   // Add cover sheet
   createCoverSheet(workbook, blueprint);
@@ -49,23 +54,23 @@ export async function generatePlannerWorkbook(config: SheetConfig): Promise<Arra
     addVBAMacros(workbook);
   }
 
-  console.log("Writing workbook to buffer...");
+  dbg("Writing workbook to buffer...");
   const buffer = XLSX.write(workbook, { type: "array", bookType: "xlsx" });
-  console.log("Buffer result:", buffer);
+  dbg("Buffer result type:", typeof buffer);
 
   if (!buffer) {
     throw new Error("XLSX.write returned undefined - workbook may be empty or invalid");
   }
 
-  console.log("Buffer length:", buffer.length);
+  dbg("Buffer length:", buffer.length);
 
   // Convert Uint8Array to ArrayBuffer properly
   const uint8Array = new Uint8Array(buffer);
   const result = uint8Array.buffer.slice(uint8Array.byteOffset, uint8Array.byteOffset + uint8Array.byteLength);
-  console.log("Result created, byteLength:", result.byteLength);
+  dbg("Result created, byteLength:", result.byteLength);
   return result;
   } catch (error) {
-    console.error("Error in generatePlannerWorkbook:", error);
+    dbg("Error in generatePlannerWorkbook:", error);
     throw error;
   }
 }

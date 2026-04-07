@@ -5,13 +5,36 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { generateSimpleQRCode } from "@/lib/qr-generator";
+import { generateQRCode } from "@/lib/qr-generator";
 
 // Mock payment amount - in production this would come from the planner blueprint
 const PLANNER_PRICE = 299; // 299 THB
 
+// Simple in-memory rate limiter — replace with Redis in production
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(identifier: string, maxRequests = 10, windowMs = 60000): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+
+  if (!record || now > record.resetAt) {
+    rateLimitMap.set(identifier, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+
+  if (record.count >= maxRequests) return false;
+  record.count++;
+  return true;
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit by IP — stricter for payment endpoint
+    const ip = request.headers.get('x-forwarded-for') ?? 'unknown';
+    if (!checkRateLimit(ip, 10, 60000)) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+
     const body = await request.json();
     const { blueprintId, amount = PLANNER_PRICE } = body;
 
@@ -36,17 +59,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate actual QR code
-    const qrCode = await generateSimpleQRCode(
+    // Generate payment ID and QR code
+    const paymentId = `pay_${crypto.randomUUID()}`;
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+    const qrCode = await generateQRCode({
+      paymentId,
       amount,
-      `ZenPlanner - Blueprint: ${blueprintId.substring(0, 8)}`
-    );
+      merchantId: process.env.PROMPTPAY_MERCHANT_ID || "1234567890",
+      merchantName: "ZenPlanner",
+      ref1: blueprintId.substring(0, 20),
+    });
 
-    // Create payment record in database
-    const paymentId = `pay_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutes
-
-    // Store payment in database
+    // Store payment in database — fail if insert fails
     const { data: payment, error: paymentError } = await supabase
       .from("payments")
       .insert({
@@ -62,7 +87,10 @@ export async function POST(request: NextRequest) {
 
     if (paymentError) {
       console.error("Failed to create payment record:", paymentError);
-      // Continue with mock data if DB insert fails
+      return NextResponse.json(
+        { error: "Failed to create payment record" },
+        { status: 500 }
+      );
     }
 
     // Create payment response

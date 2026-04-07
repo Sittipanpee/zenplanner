@@ -8,7 +8,7 @@ import { calculateToolRecommendations, ANIMAL_TOOLS } from "./archetype-map";
 import { callLLMJson } from "./llm";
 import type { PlannerBlueprint, AxisScores, LifestyleProfile, ToolId } from "./types";
 import { ALL_TOOL_IDS } from "./types";
-import { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export interface GenerationProgress {
   total: number;
@@ -51,27 +51,28 @@ export async function generatePlanner(
       });
 
       const { data: sessionData, error } = await supabase
-        .from('quiz_sessions')
-        .select('lifestyle_profile, axis_scores')
-        .eq('id', blueprint.quiz_session_id)
+        .from("quiz_sessions")
+        .select("lifestyle_profile, axis_scores")
+        .eq("id", blueprint.quiz_session_id)
         .single();
 
       if (error) {
-        console.warn(`Could not fetch quiz session ${blueprint.quiz_session_id}:`, error.message);
+        if (process.env.DEBUG_MODE === "true") {
+          console.warn(`[DBG] Could not fetch quiz session ${blueprint.quiz_session_id}:`, error.message);
+        }
       }
-      
+
       const axisScores = sessionData?.axis_scores as AxisScores | null;
       lifestyleProfile = sessionData?.lifestyle_profile as LifestyleProfile | null;
 
       if (axisScores) {
-        console.log("Found axis scores. Calculating recommendations...");
         toolSelection = calculateToolRecommendations(axisScores);
       }
     }
-    
+
     // Fallback if no tools were selected
     if (toolSelection.length === 0) {
-      toolSelection = ANIMAL_TOOLS[blueprint.spirit_animal || 'bamboo'];
+      toolSelection = ANIMAL_TOOLS[blueprint.spirit_animal || "bamboo"];
     }
 
     // Step 3: Customize tools with LLM if a lifestyle profile exists
@@ -84,10 +85,7 @@ export async function generatePlanner(
 
     let finalTools = toolSelection;
     if (lifestyleProfile && Object.keys(lifestyleProfile).length > 0) {
-      console.log("Found lifestyle profile. Customizing tools with LLM...");
       finalTools = await customizeToolsWithProfile(toolSelection, lifestyleProfile);
-    } else {
-      console.log("No lifestyle profile found, using score-based or default tools.");
     }
 
     // Step 4: Generate workbook
@@ -103,21 +101,49 @@ export async function generatePlanner(
         ...blueprint,
         tool_selection: finalTools,
       },
-      format: "google_sheets", // Default to Google Sheets format
+      format: "google_sheets",
     });
 
-    // Step 5: Upload to storage (placeholder)
+    // Step 5: Upload to Supabase Storage
     onProgress?.({
       total: 5,
       completed: 4,
-      current: "Preparing download...",
+      current: "Uploading planner...",
       status: "running",
     });
 
-    const blob = new Blob([workbookBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    const downloadUrl = URL.createObjectURL(blob);
+    const userId = blueprint.user_id;
+    const jobId = blueprint.id || crypto.randomUUID();
+    const storagePath = `${userId}/${jobId}.xlsx`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("planners")
+      .upload(storagePath, Buffer.from(workbookBuffer), {
+        contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        upsert: true,
+      });
+
+    if (uploadError) {
+      throw new Error(`Storage upload failed: ${uploadError.message}`);
+    }
+
+    // Get signed URL (1 hour expiry)
+    const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+      .from("planners")
+      .createSignedUrl(storagePath, 3600);
+
+    if (signedUrlError || !signedUrlData?.signedUrl) {
+      throw new Error(`Failed to create signed URL: ${signedUrlError?.message || "No URL returned"}`);
+    }
+
+    const downloadUrl = signedUrlData.signedUrl;
+    const expiresAt = new Date(Date.now() + 3600 * 1000);
+
+    // Update generation_jobs record if it exists
+    await supabase
+      .from("generation_jobs")
+      .update({ download_url: downloadUrl, status: "completed" })
+      .eq("blueprint_id", blueprint.id);
 
     onProgress?.({
       total: 5,
@@ -132,7 +158,7 @@ export async function generatePlanner(
         tool_selection: finalTools,
       },
       downloadUrl,
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      expiresAt,
     };
   } catch (error) {
     onProgress?.({
@@ -155,7 +181,6 @@ async function customizeToolsWithProfile(
   profile: LifestyleProfile
 ): Promise<ToolId[]> {
   try {
-    // Use LLM to suggest tool modifications based on lifestyle
     const response = await callLLMJson<{ tools: string[] }>(
       `You are a planner tool expert. Based on the user's lifestyle profile, recommend which tools to include or remove from their planner.
 
@@ -179,7 +204,9 @@ Keep 6-10 tools maximum.`,
       return response.tools as ToolId[];
     }
   } catch (e) {
-    console.warn("Failed to customize tools with LLM, using defaults:", e);
+    if (process.env.DEBUG_MODE === "true") {
+      console.warn("[DBG] Failed to customize tools with LLM, using defaults:", e);
+    }
   }
 
   return baseTools;

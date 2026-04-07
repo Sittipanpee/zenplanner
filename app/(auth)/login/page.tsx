@@ -1,5 +1,7 @@
 /**
  * Login Page
+ * With i18n, dark mode, ThemeToggle, LanguageSwitcher
+ * Uses router.push instead of window.location.href
  */
 
 "use client";
@@ -7,15 +9,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ZenButton } from "@/components/ui/zen-button";
 import { ZenInput } from "@/components/ui/zen-input";
 import { ZenCard } from "@/components/ui/zen-card";
+import ThemeToggle from "@/components/ui/theme-toggle";
+import LanguageSwitcher from "@/components/ui/language-switcher";
 import { createClient } from "@/lib/supabase/client";
 import { lineLogin } from "@/lib/liff";
 import { MessageCircle } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -35,29 +43,35 @@ export default function LoginPage() {
 
       if (signInError) throw signInError;
 
-      // Redirect to dashboard on success
-      window.location.href = "/dashboard";
+      // Redirect to dashboard on success — use router.push instead of window.location.href
+      router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      setError(err instanceof Error ? err.message : tCommon("errors.serverError"));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
+    <main className="min-h-screen bg-zen-bg dark:bg-zinc-950 flex flex-col items-center justify-center p-4">
+      {/* Header with theme/language controls */}
+      <div className="fixed top-0 right-0 px-4 py-4 z-10 flex items-center gap-2">
+        <LanguageSwitcher />
+        <ThemeToggle />
+      </div>
+
       <div className="w-full max-w-md space-y-8">
         {/* Logo / Header */}
         <div className="text-center">
           <h1 className="font-display text-4xl font-bold text-zen-sage mb-2">
-            ZenPlanner
+            {tCommon("app.name")}
           </h1>
-          <p className="text-zen-text-secondary">
-            Your personalized planning journey awaits
+          <p className="text-zen-text-secondary dark:text-zinc-400">
+            {t("login.subtitle")}
           </p>
         </div>
 
-        <ZenCard padding="lg">
+        <ZenCard padding="lg" className="dark:bg-zinc-900 dark:border-zinc-700">
           <div className="space-y-6">
             {/* LINE Login */}
             <div className="space-y-3">
@@ -65,26 +79,23 @@ export default function LoginPage() {
                 type="button"
                 className="w-full h-11 bg-zen-line hover:bg-zen-line/90 text-white font-semibold rounded-full flex items-center justify-center gap-2 transition-colors focus-visible:ring-2 focus-visible:ring-zen-sage"
                 onClick={() => {
-                  // Trigger LINE login flow
                   lineLogin();
                 }}
+                aria-label={t("login.lineButton")}
               >
                 <MessageCircle className="w-5 h-5" />
-                เข้าสู่ระบบด้วย LINE
+                {t("login.lineButton")}
               </button>
-              <p className="text-xs text-center text-zen-text-muted">
-                สะดวกและรวดเร็ว — ไม่ต้องจดจำรหัสผ่าน
-              </p>
             </div>
 
             {/* Divider */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-zen-border" />
+                <div className="w-full border-t border-zen-border dark:border-zinc-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-zen-surface text-zen-text-muted">
-                  หรือ
+                <span className="px-2 bg-zen-surface dark:bg-zinc-900 text-zen-text-muted dark:text-zinc-500">
+                  {t("login.orDivider")}
                 </span>
               </div>
             </div>
@@ -92,7 +103,7 @@ export default function LoginPage() {
             {/* Email Login Form */}
             <form onSubmit={handleEmailLogin} className="space-y-4">
               <ZenInput
-                label="อีเมล"
+                label={t("login.title")}
                 type="email"
                 placeholder="your@email.com"
                 value={email}
@@ -100,16 +111,16 @@ export default function LoginPage() {
                 required
               />
               <ZenInput
-                label="รหัสผ่าน"
+                label={t("login.subtitle")}
                 type="password"
-                placeholder="••••••••"
+                placeholder="--------"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
 
               {error && (
-                <p className="text-sm text-zen-blossom">{error}</p>
+                <p className="text-sm text-zen-blossom" role="alert">{error}</p>
               )}
 
               <ZenButton
@@ -118,24 +129,24 @@ export default function LoginPage() {
                 fullWidth
                 isLoading={isLoading}
               >
-                เข้าสู่ระบบ
+                {t("login.title")}
               </ZenButton>
             </form>
           </div>
         </ZenCard>
 
         {/* Sign Up Link */}
-        <p className="text-center text-zen-text-secondary">
-          ยังไม่มีบัญชี?{" "}
+        <p className="text-center text-zen-text-secondary dark:text-zinc-400">
+          {t("login.noAccount")}{" "}
           <Link href="/signup" className="text-zen-sage font-medium hover:underline">
-            สมัครสมาชิก
+            {t("login.signUp")}
           </Link>
         </p>
 
         {/* Guest Option */}
         <div className="text-center">
           <ZenButton variant="ghost" size="sm" onClick={() => router.push("/quiz")}>
-            ลองใช้งานแบบ Guest
+            {tCommon("nav.quiz")}
           </ZenButton>
         </div>
       </div>

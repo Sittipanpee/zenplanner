@@ -7,6 +7,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ZenCard } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { QrCode, Timer, CheckCircle, XCircle, Loader2, CreditCard } from "lucide-react";
@@ -25,7 +26,10 @@ interface PaymentData {
 function PaymentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('planner.payment');
+  const tCommon = useTranslations('common.actions');
   const blueprintId = searchParams.get("blueprintId") || "demo-blueprint";
+  const isDev = process.env.NODE_ENV !== 'production';
 
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [status, setStatus] = useState<"loading" | "pending" | "success" | "failed" | "expired">("loading");
@@ -52,7 +56,7 @@ function PaymentContent() {
           setStatus("failed");
         }
       } catch (err) {
-        setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+        setError("errorGeneric");
         setStatus("failed");
       }
     };
@@ -141,7 +145,7 @@ function PaymentContent() {
       <main className="min-h-screen bg-zen-bg flex items-center justify-center p-4">
         <div className="text-center space-y-4">
           <Loader2 className="w-8 h-8 text-zen-sage animate-spin mx-auto" />
-          <p className="text-zen-text-secondary">กำลังสร้าง QR Code...</p>
+          <p className="text-zen-text-secondary">{t('creatingQr')}</p>
         </div>
       </main>
     );
@@ -155,13 +159,13 @@ function PaymentContent() {
             <XCircle className="w-8 h-8 text-zen-blossom" />
           </div>
           <h1 className="font-display text-2xl font-bold text-zen-text">
-            {status === "expired" ? "หมดเวลาชำระเงิน" : "เกิดข้อผิดพลาด"}
+            {status === "expired" ? t('timeout') : t('failed')}
           </h1>
           <p className="text-zen-text-secondary">
-            {error || "กรุณาลองใหม่อีกครั้ง"}
+            {error ? t(error) : t('tryAgainError')}
           </p>
           <ZenButton onClick={() => router.push("/blueprint")}>
-            ลองใหม่
+            {t('retry')}
           </ZenButton>
         </div>
       </main>
@@ -176,10 +180,10 @@ function PaymentContent() {
             <CheckCircle className="w-8 h-8 text-zen-sage" />
           </div>
           <h1 className="font-display text-2xl font-bold text-zen-text">
-            ชำระเงินสำเร็จ!
+            {t('success')}
           </h1>
           <p className="text-zen-text-secondary">
-            กำลังนำไปสู่หน้าดาวน์โหลด...
+            {t('redirecting')}
           </p>
         </div>
       </main>
@@ -192,10 +196,10 @@ function PaymentContent() {
         {/* Header */}
         <div className="text-center mb-6">
           <h1 className="font-display text-2xl font-bold text-zen-text mb-2">
-            ชำระเงิน
+            {t('title')}
           </h1>
           <p className="text-zen-text-secondary">
-            สแกน QR Code เพื่อชำระ {PLANNER_PRICE} บาท
+            {t('scan')} — {t('amount', { amount: PLANNER_PRICE })}
           </p>
         </div>
 
@@ -223,14 +227,14 @@ function PaymentContent() {
 
             {/* Amount */}
             <p className="font-bold text-2xl text-zen-text mb-4">
-              {PLANNER_PRICE} บาท
+              {t('amountDisplay', { amount: PLANNER_PRICE })}
             </p>
           </div>
         </ZenCard>
 
         {/* Instructions */}
         <ZenCard className="mb-6">
-          <h3 className="font-semibold text-zen-text mb-3">วิธีชำระเงิน</h3>
+          <h3 className="font-semibold text-zen-text mb-3">{t('howTo')}</h3>
           <ol className="space-y-2 text-sm text-zen-text-secondary">
             {paymentData?.instructions.map((instruction, i) => (
               <li key={i} className="flex items-start gap-2">
@@ -241,16 +245,18 @@ function PaymentContent() {
           </ol>
         </ZenCard>
 
-        {/* Demo Button */}
+        {/* Demo Button — only visible in development */}
+        {isDev && (
         <div className="text-center mb-6">
-          <p className="text-xs text-zen-text-muted mb-2">สำหรับทดสอบ</p>
+          <p className="text-xs text-zen-text-muted mb-2">{t('forTesting')}</p>
           <button
             onClick={simulatePayment}
             className="text-sm text-zen-sage hover:underline"
           >
-            จำลองการชำระเงินสำเร็จ →
+            {t('simulateSuccess')} →
           </button>
         </div>
+        )}
 
         {/* Cancel */}
         <div className="text-center">
@@ -258,7 +264,7 @@ function PaymentContent() {
             onClick={() => router.back()}
             className="text-zen-text-muted text-sm hover:text-zen-text"
           >
-            ยกเลิก
+            {t('cancelButton')}
           </button>
         </div>
       </div>
@@ -269,7 +275,7 @@ function PaymentContent() {
 function LoadingFallback() {
   return (
     <main className="min-h-screen bg-zen-bg flex items-center justify-center p-4">
-      <div className="text-zen-text-secondary">กำลังโหลด...</div>
+      <div className="text-zen-text-secondary">Loading...</div>
     </main>
   );
 }

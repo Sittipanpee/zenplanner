@@ -28,10 +28,13 @@ export function ZenBottomNav({ items, className = "" }: ZenBottomNavProps) {
 
   return (
     <nav
+      role="navigation"
+      aria-label="Main navigation"
       className={`
         zen-bottom-bar fixed bottom-0 left-0 right-0 z-50
         bg-zen-surface border-t border-zen-border
         flex items-center justify-around px-2 pb-safe
+        lg:hidden
         ${className}
       `}
     >
@@ -41,13 +44,14 @@ export function ZenBottomNav({ items, className = "" }: ZenBottomNavProps) {
           <Link
             key={item.href}
             href={item.href}
+            aria-current={isActive ? "page" : undefined}
             className={`
               flex flex-col items-center justify-center min-w-[64px] h-14
               transition-colors duration-200
               ${isActive ? "text-zen-sage" : "text-zen-text-muted hover:text-zen-text-secondary"}
             `}
           >
-            <div className="mb-1">{item.icon}</div>
+            <div className="mb-1" aria-hidden="true">{item.icon}</div>
             <span className="text-xs font-medium">{item.label}</span>
           </Link>
         );
@@ -104,19 +108,21 @@ export function ZenSidebar({ items, className = "" }: ZenSidebarProps) {
     <aside
       className={`
         w-64 bg-zen-surface border-r border-zen-border min-h-screen p-4
+        hidden lg:block
         ${className}
       `}
     >
       <div className="mb-8">
         <h2 className="font-display text-xl font-bold text-zen-sage">ZenPlanner</h2>
       </div>
-      <nav className="space-y-1">
+      <nav role="navigation" aria-label="Sidebar navigation" className="space-y-1">
         {items.map((item) => {
           const isActive = pathname === item.href || item.active;
           return (
             <Link
               key={item.href}
               href={item.href}
+              aria-current={isActive ? "page" : undefined}
               className={`
                 flex items-center gap-3 px-4 py-3 rounded-lg
                 transition-colors duration-200
@@ -126,7 +132,7 @@ export function ZenSidebar({ items, className = "" }: ZenSidebarProps) {
                 }
               `}
             >
-              <div>{item.icon}</div>
+              <div aria-hidden="true">{item.icon}</div>
               <span className="font-medium">{item.label}</span>
             </Link>
           );

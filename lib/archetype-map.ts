@@ -115,16 +115,6 @@ export const ANIMAL_TOOLS: Record<SpiritAnimal, ToolId[]> = {
 export function calculateToolRecommendations(scores: AxisScores): ToolId[] {
   const recommendations = new Map<ToolId, number>();
 
-  // Weight each score dimension
-  const weights = {
-    energy: scores.energy > 60 ? "structured" : "flexible",
-    planning: scores.planning > 60 ? "detailed" : "big_picture",
-    social: scores.social > 60 ? "social" : "independent",
-    decision: scores.decision > 60 ? "analytical" : "intuitive",
-    focus: scores.focus > 60 ? "intense" : "adaptive",
-    drive: scores.drive > 60 ? "achievement" : "balance",
-  };
-
   // Add base recommendations from animal
   const dominantAnimal = getDominantAnimal(scores);
   const baseTools = ANIMAL_TOOLS[dominantAnimal];
@@ -225,8 +215,6 @@ export function getDominantAnimal(scores: AxisScores): SpiritAnimal {
     // Bamboo: Resilient, Low energy + Surfer + Gatherer + Petal + Kaleidoscope + Garden
     { animal: "bamboo", profile: [30, 25, 50, 30, 35, 35] },
   ];
-
-  const inputProfile = [energy, planning, social, decision, focus, drive];
 
   // Calculate Manhattan distance to each archetype
   let closestAnimal: SpiritAnimal = "butterfly";

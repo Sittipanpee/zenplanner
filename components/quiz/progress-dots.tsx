@@ -1,10 +1,12 @@
 /**
  * Progress Dots Component
  * Step progress indicator for quiz phases
+ * With dark mode, ARIA, and ProgressBar width fix
  */
 
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 export interface ProgressDotsProps {
@@ -31,6 +33,11 @@ export function ProgressDots({
         "flex items-center justify-center gap-2",
         className
       )}
+      role="progressbar"
+      aria-valuenow={current}
+      aria-valuemin={0}
+      aria-valuemax={total}
+      aria-label={`Step ${current} of ${total}`}
     >
       {Array.from({ length: total }).map((_, i) => {
         const isCompleted = i < current;
@@ -50,7 +57,7 @@ export function ProgressDots({
                   : "bg-zen-sage"
                 : isCurrent
                   ? "bg-zen-sage-light scale-110"
-                  : "bg-zen-border",
+                  : "bg-zen-border dark:bg-zinc-700",
               // Animation for current
               isCurrent && "animate-zen-pulse-grow"
             )}
@@ -81,6 +88,7 @@ export interface ProgressBarProps {
 
 /**
  * Progress Bar - Linear progress indicator
+ * FIX: width is now always applied regardless of color+variant combination
  */
 export function ProgressBar({
   progress,
@@ -94,28 +102,34 @@ export function ProgressBar({
   return (
     <div className={cn("w-full", className)}>
       {showLabel && (
-        <div className="flex justify-between text-xs text-zen-text-secondary mb-1">
-          <span>ความคืบหน้า</span>
+        <div className="flex justify-between text-xs text-zen-text-secondary dark:text-zinc-400 mb-1">
+          <span>Progress</span>
           <span>{Math.round(clampedProgress)}%</span>
         </div>
       )}
 
-      <div className="h-2 bg-zen-surface-alt rounded-full overflow-hidden">
+      <div
+        className="h-2 bg-zen-surface-alt dark:bg-zinc-800 rounded-full overflow-hidden"
+        role="progressbar"
+        aria-valuenow={Math.round(clampedProgress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
         <div
           className={cn(
             "h-full rounded-full transition-all duration-500 ease-out",
-            variant === "gradient"
+            !color && variant === "gradient"
               ? "bg-gradient-to-r from-zen-sage to-zen-sage-light"
-              : variant === "animated"
-                ? "animate-zen-glow-pulse"
-                : "bg-zen-sage",
-            color && variant === "default"
+              : !color && variant === "animated"
+                ? "bg-zen-sage animate-zen-glow-pulse"
+                : !color
+                  ? "bg-zen-sage"
+                  : ""
           )}
-          style={
-            color && variant === "default"
-              ? { background: color }
-              : { width: `${clampedProgress}%` }
-          }
+          style={{
+            width: `${clampedProgress}%`,
+            ...(color ? { background: color } : {}),
+          }}
         />
       </div>
     </div>
@@ -137,9 +151,11 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
         "flex items-center justify-between w-full",
         className
       )}
+      role="list"
+      aria-label="Progress steps"
     >
       {steps.map((step, index) => (
-        <div key={index} className="flex items-center flex-1">
+        <div key={index} className="flex items-center flex-1" role="listitem">
           {/* Step dot */}
           <div
             className={cn(
@@ -147,9 +163,10 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
               step.status === "completed"
                 ? "bg-zen-sage text-white"
                 : step.status === "current"
-                  ? "bg-zen-sage-light text-zen-text animate-zen-pulse-grow"
-                  : "bg-zen-border text-zen-text-muted"
+                  ? "bg-zen-sage-light text-zen-text dark:text-zinc-100 animate-zen-pulse-grow"
+                  : "bg-zen-border dark:bg-zinc-700 text-zen-text-muted dark:text-zinc-500"
             )}
+            aria-current={step.status === "current" ? "step" : undefined}
           >
             {step.status === "completed" ? (
               <svg
@@ -157,6 +174,7 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -175,10 +193,10 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
             className={cn(
               "hidden sm:block text-xs ml-2 whitespace-nowrap",
               step.status === "completed"
-                ? "text-zen-text"
+                ? "text-zen-text dark:text-zinc-200"
                 : step.status === "current"
-                  ? "text-zen-text font-medium"
-                  : "text-zen-text-muted"
+                  ? "text-zen-text dark:text-zinc-100 font-medium"
+                  : "text-zen-text-muted dark:text-zinc-500"
             )}
           >
             {step.label}
@@ -191,7 +209,7 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
                 "flex-1 h-0.5 mx-2",
                 step.status === "completed"
                   ? "bg-zen-sage"
-                  : "bg-zen-border"
+                  : "bg-zen-border dark:bg-zinc-700"
               )}
             />
           )}
@@ -218,10 +236,10 @@ export function QuizPhaseProgress({
   className,
 }: QuizPhaseProgressProps) {
   const phases = [
-    { key: "quiz", label: "ค้นหาสัตว์", status: phase === "quiz" ? "current" : (phase === "reveal" || phase === "profile" || phase === "complete" ? "completed" : "pending") as "completed" | "current" | "pending" },
-    { key: "reveal", label: "เผยตัว", status: phase === "reveal" ? "current" : (phase === "profile" || phase === "complete" ? "completed" : "pending") as "completed" | "current" | "pending" },
-    { key: "profile", label: "โปรไฟล์", status: phase === "profile" ? "current" : (phase === "complete" ? "completed" : "pending") as "completed" | "current" | "pending" },
-    { key: "complete", label: "เสร็จสิ้น", status: phase === "complete" ? "current" : "pending" as "completed" | "current" | "pending" },
+    { key: "quiz", label: "Quiz", status: phase === "quiz" ? "current" : (phase === "reveal" || phase === "profile" || phase === "complete" ? "completed" : "pending") as "completed" | "current" | "pending" },
+    { key: "reveal", label: "Reveal", status: phase === "reveal" ? "current" : (phase === "profile" || phase === "complete" ? "completed" : "pending") as "completed" | "current" | "pending" },
+    { key: "profile", label: "Profile", status: phase === "profile" ? "current" : (phase === "complete" ? "completed" : "pending") as "completed" | "current" | "pending" },
+    { key: "complete", label: "Done", status: phase === "complete" ? "current" : "pending" as "completed" | "current" | "pending" },
   ];
 
   return (
@@ -258,16 +276,20 @@ export function ZenPathProgress({
   return (
     <div
       className={cn(
-        "relative h-2 bg-zen-surface-alt rounded-full overflow-hidden",
+        "relative h-2 bg-zen-surface-alt dark:bg-zinc-800 rounded-full overflow-hidden",
         className
       )}
+      role="progressbar"
+      aria-valuenow={current}
+      aria-valuemin={0}
+      aria-valuemax={total}
     >
       {/* Background path markers */}
       <div className="absolute inset-0 flex">
         {Array.from({ length: total }).map((_, i) => (
           <div
             key={i}
-            className="flex-1 border-r border-zen-border last:border-0"
+            className="flex-1 border-r border-zen-border dark:border-zinc-700 last:border-0"
           />
         ))}
       </div>
@@ -280,7 +302,7 @@ export function ZenPathProgress({
 
       {/* Current position marker */}
       <div
-        className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md transition-all duration-300"
+        className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white dark:bg-zinc-200 rounded-full shadow-md transition-all duration-300"
         style={{ left: `calc(${(current / total) * 100}% - 6px)` }}
       />
     </div>

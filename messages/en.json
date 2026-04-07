@@ -1,0 +1,328 @@
+{
+  "common": {
+    "app": {
+      "name": "ZenPlanner",
+      "tagline": "Plan with your spirit"
+    },
+    "nav": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "quiz": "Quiz",
+      "planner": "Planner",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Log out",
+      "login": "Log in"
+    },
+    "actions": {
+      "continue": "Continue",
+      "back": "Back",
+      "save": "Save",
+      "cancel": "Cancel",
+      "generate": "Generate",
+      "download": "Download",
+      "share": "Share",
+      "copy": "Copy link",
+      "copied": "Copied!",
+      "loading": "Loading...",
+      "error": "Something went wrong",
+      "retry": "Try again",
+      "close": "Close",
+      "next": "Next",
+      "skip": "Skip",
+      "done": "Done"
+    },
+    "theme": {
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "system": "System",
+      "toggleLight": "Switch to light mode",
+      "toggleDark": "Switch to dark mode"
+    },
+    "language": {
+      "en": "English",
+      "th": "ไทย",
+      "zh": "中文"
+    },
+    "errors": {
+      "notFound": "Page not found",
+      "serverError": "Server error — please try again later",
+      "unauthorized": "Please log in to continue",
+      "networkError": "Network error — check your connection"
+    }
+  },
+  "landing": {
+    "startJourney": "Start Your Journey",
+    "feature1": {
+      "title": "Spirit Animal Quiz",
+      "desc": "Discover your planning archetype through AI-powered personality analysis"
+    },
+    "feature2": {
+      "title": "Smart Planner",
+      "desc": "Generate a personalized planner with tools matched to your spirit animal"
+    },
+    "feature3": {
+      "title": "3 Languages",
+      "desc": "Full Thai, English, and Chinese support"
+    },
+    "card1": {
+      "desc": "Take the 22-question spirit animal quiz and discover your planning archetype"
+    },
+    "card2": {
+      "desc": "Build a custom planner with tools tailored to your spirit animal"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue your planning journey",
+      "lineButton": "Continue with LINE",
+      "githubButton": "Continue with GitHub",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "orDivider": "or"
+    },
+    "signup": {
+      "title": "Create your account",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "quiz": {
+    "home": {
+      "title": "Discover your spirit animal",
+      "subtitle": "A short quiz to reveal your unique planning personality",
+      "startButton": "Start the quiz",
+      "modeClassic": "Classic",
+      "modeChat": "Chat",
+      "modeGame": "Mini-game",
+      "estimatedTime": "About 3 minutes"
+    },
+    "question": {
+      "progress": "Question {current} of {total}",
+      "back": "Previous question",
+      "hint": "Choose the answer that feels most natural to you"
+    },
+    "reveal": {
+      "title": "Your spirit animal is",
+      "subtitle": "This archetype reflects how you naturally approach planning and life",
+      "share": "Share your result",
+      "takeAgain": "Retake quiz",
+      "viewPlanner": "Create my planner",
+      "copied": "Link copied to clipboard!",
+      "copyError": "Could not copy — please copy the URL manually"
+    },
+    "profile": {
+      "title": "Tell us about your lifestyle",
+      "chatPlaceholder": "Describe your typical day, goals, or anything on your mind...",
+      "send": "Send",
+      "analyzing": "Analysing your profile...",
+      "complete": "Profile complete"
+    },
+    "summary": {
+      "title": "Your planning profile",
+      "traits": "Key traits",
+      "strengths": "Your strengths",
+      "recommendation": "Recommended tools"
+    }
+  },
+  "planner": {
+    "blueprint": {
+      "title": "Build your blueprint",
+      "subtitle": "Choose the tools that fit your life",
+      "spiritAnimal": "Your spirit animal",
+      "selectedTools": "{count} tools selected",
+      "customize": "Customise",
+      "generate": "Generate planner",
+      "noAnimal": "Complete the quiz first to unlock your personalised blueprint"
+    },
+    "toolGrid": {
+      "searchPlaceholder": "Search tools...",
+      "allCategories": "All categories",
+      "noResults": "No tools found",
+      "selected": "Selected",
+      "addTool": "Add",
+      "removeTool": "Remove"
+    },
+    "customize": {
+      "title": "Customise your planner",
+      "colorScheme": "Colour scheme",
+      "layout": "Layout",
+      "paperSize": "Paper size",
+      "preview": "Preview"
+    },
+    "generate": {
+      "title": "Generating your planner",
+      "step1": "Preparing your blueprint...",
+      "step2": "Crafting your daily pages...",
+      "step3": "Building habit trackers...",
+      "step4": "Adding your personal touches...",
+      "step5": "Almost ready..."
+    },
+    "done": {
+      "title": "Your planner is ready!",
+      "subtitle": "Download or share it with a friend",
+      "downloadExcel": "Download Excel",
+      "downloadSheets": "Open in Google Sheets",
+      "shareTitle": "Share",
+      "shareLine": "Share on LINE",
+      "shareFacebook": "Share on Facebook",
+      "shareTwitter": "Share on X (Twitter)",
+      "copyLink": "Copy link"
+    },
+    "payment": {
+      "title": "Unlock your planner",
+      "subtitle": "One-time payment — yours to keep forever",
+      "amount": "฿{amount}",
+      "scan": "Scan to pay",
+      "waiting": "Waiting for payment...",
+      "success": "Payment confirmed!",
+      "failed": "Payment failed",
+      "retry": "Try again",
+      "creatingQr": "Creating QR Code...",
+      "howTo": "How to pay",
+      "forTesting": "For testing",
+      "simulateSuccess": "Simulate payment success",
+      "cancelButton": "Cancel",
+      "timeout": "Payment timed out",
+      "redirecting": "Redirecting to download...",
+      "errorGeneric": "An error occurred. Please try again.",
+      "tryAgainError": "Please try again.",
+      "amountDisplay": "{amount} THB",
+      "loadingPage": "Loading..."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {name}",
+    "stats": {
+      "currentStreak": "Current streak",
+      "longestStreak": "Longest streak",
+      "plannersCreated": "Planners created",
+      "toolsUsed": "Tools used",
+      "daysActive": "Days active",
+      "planners": "{count} planners"
+    },
+    "heatmap": {
+      "title": "Activity",
+      "less": "Less",
+      "more": "More",
+      "tooltip": "{count} activities on {date}",
+      "empty": "No activity yet"
+    },
+    "recentPlanners": {
+      "title": "Recent planners",
+      "empty": "No planners yet",
+      "createFirst": "Create your first planner",
+      "viewAll": "View all"
+    },
+    "quickActions": {
+      "title": "Quick actions",
+      "newPlanner": "New planner",
+      "retakeQuiz": "Retake quiz",
+      "viewStats": "View stats",
+      "takeQuiz": "Take Quiz",
+      "createPlanner": "Create Planner",
+      "tools": "Tools",
+      "statistics": "Stats"
+    },
+    "mood": {
+      "title": "Today's mood",
+      "howAreYou": "How are you feeling today?",
+      "energyLevel": "Energy level"
+    },
+    "priorities": {
+      "title": "Today's priorities",
+      "empty": "No priorities yet. Try adding one!",
+      "placeholder": "Add a priority..."
+    },
+    "habits": {
+      "title": "Habit tracker",
+      "empty": "No habits tracked yet. Try adding one!",
+      "today": "today",
+      "best": "Best",
+      "days": "days",
+      "placeholder": "Add a habit..."
+    },
+    "plannerTools": {
+      "title": "Your planner tools",
+      "noTools": "No extra tools selected",
+      "customize": "Customize tools"
+    },
+    "tools": {
+      "edit": "Edit",
+      "create": "Create",
+      "more": "+{count} more"
+    },
+    "quizzes": "Quizzes",
+    "planner": "Planner",
+    "consecutiveDays": "Consecutive days",
+    "recentActivity": "Recent activity",
+    "findAnimal": "Find your new spirit animal",
+    "overview30": "30-day overview"
+  },
+  "generate": {
+    "ready": {
+      "title": "Create your planner",
+      "subtitle": "Ready to generate your Excel planner",
+      "demoMode": "(Demo mode)",
+      "hasTools": "(Tools already selected)",
+      "excelSupport": "Supports Excel and Google Sheets",
+      "builtInFormulas": "Built-in Excel formulas",
+      "personalised": "Personalised to your spirit animal",
+      "startButton": "Start generating",
+      "backToCustomize": "Back to customize tools"
+    },
+    "noPayment": {
+      "title": "Please pay first",
+      "pending": "Payment is not yet complete",
+      "notFound": "Payment not found",
+      "failed": "Payment failed",
+      "goToPayment": "Go to payment",
+      "backToDashboard": "Back to dashboard"
+    },
+    "checking": {
+      "title": "Checking...",
+      "subtitle": "Verifying payment status"
+    },
+    "generating": {
+      "title": "Generating planner...",
+      "subtitle": "Customizing tools for you",
+      "step1": "Prepare data",
+      "step2": "Create tools",
+      "step3": "Adjust layout",
+      "step4": "Build Excel file"
+    },
+    "completed": {
+      "title": "Planner ready!",
+      "subtitle": "Your personalised planner has been generated",
+      "tools": "Tools: {count} items",
+      "download": "Download planner",
+      "backToDashboard": "Back to dashboard",
+      "openHint": "Open the file with Excel or Google Sheets to edit"
+    },
+    "failed": {
+      "title": "Something went wrong",
+      "subtitle": "Could not generate planner. Please try again.",
+      "retry": "Retry",
+      "backToCustomize": "Back to customize tools"
+    }
+  },
+  "profile": {
+    "title": "Your profile",
+    "spiritAnimal": "Spirit animal",
+    "editProfile": "Edit profile",
+    "planningStyle": "Planning style",
+    "keyTraits": "Key traits",
+    "settings": {
+      "title": "Settings",
+      "notifications": "Notifications",
+      "privacy": "Privacy",
+      "language": "Language",
+      "theme": "Theme",
+      "account": "Account",
+      "signOut": "Sign out",
+      "deleteAccount": "Delete account"
+    }
+  }
+}

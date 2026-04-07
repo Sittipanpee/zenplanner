@@ -1,10 +1,11 @@
 /**
  * LINE Auth Bridge API
- * Handles LINE LIFF authentication
+ * Handles LINE LIFF authentication — creates a real Supabase session
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+import { createClient as createServerClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,33 +25,96 @@ export async function POST(request: NextRequest) {
     }
 
     const lineProfile = await lineProfileRes.json();
+    const lineUserId: string = lineProfile.userId;
 
-    // Find or create user in Supabase
-    const supabase = await createClient();
+    // Create Supabase Admin client
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    // Check if user exists by line_user_id
-    const { data: existingProfile } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("line_user_id", lineProfile.userId)
-      .single();
-
-    if (existingProfile) {
-      // For now, just return success with profile
-      // In production, you'd create a proper session
-      return NextResponse.json({
-        user: existingProfile,
-        success: true,
-      });
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error("Missing SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_URL");
+      return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
     }
 
-    // Create new user - simplified for demo
-    // In production, use proper admin API
+    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+
+    const deterministicEmail = `line_${lineUserId}@line.zenplanner.internal`;
+    const salt = process.env.LINE_AUTH_SALT || "zenplanner";
+    const deterministicPassword = `line_${lineUserId}_${salt}`;
+
+    // Try to create user (will fail with 422 if exists)
+    const { data: createData, error: createError } = await supabaseAdmin.auth.admin.createUser({
+      email: deterministicEmail,
+      password: deterministicPassword,
+      email_confirm: true,
+      user_metadata: {
+        display_name: lineProfile.displayName,
+        full_name: lineProfile.displayName,
+        avatar_url: lineProfile.pictureUrl,
+        line_user_id: lineUserId,
+        provider: "line",
+      },
+    });
+
+    // If user already exists, update their metadata
+    if (createError && createError.message?.includes("already been registered")) {
+      // Bounded user lookup — perPage caps the scan size.
+      // For production at scale, consider a custom DB query by email.
+      const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
+      const existingUser = listData?.users?.find((u) => u.email === deterministicEmail);
+      if (existingUser) {
+        await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+          user_metadata: {
+            display_name: lineProfile.displayName,
+            full_name: lineProfile.displayName,
+            avatar_url: lineProfile.pictureUrl,
+            line_user_id: lineUserId,
+            provider: "line",
+          },
+        });
+      }
+    } else if (createError) {
+      console.error("Failed to create LINE user:", createError);
+      return NextResponse.json({ error: "Failed to create user account" }, { status: 500 });
+    }
+
+    // Sign in with password to get session tokens
+    const serverSupabase = await createServerClient();
+    const { data: signInData, error: signInError } = await serverSupabase.auth.signInWithPassword({
+      email: deterministicEmail,
+      password: deterministicPassword,
+    });
+
+    if (signInError || !signInData.session) {
+      console.error("LINE sign-in failed:", signInError);
+      return NextResponse.json({ error: "Failed to create session" }, { status: 500 });
+    }
+
+    // Upsert profile with LINE data
+    await serverSupabase.from("profiles").upsert(
+      {
+        id: signInData.user.id,
+        display_name: lineProfile.displayName,
+        avatar_url: lineProfile.pictureUrl,
+        line_user_id: lineUserId,
+      },
+      { onConflict: "id" }
+    );
+
     return NextResponse.json({
       user: {
-        line_user_id: lineProfile.userId,
-        line_display_name: lineProfile.displayName,
-        line_picture_url: lineProfile.pictureUrl,
+        id: signInData.user.id,
+        email: signInData.user.email,
+        display_name: lineProfile.displayName,
+        avatar_url: lineProfile.pictureUrl,
+        line_user_id: lineUserId,
+      },
+      session: {
+        access_token: signInData.session.access_token,
+        refresh_token: signInData.session.refresh_token,
+        expires_at: signInData.session.expires_at,
       },
       success: true,
     });

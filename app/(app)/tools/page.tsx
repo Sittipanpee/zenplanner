@@ -6,12 +6,14 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ZenCard, ZenCardHeader } from "@/components/ui/zen-card";
 import { ToolGrid } from "@/components/planner/tool-grid";
 import { ToolId, BlueprintCustomization } from "@/lib/types";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function ToolsPage() {
+  const t = useTranslations('planner.toolGrid');
   // Load user's selected tools from localStorage or use defaults
   const [selectedTools, setSelectedTools] = useState<ToolId[]>(() => {
     if (typeof window !== "undefined") {
@@ -59,10 +61,10 @@ export default function ToolsPage() {
       {/* Header */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         <h1 className="font-display text-2xl md:text-3xl font-bold text-zen-text mb-2">
-          เครื่องมือของฉัน
+          {t('searchPlaceholder')}
         </h1>
         <p className="text-zen-text-secondary">
-          เลือกเครื่องมือที่คุณต้องการใช้ใน Planner ของคุณ
+          {t('selected')}: {selectedTools.length}
         </p>
       </div>
 

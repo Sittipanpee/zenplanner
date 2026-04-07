@@ -5,41 +5,39 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { callLLM, QUIZ_SYSTEM_PROMPT } from "@/lib/llm";
 import { determineAnimal, generateInsight } from "@/lib/quiz-engine";
+import { buildQuizSystemPrompt } from "@/lib/quiz-prompts";
+import { callLLM } from "@/lib/llm";
+import { QUIZ_DATA } from "@/lib/quiz-data";
 import type { AxisScores } from "@/lib/types";
 
-// Score weights for each answer option (0-3)
-const ANSWER_SCORES = [
-  // Question 1: Morning routine
-  { energy: 30, planning: 30, social: 10, decision: 20, focus: 20, drive: 25 },
-  { energy: -10, planning: -10, social: 10, decision: 10, focus: -10, drive: -5 },
-  { energy: 5, planning: 0, social: -5, decision: 5, focus: 5, drive: 5 },
-  { energy: 20, planning: -15, social: 30, decision: -10, focus: -5, drive: 15 },
-  // Question 2: Work time preference
-  { energy: 30, planning: 20, social: -10, decision: 20, focus: 25, drive: 20 },
-  { energy: -10, planning: 15, social: -10, decision: 25, focus: 25, drive: 15 },
-  { energy: 5, planning: -15, social: 10, decision: 5, focus: 0, drive: 5 },
-  { energy: 10, planning: 5, social: 5, decision: 10, focus: 10, drive: 10 },
-  // Question 3: Decision making
-  { energy: 25, planning: 30, social: 5, decision: 30, focus: 25, drive: 30 },
-  { energy: -5, planning: -5, social: 25, decision: -15, focus: 0, drive: 0 },
-  { energy: 10, planning: 15, social: -5, decision: -10, focus: 10, drive: 10 },
-  { energy: 5, planning: 5, social: 15, decision: 20, focus: 5, drive: 5 },
-  // Question 4: Social preference
-  { energy: 10, planning: 5, social: 30, decision: 5, focus: 5, drive: 15 },
-  { energy: -5, planning: 10, social: -30, decision: 15, focus: 15, drive: 5 },
-  { energy: 5, planning: 5, social: 10, decision: 5, focus: 5, drive: 10 },
-  { energy: 15, planning: -5, social: 20, decision: 0, focus: 0, drive: 10 },
-  // Question 5: Focus style
-  { energy: 20, planning: 25, social: -5, decision: 20, focus: 30, drive: 25 },
-  { energy: -5, planning: -10, social: 15, decision: -10, focus: -20, drive: 0 },
-  { energy: 5, planning: 0, social: 5, decision: 5, focus: 10, drive: 10 },
-  { energy: 10, planning: 5, social: 10, decision: 0, focus: 5, drive: 5 },
-];
+const MINIGAME_QUESTION_COUNT = 10;
+
+// Simple in-memory rate limiter — replace with Redis in production
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(identifier: string, maxRequests = 30, windowMs = 60000): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+
+  if (!record || now > record.resetAt) {
+    rateLimitMap.set(identifier, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+
+  if (record.count >= maxRequests) return false;
+  record.count++;
+  return true;
+}
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit by IP
+    const ip = request.headers.get('x-forwarded-for') ?? 'unknown';
+    if (!checkRateLimit(ip, 30, 60000)) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -49,24 +47,53 @@ export async function POST(request: NextRequest) {
 
     const { sessionId, message, mode, questionIndex, answerIndex } = await request.json();
 
-    // Input validation
-    if (typeof questionIndex !== 'number' || typeof answerIndex !== 'number') {
-      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
-    }
-    if (answerIndex < 0 || answerIndex > 3) {
-      return NextResponse.json({ error: "Invalid answer index" }, { status: 400 });
-    }
-
-    // For minigame mode, use deterministic logic
     if (mode === "minigame") {
-      // Store answer in session
-      const answers: number[] = []; // Would come from DB in production
+      // Input validation
+      if (typeof questionIndex !== "number" || typeof answerIndex !== "number") {
+        return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+      }
+      if (answerIndex < 0 || answerIndex > 3) {
+        return NextResponse.json({ error: "Invalid answer index" }, { status: 400 });
+      }
 
-      // Calculate current scores based on answers
-      const scores = calculateScores(answers, answerIndex, questionIndex);
+      // Load existing answers from DB quiz_session JSONB field
+      let existingAnswers: number[] = [];
+      if (sessionId) {
+        const { data: session, error: fetchError } = await supabase
+          .from("quiz_sessions")
+          .select("answers")
+          .eq("id", sessionId)
+          .single();
 
-      // Check if complete (5 questions)
-      const isComplete = questionIndex >= 4;
+        if (fetchError && fetchError.code !== "PGRST116") {
+          console.error("Failed to fetch quiz session:", fetchError);
+        }
+
+        if (session?.answers && Array.isArray(session.answers)) {
+          existingAnswers = session.answers as number[];
+        }
+      }
+
+      // Append new answer to the loaded array
+      const updatedAnswers = [...existingAnswers, answerIndex];
+
+      // Save updated answers back to DB before returning
+      if (sessionId) {
+        const { error: saveError } = await supabase
+          .from("quiz_sessions")
+          .update({ answers: updatedAnswers })
+          .eq("id", sessionId);
+
+        if (saveError) {
+          console.error("Failed to save quiz answers:", saveError);
+        }
+      }
+
+      // Calculate cumulative axis scores using QUIZ_DATA (full axis values, not compressed deltas)
+      const scores = calculateScoresFromQuizData(updatedAnswers);
+
+      // Check if complete
+      const isComplete = updatedAnswers.length >= MINIGAME_QUESTION_COUNT;
 
       if (isComplete) {
         const spiritAnimal = determineAnimal(scores);
@@ -81,25 +108,100 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      // Return next question (in production, store in DB)
+      // Return next question
+      const nextQuestionIndex = updatedAnswers.length;
+      const nextQuestion = QUIZ_DATA[nextQuestionIndex % QUIZ_DATA.length];
+
       return NextResponse.json({
-        reply: getNextQuestion(questionIndex),
+        reply: nextQuestion
+          ? `${nextQuestion.scenario}`
+          : "ขอบคุณที่ตอบคำถาม!",
+        isComplete: false,
+        questionIndex: nextQuestionIndex,
+        question: nextQuestion
+          ? {
+              id: nextQuestion.id,
+              scenario: nextQuestion.scenario,
+              options: nextQuestion.options.map((o) => o.label),
+            }
+          : null,
+      });
+    }
+
+    if (mode === "custom") {
+      // LLM-driven custom quiz mode
+      if (!message || typeof message !== "string") {
+        return NextResponse.json({ error: "Missing message for custom mode" }, { status: 400 });
+      }
+
+      // Detect locale from Accept-Language header or query param
+      const acceptLanguage = request.headers.get("accept-language") ?? "";
+      let locale: "en" | "th" | "zh" = "th";
+      if (acceptLanguage.startsWith("zh")) locale = "zh";
+      else if (acceptLanguage.startsWith("en")) locale = "en";
+
+      // Load conversation history from DB
+      let conversation: Array<{ role: "user" | "assistant" | "system"; content: string }> = [];
+      if (sessionId) {
+        const { data: session } = await supabase
+          .from("quiz_sessions")
+          .select("conversation")
+          .eq("id", sessionId)
+          .single();
+
+        if (session?.conversation && Array.isArray(session.conversation)) {
+          conversation = session.conversation as Array<{
+            role: "user" | "assistant" | "system";
+            content: string;
+          }>;
+        }
+      }
+
+      // Build messages (skip any system messages from stored conversation)
+      const messages = [
+        ...conversation.filter((m) => m.role !== "system"),
+        { role: "user" as const, content: message },
+      ];
+
+      const systemPrompt = buildQuizSystemPrompt(locale);
+      const reply = await callLLM(systemPrompt, messages, {
+        temperature: 0.8,
+        maxTokens: 600,
+      });
+
+      // Persist updated conversation
+      if (sessionId) {
+        const updatedConversation = [
+          ...conversation.filter((m) => m.role !== "system"),
+          { role: "user" as const, content: message },
+          { role: "assistant" as const, content: reply },
+        ];
+        await supabase
+          .from("quiz_sessions")
+          .update({ conversation: updatedConversation })
+          .eq("id", sessionId);
+      }
+
+      return NextResponse.json({
+        reply,
         isComplete: false,
       });
     }
 
-    // For custom mode, use LLM
-    // ... LLM-based quiz implementation
-
-    return NextResponse.json({ error: "Not implemented" }, { status: 501 });
+    return NextResponse.json({ error: "Invalid mode" }, { status: 400 });
   } catch (error) {
     console.error("Quiz step error:", error);
     return NextResponse.json({ error: "Quiz failed" }, { status: 500 });
   }
 }
 
-function calculateScores(answers: number[], newAnswer: number, questionIndex: number): AxisScores {
-  // Start with baseline scores
+/**
+ * Calculate cumulative axis scores from an ordered list of answer indices.
+ * Each answer maps to a row in QUIZ_DATA — full axis values used (not compressed deltas).
+ * Base: 50 for all axes. Per-question: weighted average of the selected option's score.
+ * Clamped to 0-100.
+ */
+function calculateScoresFromQuizData(answers: number[]): AxisScores {
   const scores: AxisScores = {
     energy: 50,
     planning: 50,
@@ -109,42 +211,31 @@ function calculateScores(answers: number[], newAnswer: number, questionIndex: nu
     drive: 50,
   };
 
-  // Add previous answers' scores
-  answers.forEach((answer, idx) => {
-    const scoreIndex = idx * 4 + answer;
-    if (scoreIndex < ANSWER_SCORES.length) {
-      const score = ANSWER_SCORES[scoreIndex];
-      scores.energy = Math.max(0, Math.min(100, scores.energy + score.energy));
-      scores.planning = Math.max(0, Math.min(100, scores.planning + score.planning));
-      scores.social = Math.max(0, Math.min(100, scores.social + score.social));
-      scores.decision = Math.max(0, Math.min(100, scores.decision + score.decision));
-      scores.focus = Math.max(0, Math.min(100, scores.focus + score.focus));
-      scores.drive = Math.max(0, Math.min(100, scores.drive + score.drive));
-    }
-  });
+  answers.forEach((answerIndex, questionIdx) => {
+    const question = QUIZ_DATA[questionIdx % QUIZ_DATA.length];
+    if (!question) return;
 
-  // Add new answer score
-  const newScoreIndex = questionIndex * 4 + newAnswer;
-  if (newScoreIndex < ANSWER_SCORES.length) {
-    const score = ANSWER_SCORES[newScoreIndex];
-    scores.energy = Math.max(0, Math.min(100, scores.energy + score.energy));
-    scores.planning = Math.max(0, Math.min(100, scores.planning + score.planning));
-    scores.social = Math.max(0, Math.min(100, scores.social + score.social));
-    scores.decision = Math.max(0, Math.min(100, scores.decision + score.decision));
-    scores.focus = Math.max(0, Math.min(100, scores.focus + score.focus));
-    scores.drive = Math.max(0, Math.min(100, scores.drive + score.drive));
-  }
+    const option = question.options[answerIndex];
+    if (!option) return;
+
+    const s = option.score;
+
+    // Apply full axis value contribution: move score toward the answer's value
+    // Contribution = (answerValue - currentScore) * weight
+    // Weight decreases as more questions answered to prevent runaway scores
+    const weight = 1 / (questionIdx + 1);
+
+    scores.energy = clamp(scores.energy + (s.energy - scores.energy) * weight);
+    scores.planning = clamp(scores.planning + (s.planning - scores.planning) * weight);
+    scores.social = clamp(scores.social + (s.social - scores.social) * weight);
+    scores.decision = clamp(scores.decision + (s.decision - scores.decision) * weight);
+    scores.focus = clamp(scores.focus + (s.focus - scores.focus) * weight);
+    scores.drive = clamp(scores.drive + (s.drive - scores.drive) * weight);
+  });
 
   return scores;
 }
 
-function getNextQuestion(index: number): string {
-  const questions = [
-    "ถ้าคุณมีวันหยุดสุดสัปดาห์ คุณจะทำอะไร?",
-    "เมื่อต้องตัดสินใจสำคัญ คุณทำอย่างไร?",
-    "คนรอบข้างมักจะอธิบายคุณว่าอย่างไร?",
-    "เมื่อต้องทำงานหลายอย่างพร้อมกัน คุณ...?",
-    "ถ้ามีเวลาว่าง คุณชอบทำอะไร?",
-  ];
-  return questions[index] || "ขอบคุณที่ตอบคำถาม!";
+function clamp(value: number): number {
+  return Math.max(0, Math.min(100, value));
 }
