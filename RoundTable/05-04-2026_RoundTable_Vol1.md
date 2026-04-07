@@ -151,10 +151,15 @@ Production sprint complete. All waves delivered.
 | package-lock.json | Modified (staged + unstaged) |
 | package.json | Modified (staged + unstaged) |
 
-### Untracked Files (pending Commander scope confirmation)
-- `.claude_backup_before_uniops/` — backup of .claude dir
-- `GEMINI.md`, `hybrid_erd.html`, `openclaw_prompt.txt` — AI/ERD docs
-- `public/manifest.json`, `public/sw.js`, `public/register-sw.js` — PWA files
-- `public/icon-192.png`, `public/icon-512.png` — PWA icons
-- `scripts/generate-icons.js` — icon generation script
-- `test-results/` — test output folder
+### Untracked Files — Commander Decision
+- **Included:** PWA files (`public/manifest.json`, `public/sw.js`, `public/register-sw.js`, `public/icon-*.png`, `scripts/generate-icons.js`)
+- **Excluded:** `.claude_backup_before_uniops/`, `GEMINI.md`, `hybrid_erd.html`, `openclaw_prompt.txt`, `test-results/`
+
+### Git Record — Commit + Push
+- Branch: main (Commander override — protected branch)
+- Rebase: onto origin/main (8 remote commits preserved)
+- Commit: `902dad6` — feat(pwa+config): add PWA support and update dependencies
+- Push: origin/main — SUCCESS
+- Strategy: B — rebase local on top of remote, then push
+- Review: skipped (Commander directive)
+- Time: 07-04-2026

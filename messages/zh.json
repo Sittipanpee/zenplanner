@@ -110,7 +110,11 @@
       "takeAgain": "重新测验",
       "viewPlanner": "创建我的计划",
       "copied": "链接已复制到剪贴板！",
-      "copyError": "复制失败，请手动复制链接"
+      "copyError": "复制失败，请手动复制链接",
+      "aiInsight": {
+        "title": "你的规划洞察",
+        "loading": "正在生成你的洞察..."
+      }
     },
     "profile": {
       "title": "告诉我们你的生活方式",

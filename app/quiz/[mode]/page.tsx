@@ -214,7 +214,19 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
               {tCommon("actions.done")}
             </p>
           )}
-          <ZenButton fullWidth onClick={() => router.push(`/quiz/reveal?animal=${result.animal}`)}>
+          <ZenButton fullWidth onClick={() => {
+            const s = result.scores;
+            const params = new URLSearchParams({
+              animal: result.animal,
+              energy:   String(Math.round(s.energy)),
+              planning: String(Math.round(s.planning)),
+              social:   String(Math.round(s.social)),
+              decision: String(Math.round(s.decision)),
+              focus:    String(Math.round(s.focus)),
+              drive:    String(Math.round(s.drive)),
+            });
+            router.push(`/quiz/reveal?${params.toString()}`);
+          }}>
             {tCommon("actions.continue")}
           </ZenButton>
         </div>

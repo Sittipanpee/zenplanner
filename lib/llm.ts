@@ -5,7 +5,7 @@
 
 import { z, type ZodSchema } from "zod";
 
-const POLLINATIONS_ENDPOINT = "https://text.pollinations.ai/openai/chat/completions";
+const POLLINATIONS_ENDPOINT = "https://gen.pollinations.ai/v1/chat/completions";
 const MAX_RETRIES = 3;
 const TIMEOUT_MS = 30_000;
 const BACKOFF_BASE_MS = 1000;
@@ -42,11 +42,19 @@ export async function callLLM(
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
+    const apiKey = process.env.POLLINATIONS_API_KEY;
+    if (!apiKey) {
+      throw new Error("POLLINATIONS_API_KEY is not configured");
+    }
+
     const response = await fetch(POLLINATIONS_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
       body: JSON.stringify({
-        model: "openai",
+        model: options.model ?? "openai",
         max_tokens: maxTokens,
         temperature,
         messages: fullMessages,

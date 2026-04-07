@@ -110,7 +110,11 @@
       "takeAgain": "Retake quiz",
       "viewPlanner": "Create my planner",
       "copied": "Link copied to clipboard!",
-      "copyError": "Could not copy — please copy the URL manually"
+      "copyError": "Could not copy — please copy the URL manually",
+      "aiInsight": {
+        "title": "Your planning insight",
+        "loading": "Generating your insight..."
+      }
     },
     "profile": {
       "title": "Tell us about your lifestyle",

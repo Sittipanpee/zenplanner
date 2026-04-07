@@ -27,6 +27,8 @@ function QuizRevealContent() {
 
   const [showContent, setShowContent] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
+  const [isLoadingAI, setIsLoadingAI] = useState(true);
 
   // Get locale-aware name and description
   const animalName = locale === "th" ? data.nameTh : locale === "zh" ? data.nameZh : data.nameEn;
@@ -39,6 +41,22 @@ function QuizRevealContent() {
     const timer = setTimeout(() => setShowContent(true), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  // Fetch AI-generated planning insight
+  useEffect(() => {
+    const params = new URLSearchParams({ animal: animalKey, locale });
+    const scoreKeys = ["energy", "planning", "social", "decision", "focus", "drive"] as const;
+    scoreKeys.forEach((k) => {
+      const v = searchParams.get(k);
+      if (v) params.set(k, v);
+    });
+
+    fetch(`/api/quiz/reveal-summary?${params.toString()}`)
+      .then((r) => r.json())
+      .then((d) => { if (d.summary) setAiSummary(d.summary); })
+      .catch(() => { /* silent — summary is enhancement, not critical */ })
+      .finally(() => setIsLoadingAI(false));
+  }, [animalKey, locale, searchParams]);
 
   const handleShare = async () => {
     const text = `${t("reveal.title")} ${animalName} ${data.emoji}! ${animalDescription}`;
@@ -82,6 +100,26 @@ function QuizRevealContent() {
           </p>
         </div>
       </div>
+      {/* AI Planning Insight */}
+      <div className="max-w-md mx-auto px-4 pt-6">
+        <ZenCard className="p-5">
+          <p className="text-xs font-semibold text-zen-sage uppercase tracking-widest mb-3 flex items-center gap-1">
+            <Sparkles className="w-3.5 h-3.5" />
+            {t("reveal.aiInsight.title")}
+          </p>
+          {isLoadingAI ? (
+            <div className="space-y-2 animate-pulse">
+              <div className="h-3.5 bg-zen-border dark:bg-zinc-700 rounded w-full" />
+              <div className="h-3.5 bg-zen-border dark:bg-zinc-700 rounded w-5/6" />
+              <div className="h-3.5 bg-zen-border dark:bg-zinc-700 rounded w-4/6" />
+              <p className="text-xs text-zen-text-muted dark:text-zinc-500 mt-2">{t("reveal.aiInsight.loading")}</p>
+            </div>
+          ) : aiSummary ? (
+            <p className="text-zen-text dark:text-zinc-200 text-sm leading-relaxed">{aiSummary}</p>
+          ) : null}
+        </ZenCard>
+      </div>
+
       <div className="max-w-md mx-auto px-4 py-8 space-y-4">
         <div className="flex gap-3">
           <button
