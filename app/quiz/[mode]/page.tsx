@@ -157,32 +157,69 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
     }
   };
 
+  /**
+   * Discriminator-based weighted scoring (simplified IRT-style).
+   *
+   * For each (question, axis) pair, the weight is computed from three factors:
+   *   1. Discrimination — stdDev of the 4 option values for that axis in that
+   *      question. A question whose options span 20→90 on `energy` is far more
+   *      diagnostic of energy than one whose options sit at 45/50/55/60.
+   *   2. Signal — how far the user's chosen value sits from the question's
+   *      median value for that axis. Choosing an extreme answer carries more
+   *      signal than picking a middle-of-the-road option.
+   *   3. Focus boost — the question's declared `axisFocus` axis gets full
+   *      weight (1.0); off-focus axes get 0.5 (they still contribute, but the
+   *      author has marked them as secondary).
+   *
+   * Final weight = discrimination × (0.4 + 0.6 × signal) × focusBoost.
+   * Per-axis result = Σ(chosenValue × weight) / Σ(weight).
+   *
+   * Because option values already live in [0,100], the weighted average lands
+   * in [0,100] naturally — no rescaling needed before the archetype matcher.
+   */
   const calculateScores = (ans: number[]): AxisScores => {
-    // Each option's score values are 0–100 *target levels* per axis.
-    // Compute a weighted average across all answered questions.
-    // Focus axis gets full weight (1.0); off-focus axes get reduced weight (0.3).
+    const axes: (keyof AxisScores)[] = ["energy", "planning", "social", "decision", "focus", "drive"];
     const sums: AxisScores = { energy: 0, planning: 0, social: 0, decision: 0, focus: 0, drive: 0 };
     const weightTotals: AxisScores = { energy: 0, planning: 0, social: 0, decision: 0, focus: 0, drive: 0 };
 
-    ans.forEach((a, idx) => {
-      const question = QUIZ_QUESTIONS[idx];
-      const option = question?.options[a];
-      if (!option?.score) return;
-      const focusAxis = question.axisFocus;
-      Object.entries(option.score).forEach(([k, v]) => {
-        if (k in sums && v !== undefined) {
-          const key = k as keyof AxisScores;
-          const weight = k === focusAxis ? 1.0 : 0.3;
-          sums[key] += v * weight;
-          weightTotals[key] += weight;
+    ans.forEach((chosenIdx, qIdx) => {
+      const question = QUIZ_QUESTIONS[qIdx];
+      const chosen = question?.options[chosenIdx];
+      if (!question || !chosen?.score) return;
+
+      axes.forEach((axis) => {
+        // Collect all option values for this axis in this question
+        const allValues = question.options.map((o) => o.score[axis] ?? 50);
+        const n = allValues.length;
+        const mean = allValues.reduce((s, v) => s + v, 0) / n;
+
+        // Discrimination: stdDev of this axis across the 4 options
+        // High stdDev → this question discriminates this axis well
+        const variance = allValues.reduce((s, v) => s + (v - mean) ** 2, 0) / n;
+        const stdDev = Math.sqrt(variance);
+        const discrimination = Math.min(1, stdDev / 25); // ~25 stdDev = max signal
+
+        // Signal: how far the chosen value sits from the question's median
+        const sorted = [...allValues].sort((a, b) => a - b);
+        const median = (sorted[Math.floor((n - 1) / 2)] + sorted[Math.floor(n / 2)]) / 2;
+        const signal = Math.min(1, Math.abs(chosen.score[axis] - median) / 40);
+
+        // Focus boost: declared focus axis carries more weight
+        const focusBoost = axis === question.axisFocus ? 1.0 : 0.5;
+
+        const weight = discrimination * (0.4 + 0.6 * signal) * focusBoost;
+        if (weight > 0) {
+          sums[axis] += chosen.score[axis] * weight;
+          weightTotals[axis] += weight;
         }
       });
     });
 
     const scores: AxisScores = { energy: 50, planning: 50, social: 50, decision: 50, focus: 50, drive: 50 };
-    (Object.keys(scores) as (keyof AxisScores)[]).forEach((k) => {
-      if (weightTotals[k] > 0) {
-        scores[k] = Math.round(Math.min(100, Math.max(0, sums[k] / weightTotals[k])));
+    axes.forEach((axis) => {
+      if (weightTotals[axis] > 0) {
+        const raw = sums[axis] / weightTotals[axis];
+        scores[axis] = Math.round(Math.min(100, Math.max(0, raw)));
       }
     });
     return scores;
