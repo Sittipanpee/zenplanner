@@ -9,6 +9,8 @@
       "dashboard": "仪表板",
       "quiz": "测验",
       "planner": "计划",
+      "tools": "工具",
+      "reports": "报告",
       "profile": "个人资料",
       "settings": "设置",
       "logout": "退出",
@@ -76,6 +78,8 @@
     "login": {
       "title": "欢迎回来",
       "subtitle": "登录后继续您的规划之旅",
+      "emailLabel": "邮箱",
+      "passwordLabel": "密码",
       "lineButton": "使用 LINE 登录",
       "githubButton": "使用 GitHub 登录",
       "noAccount": "还没有账号？",
@@ -123,6 +127,12 @@
         "tertiary": "再次契合",
         "hybridHint": "你是 {primary} 与 {secondary} 的混合型 — 两种原型都强烈共鸣"
       },
+      "toolkit": {
+        "title": "为你推荐的工具包",
+        "subtitle": "为你的 {animal} 原型精选",
+        "ctaSetup": "设置我的工具包",
+        "topPickBadge": "首选"
+      },
       "stats": {
         "title": "档案统计",
         "energy": "精力",
@@ -132,12 +142,36 @@
         "focus": "专注",
         "drive": "驱动力",
         "descriptors": {
-          "energy":   { "high": "清晨型",     "mid": "弹性作息",   "low": "夜猫子" },
-          "planning": { "high": "提前规划",   "mid": "灵活应变",   "low": "随性而为" },
-          "social":   { "high": "从他人获能", "mid": "选择性社交", "low": "独处最佳" },
-          "decision": { "high": "果断决策",   "mid": "均衡考量",   "low": "深思熟虑" },
-          "focus":    { "high": "深度专注",   "mid": "随情境调整", "low": "多线并进" },
-          "drive":    { "high": "目标导向",   "mid": "重视进展",   "low": "享受过程" }
+          "energy": {
+            "high": "清晨型",
+            "mid": "弹性作息",
+            "low": "夜猫子"
+          },
+          "planning": {
+            "high": "提前规划",
+            "mid": "灵活应变",
+            "low": "随性而为"
+          },
+          "social": {
+            "high": "从他人获能",
+            "mid": "选择性社交",
+            "low": "独处最佳"
+          },
+          "decision": {
+            "high": "果断决策",
+            "mid": "均衡考量",
+            "low": "深思熟虑"
+          },
+          "focus": {
+            "high": "深度专注",
+            "mid": "随情境调整",
+            "low": "多线并进"
+          },
+          "drive": {
+            "high": "目标导向",
+            "mid": "重视进展",
+            "low": "享受过程"
+          }
         }
       }
     },
@@ -223,7 +257,7 @@
   },
   "dashboard": {
     "title": "仪表板",
-    "welcome": "欢迎回来，{name}",
+    "welcome": "欢迎回来",
     "stats": {
       "currentStreak": "当前连续天数",
       "longestStreak": "最长连续天数",
@@ -353,5 +387,170 @@
       "signOut": "退出登录",
       "deleteAccount": "删除账号"
     }
+  },
+  "tools": {
+    "catalog": {
+      "title": "工具目录",
+      "subtitle": "选择真正适合你工作方式的工具",
+      "filterAll": "全部类别",
+      "empty": "没有符合筛选的工具",
+      "emptyCategory": "此类别暂无工具",
+      "enable": "启用",
+      "disable": "停用",
+      "enabled": "已启用",
+      "recommended": "推荐",
+      "searchPlaceholder": "搜索工具…",
+      "categoryProductivity": "效率",
+      "categoryWellbeing": "身心",
+      "categoryReflection": "反思",
+      "categoryTracking": "追踪",
+      "categoryCreativity": "创意",
+      "heroTitle": "你的蓝图",
+      "heroSubtitleWithAnimal": "基于你的{animal}原型，我们推荐这些工具开始使用。喜欢哪个就启用哪个 — 随时可以更改。",
+      "heroSubtitleNoAnimal": "浏览完整目录，启用适合你工作方式的工具。",
+      "enabledCount": "已启用 {count} 个工具",
+      "goToDashboard": "前往仪表盘"
+    },
+    "dashboard": {
+      "empty": "还没有工具。从目录中启用几个开始吧。",
+      "emptyAction": "打开目录"
+    },
+    "widget": {
+      "collapse": "收起",
+      "expand": "展开",
+      "delete": "移除",
+      "confirmDisable": "隐藏此工具？你的数据将被保留。"
+    },
+    "entry": {
+      "savedToast": "已保存",
+      "errorToast": "保存失败 — 请重试"
+    },
+    "recommendation": {
+      "title": "为你推荐的工具包",
+      "subtitle": "为你的原型精挑细选",
+      "enableAll": "全部启用"
+    },
+    "dailyPriorities": {
+      "title": "今日要务",
+      "subtitle": "今天最重要的 3 件事",
+      "addPlaceholder": "今天什么最重要？",
+      "emptyHint": "点击空位添加要务"
+    },
+    "habitTracker": {
+      "title": "习惯追踪",
+      "subtitle": "每日习惯，一键打卡",
+      "addHabit": "添加习惯",
+      "streak": "连续 {days} 天",
+      "todayCount": "今日完成 {done} / {total}",
+      "noHabits": "还没有习惯 — 添加一个开始"
+    },
+    "moodLog": {
+      "title": "心情记录",
+      "subtitle": "今天感觉怎么样？",
+      "emojiLabels": {
+        "veryBad": "非常糟",
+        "bad": "不太好",
+        "neutral": "还行",
+        "good": "很好",
+        "veryGood": "超棒"
+      },
+      "noteLabel": "添加备注（可选）",
+      "noNote": "无备注",
+      "trendLabel": "最近 7 天"
+    },
+    "pomodoro": {
+      "title": "番茄钟",
+      "subtitle": "以计时段进行专注",
+      "start": "开始",
+      "pause": "暂停",
+      "reset": "重置",
+      "break": "休息",
+      "workSession": "专注",
+      "completed": "本段完成",
+      "sessionsToday": "今日",
+      "editLengths": "编辑时长",
+      "sessionLengthLabel": "专注时长（分钟）",
+      "breakLengthLabel": "休息时长（分钟）"
+    },
+    "energyLevel": {
+      "title": "能量水平",
+      "subtitle": "你现在感觉多有活力？",
+      "currentLabel": "当前",
+      "lowLabel": "疲惫",
+      "highLabel": "充沛",
+      "trendLabel": "趋势",
+      "loggedAt": "记录于"
+    },
+    "gratitude": {
+      "title": "感恩日记",
+      "subtitle": "今天你感激的 3 件事",
+      "placeholder1": "让你微笑的小事…",
+      "placeholder2": "你欣赏的人…",
+      "placeholder3": "值得铭记的瞬间…",
+      "yesterdayLabel": "昨天你写下…",
+      "completeMessage": "真美。谢谢你。"
+    },
+    "water": {
+      "title": "喝水",
+      "subtitle": "每喝一杯水就点一下。",
+      "goalReached": "已达目标！",
+      "progressLabel": "今日 {current}/{goal} 杯",
+      "editGoal": "编辑目标",
+      "goalLabel": "每日目标（杯）"
+    },
+    "sleep": {
+      "title": "睡眠",
+      "subtitle": "记录就寝、起床时间和睡眠质量。",
+      "bedtimeLabel": "就寝时间",
+      "wakeTimeLabel": "起床时间",
+      "qualityLabel": "质量",
+      "hoursSlept": "睡了 {value}",
+      "trendLabel": "最近 7 天"
+    },
+    "weeklyReview": {
+      "title": "每周回顾",
+      "subtitle": "回顾这一周 — 成就、挑战和下一步",
+      "winsLabel": "成就",
+      "lossesLabel": "挑战",
+      "nextFocusLabel": "下周重点",
+      "ratingLabel": "总体评分",
+      "saveBtn": "保存回顾",
+      "noReviewYet": "本周还没有回顾",
+      "ctaReflect": "回顾你的一周",
+      "previousLabel": "过往周次",
+      "addItem": "添加",
+      "noItems": "暂无"
+    },
+    "dailyReflection": {
+      "title": "每日反思",
+      "subtitle": "三个简短的问题结束今天",
+      "highlightPrompt": "今天的亮点是什么？",
+      "challengePrompt": "今天有什么挑战？",
+      "intentPrompt": "明天的意图是什么？",
+      "saveBtn": "保存反思",
+      "yesterdayLabel": "昨天你写道…",
+      "ctaReflect": "反思今天",
+      "noReflection": "还没有反思"
+    }
+  },
+  "reports": {
+    "title": "你的报告",
+    "subtitle": "来自每日记录的跨工具洞察",
+    "tabs": {
+      "week": "周",
+      "month": "月",
+      "quarter": "季度",
+      "year": "年"
+    },
+    "kpi": {
+      "streak": "连续天数",
+      "moodAverage": "平均心情",
+      "prioritiesDone": "已完成优先事项",
+      "habitsPercent": "习惯 %"
+    },
+    "empty": "数据还不够 — 记录几天后即可查看报告。",
+    "breakdownLabel": "工具明细",
+    "reflectionLabel": "反思",
+    "reflectionPlaceholder": "写下关于这段时间的自由笔记…"
   }
 }

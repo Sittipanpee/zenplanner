@@ -103,7 +103,7 @@ export default function LoginPage() {
             {/* Email Login Form */}
             <form onSubmit={handleEmailLogin} className="space-y-4">
               <ZenInput
-                label={t("login.title")}
+                label={t("login.emailLabel")}
                 type="email"
                 placeholder="your@email.com"
                 value={email}
@@ -111,7 +111,7 @@ export default function LoginPage() {
                 required
               />
               <ZenInput
-                label={t("login.subtitle")}
+                label={t("login.passwordLabel")}
                 type="password"
                 placeholder="--------"
                 value={password}

@@ -17,6 +17,7 @@ import type { SpiritAnimal } from "@/lib/types";
 import { ZenCard } from "@/components/ui/zen-card";
 import { ZenButton } from "@/components/ui/zen-button";
 import { Sparkles, Download, Share2, ArrowLeft, Loader2, Check, Zap, CalendarDays, Users, Shuffle, Target, Flame } from "lucide-react";
+import { RecommendedToolkitCard } from "@/components/quiz/recommended-toolkit-card";
 
 function QuizRevealContent() {
   const searchParams = useSearchParams();
@@ -238,6 +239,9 @@ function QuizRevealContent() {
           )}
         </ZenCard>
       </div>
+
+      {/* Recommended Toolkit (PTS-01-05) */}
+      <RecommendedToolkitCard animalKey={animalKey} animalName={animalName} />
 
       <div className="max-w-md mx-auto px-4 py-8 space-y-4">
         <div className="flex gap-3">

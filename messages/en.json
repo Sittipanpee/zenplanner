@@ -9,6 +9,8 @@
       "dashboard": "Dashboard",
       "quiz": "Quiz",
       "planner": "Planner",
+      "tools": "Tools",
+      "reports": "Reports",
       "profile": "Profile",
       "settings": "Settings",
       "logout": "Log out",
@@ -76,6 +78,8 @@
     "login": {
       "title": "Welcome back",
       "subtitle": "Sign in to continue your planning journey",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
       "lineButton": "Continue with LINE",
       "githubButton": "Continue with GitHub",
       "noAccount": "Don't have an account?",
@@ -123,6 +127,12 @@
         "tertiary": "Tertiary",
         "hybridHint": "You're a {primary}-{secondary} hybrid — both archetypes resonate strongly"
       },
+      "toolkit": {
+        "title": "Your recommended toolkit",
+        "subtitle": "Hand-picked for your {animal} archetype",
+        "ctaSetup": "Set up my toolkit",
+        "topPickBadge": "Top pick"
+      },
       "stats": {
         "title": "Profile Stats",
         "energy": "Energy",
@@ -132,12 +142,36 @@
         "focus": "Focus",
         "drive": "Drive",
         "descriptors": {
-          "energy":   { "high": "Early Riser",        "mid": "Flexible",        "low": "Night Owl" },
-          "planning": { "high": "Plans Ahead",         "mid": "Adaptive",        "low": "Spontaneous" },
-          "social":   { "high": "Energized by Others", "mid": "Selective",       "low": "Solo Best" },
-          "decision": { "high": "Decisive",            "mid": "Balanced",        "low": "Deliberate" },
-          "focus":    { "high": "Deep Focus",          "mid": "Contextual",      "low": "Multi-Track" },
-          "drive":    { "high": "Goal-Driven",         "mid": "Progress-Minded", "low": "Process-Focused" }
+          "energy": {
+            "high": "Early Riser",
+            "mid": "Flexible",
+            "low": "Night Owl"
+          },
+          "planning": {
+            "high": "Plans Ahead",
+            "mid": "Adaptive",
+            "low": "Spontaneous"
+          },
+          "social": {
+            "high": "Energized by Others",
+            "mid": "Selective",
+            "low": "Solo Best"
+          },
+          "decision": {
+            "high": "Decisive",
+            "mid": "Balanced",
+            "low": "Deliberate"
+          },
+          "focus": {
+            "high": "Deep Focus",
+            "mid": "Contextual",
+            "low": "Multi-Track"
+          },
+          "drive": {
+            "high": "Goal-Driven",
+            "mid": "Progress-Minded",
+            "low": "Process-Focused"
+          }
         }
       }
     },
@@ -223,7 +257,7 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
+    "welcome": "Welcome back",
     "stats": {
       "currentStreak": "Current streak",
       "longestStreak": "Longest streak",
@@ -353,5 +387,170 @@
       "signOut": "Sign out",
       "deleteAccount": "Delete account"
     }
+  },
+  "tools": {
+    "catalog": {
+      "title": "Tool catalog",
+      "subtitle": "Pick the tools that fit how you actually work",
+      "filterAll": "All categories",
+      "empty": "No tools match your filters",
+      "emptyCategory": "No tools in this category yet",
+      "enable": "Enable",
+      "disable": "Disable",
+      "enabled": "Enabled",
+      "recommended": "Recommended",
+      "searchPlaceholder": "Search tools…",
+      "categoryProductivity": "Productivity",
+      "categoryWellbeing": "Wellbeing",
+      "categoryReflection": "Reflection",
+      "categoryTracking": "Tracking",
+      "categoryCreativity": "Creativity",
+      "heroTitle": "Your blueprint",
+      "heroSubtitleWithAnimal": "Based on your {animal} archetype, we recommend these tools to start with. Enable any you like — you can always change them later.",
+      "heroSubtitleNoAnimal": "Browse the full catalog and enable the tools that fit how you work.",
+      "enabledCount": "{count} tools enabled",
+      "goToDashboard": "Go to Dashboard"
+    },
+    "dashboard": {
+      "empty": "No tools yet. Enable a few from the catalog to get started.",
+      "emptyAction": "Open the catalog"
+    },
+    "widget": {
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "delete": "Remove",
+      "confirmDisable": "Hide this tool? Your data will be kept."
+    },
+    "entry": {
+      "savedToast": "Saved",
+      "errorToast": "Could not save — try again"
+    },
+    "recommendation": {
+      "title": "Your recommended toolkit",
+      "subtitle": "Hand-picked for your archetype",
+      "enableAll": "Enable all"
+    },
+    "dailyPriorities": {
+      "title": "Daily Priorities",
+      "subtitle": "Your top 3 for today",
+      "addPlaceholder": "What matters today?",
+      "emptyHint": "Tap a slot to add a priority"
+    },
+    "habitTracker": {
+      "title": "Habit Tracker",
+      "subtitle": "Daily habits, one tap to log",
+      "addHabit": "Add habit",
+      "streak": "{days}-day streak",
+      "todayCount": "{done} / {total} done today",
+      "noHabits": "No habits yet — add one to start"
+    },
+    "moodLog": {
+      "title": "Mood Log",
+      "subtitle": "How are you feeling today?",
+      "emojiLabels": {
+        "veryBad": "Very bad",
+        "bad": "Not great",
+        "neutral": "Okay",
+        "good": "Good",
+        "veryGood": "Amazing"
+      },
+      "noteLabel": "Add a note (optional)",
+      "noNote": "No note",
+      "trendLabel": "Last 7 days"
+    },
+    "pomodoro": {
+      "title": "Pomodoro",
+      "subtitle": "Focus in timed sessions",
+      "start": "Start",
+      "pause": "Pause",
+      "reset": "Reset",
+      "break": "Break",
+      "workSession": "Focus",
+      "completed": "Session complete",
+      "sessionsToday": "today",
+      "editLengths": "Edit lengths",
+      "sessionLengthLabel": "Session length (minutes)",
+      "breakLengthLabel": "Break length (minutes)"
+    },
+    "energyLevel": {
+      "title": "Energy Level",
+      "subtitle": "How energized do you feel right now?",
+      "currentLabel": "Right now",
+      "lowLabel": "Drained",
+      "highLabel": "Energized",
+      "trendLabel": "Trend",
+      "loggedAt": "Logged at"
+    },
+    "gratitude": {
+      "title": "Gratitude",
+      "subtitle": "3 things you're grateful for today",
+      "placeholder1": "Something small that made you smile…",
+      "placeholder2": "A person you appreciate…",
+      "placeholder3": "A moment worth remembering…",
+      "yesterdayLabel": "Yesterday you wrote…",
+      "completeMessage": "Beautiful. Thank you."
+    },
+    "weeklyReview": {
+      "title": "Weekly Review",
+      "subtitle": "Reflect on this week — wins, losses, and what's next",
+      "winsLabel": "Wins",
+      "lossesLabel": "Losses / challenges",
+      "nextFocusLabel": "Next week's focus",
+      "ratingLabel": "Overall rating",
+      "saveBtn": "Save review",
+      "noReviewYet": "No review for this week yet",
+      "ctaReflect": "Reflect on your week",
+      "previousLabel": "Previous weeks",
+      "addItem": "Add item",
+      "noItems": "Nothing yet"
+    },
+    "dailyReflection": {
+      "title": "Daily Reflection",
+      "subtitle": "Three short prompts to close the day",
+      "highlightPrompt": "What was today's highlight?",
+      "challengePrompt": "What was challenging?",
+      "intentPrompt": "What's your intent for tomorrow?",
+      "saveBtn": "Save reflection",
+      "yesterdayLabel": "Yesterday you wrote…",
+      "ctaReflect": "Reflect on today",
+      "noReflection": "No reflection yet"
+    },
+    "water": {
+      "title": "Water",
+      "subtitle": "Tap a glass each time you drink.",
+      "goalReached": "Goal reached!",
+      "progressLabel": "{current}/{goal} glasses today",
+      "editGoal": "Edit goal",
+      "goalLabel": "Daily goal (glasses)"
+    },
+    "sleep": {
+      "title": "Sleep",
+      "subtitle": "Log bedtime, wake time, and how you slept.",
+      "bedtimeLabel": "Bedtime",
+      "wakeTimeLabel": "Wake time",
+      "qualityLabel": "Quality",
+      "hoursSlept": "Slept {value}",
+      "trendLabel": "Last 7 days"
+    }
+  },
+  "reports": {
+    "title": "Your reports",
+    "subtitle": "Cross-tool insights from your daily logs",
+    "tabs": {
+      "week": "Week",
+      "month": "Month",
+      "quarter": "Quarter",
+      "year": "Year"
+    },
+    "kpi": {
+      "streak": "Streak",
+      "moodAverage": "Mood avg",
+      "prioritiesDone": "Priorities done",
+      "habitsPercent": "Habits %"
+    },
+    "empty": "Not enough data yet — log entries for a few days to see your report.",
+    "breakdownLabel": "Per-tool breakdown",
+    "reflectionLabel": "Reflection",
+    "reflectionPlaceholder": "Write a freeform note about this period…"
   }
 }
