@@ -77,6 +77,16 @@ If `.orchestrator/HALT` exists OR Telegram `/halt` is received, CO broadcasts ha
 
 ### 3.8 Silent failure = critical incident
 Any operation that fails without producing a journal entry, a report, or a user-visible error message is a CRITICAL incident. The offending agent is quarantined + the incident goes to the postmortem queue.
+### 3.9 Agents MUST use Skills (no raw git, no raw migrations, no raw deploys)
+Every agent — worker, PM, sentinel, DA — MUST use the Skill tool when a skill exists for the task it is performing. Specifically:
+- **Git operations:** use `Skill("git", "commit" | "pr" | "sync" | "status")` — NEVER raw `git commit`, `git push`, `git merge`, `git rebase`. The /git skill handles safety gates, 2-pass review, and governance logging. Bypassing it is a critical protocol violation.
+- **Bug reports, mod logs, sub-features:** use the corresponding slash-command skills (`/bug-report`, `/mod-log`, `/sub-feature`) to create tickets in the Development folder with the correct structure.
+- **Any other skill in `.claude/skills/`** that matches the task — use it. Skills exist precisely because their procedures were hardened after past failures.
+
+Raw tool calls are acceptable only when no skill exists for the task. If an agent is uncertain whether a skill applies, it should file an escalation rather than bypass the skill.
+
+Commander directive (2026-04-08): "please always make agents use skills" — this rule is non-negotiable and applies to every agent spawn.
+
 
 ---
 
