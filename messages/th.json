@@ -494,6 +494,17 @@
       "sessionLengthLabel": "ความยาวเซสชัน (นาที)",
       "breakLengthLabel": "ความยาวช่วงพัก (นาที)"
     },
+    "meditationTimer": {
+      "title": "นั่งสมาธิ",
+      "subtitle": "นั่งลง หายใจ กลับมา",
+      "start": "เริ่ม",
+      "pause": "หยุดชั่วคราว",
+      "reset": "รีเซ็ต",
+      "presetLabel": "พรีเซ็ต",
+      "customLabel": "ความยาวเอง (นาที)",
+      "completedMessage": "จบเซสชันแล้ว ทำได้ดีมาก",
+      "totalToday": "นาทีวันนี้"
+    },
     "energyLevel": {
       "title": "ระดับพลังงาน",
       "subtitle": "ตอนนี้คุณรู้สึกมีพลังแค่ไหน?",

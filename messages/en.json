@@ -494,6 +494,17 @@
       "sessionLengthLabel": "Session length (minutes)",
       "breakLengthLabel": "Break length (minutes)"
     },
+    "meditationTimer": {
+      "title": "Meditation",
+      "subtitle": "Sit. Breathe. Return.",
+      "start": "Start",
+      "pause": "Pause",
+      "reset": "Reset",
+      "presetLabel": "Presets",
+      "customLabel": "Custom length (min)",
+      "completedMessage": "Session complete. Well done.",
+      "totalToday": "min today"
+    },
     "energyLevel": {
       "title": "Energy Level",
       "subtitle": "How energized do you feel right now?",

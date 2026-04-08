@@ -494,6 +494,17 @@
       "sessionLengthLabel": "专注时长（分钟）",
       "breakLengthLabel": "休息时长（分钟）"
     },
+    "meditationTimer": {
+      "title": "冥想",
+      "subtitle": "坐下。呼吸。回归。",
+      "start": "开始",
+      "pause": "暂停",
+      "reset": "重置",
+      "presetLabel": "预设",
+      "customLabel": "自定义时长（分钟）",
+      "completedMessage": "本次完成。做得好。",
+      "totalToday": "分钟 今日"
+    },
     "energyLevel": {
       "title": "能量水平",
       "subtitle": "你现在感觉多有活力？",
