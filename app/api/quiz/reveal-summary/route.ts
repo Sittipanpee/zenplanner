@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { callLLM } from "@/lib/llm";
 import { getAnimal } from "@/lib/animal-data";
+import { checkRateLimit, getClientIp } from "@/lib/api/rate-limit";
 import type { SpiritAnimal } from "@/lib/types";
 
 const LANGUAGE_INSTRUCTION: Record<"en" | "th" | "zh", string> = {
@@ -18,27 +19,6 @@ const LANGUAGE_INSTRUCTION: Record<"en" | "th" | "zh", string> = {
 // ---------- Rate limiting (in-memory, per-IP) ----------
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
-
-function getClientIp(request: NextRequest): string {
-  const xff = request.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  const realIp = request.headers.get("x-real-ip");
-  if (realIp) return realIp.trim();
-  return "unknown";
-}
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitStore.get(ip);
-  if (!entry || entry.resetAt <= now) {
-    rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return true;
-  }
-  if (entry.count >= RATE_LIMIT_MAX) return false;
-  entry.count += 1;
-  return true;
-}
 
 // ---------- Axis description helpers ----------
 function clampScore(raw: string | null): number {
@@ -92,10 +72,19 @@ function describeAxis(axis: AxisKey, value: number): string {
 export async function GET(request: NextRequest) {
   // Rate limit check
   const ip = getClientIp(request);
-  if (!checkRateLimit(ip)) {
+  const rl = checkRateLimit(`reveal-summary:${ip}`, {
+    max: RATE_LIMIT_MAX,
+    windowMs: RATE_LIMIT_WINDOW_MS,
+  });
+  if (!rl.ok) {
     return NextResponse.json(
       { error: "Too many requests" },
-      { status: 429 }
+      {
+        status: 429,
+        headers: rl.retryAfter
+          ? { "Retry-After": String(rl.retryAfter) }
+          : undefined,
+      }
     );
   }
 
