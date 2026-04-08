@@ -1,24 +1,22 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "commander_order",
-  "title": "Commander Order",
-  "description": "Direct order from Commander. Highest priority. CO acts within one poll tick.",
+  "title": "Commander Order / Phase Gate Request",
+  "description": "Inter-party message between Commander and Chief Orchestrator. Direction is inferred from from/to fields. Commander → CO = action order. CO → Commander = phase gate request or decision ask.",
   "type": "object",
   "required": ["type", "from", "to", "priority", "created_at", "order", "reason"],
   "properties": {
     "type": { "const": "commander_order" },
-    "from": { "const": "commander" },
-    "to": { "const": "chief-orchestrator" },
+    "from": { "enum": ["commander", "chief-orchestrator"] },
+    "to": { "enum": ["commander", "chief-orchestrator"] },
     "priority": { "const": "highest" },
-    "created_at": { "type": "string", "format": "date-time" },
+    "created_at": { "type": "string" },
     "order": {
       "enum": ["halt", "resume", "rollback", "approve_phase_gate", "reject_phase_gate", "dispatch", "pause_dept", "resume_dept", "amend_charter"]
     },
     "reason": { "type": "string" },
-    "target": {
-      "type": "string",
-      "description": "Optional target: dept name, commit sha, phase id, etc."
-    },
-    "acknowledge_required": { "type": "boolean", "default": true }
+    "target": { "type": "string" },
+    "acknowledge_required": { "type": "boolean" },
+    "expires_at": { "type": "string" }
   }
 }
