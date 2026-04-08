@@ -567,5 +567,47 @@
     "breakdownLabel": "Per-tool breakdown",
     "reflectionLabel": "Reflection",
     "reflectionPlaceholder": "Write a freeform note about this period…"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: April 2026",
+      "intro": "ZenPlanner respects your privacy. This policy explains what data we collect, why, and your rights under Thailand's Personal Data Protection Act (PDPA).",
+      "footerTermsLink": "See our Terms of Service",
+      "sections": {
+        "collect": {
+          "title": "What data we collect",
+          "body": "• Email address (via Supabase authentication)\n• Quiz responses — your answers, scores, and resulting spirit animal\n• Tool entries — anything you choose to write in the planner, mood tracker, or reflection tools\n• Cookies — theme preference, locale, and session token"
+        },
+        "why": {
+          "title": "Why we collect it",
+          "body": "We use your data solely to deliver the service: authenticate you, compute your archetype, render your dashboard, and persist your progress across sessions and devices."
+        },
+        "sharing": {
+          "title": "Who we share it with",
+          "body": "Nobody — except the subprocessors listed in the next section. We do not sell, rent, or trade your personal data."
+        },
+        "subprocessors": {
+          "title": "Subprocessors",
+          "body": "• Supabase (Frankfurt region) — authentication and data storage in the EU\n• Vercel — global edge hosting and delivery\n• Pollinations.ai — LLM inference for generated content; only anonymized scores are sent, never your identity"
+        },
+        "rights": {
+          "title": "Your rights",
+          "body": "Under PDPA you have the right to access, correct, delete, and export your personal data. To exercise any of these rights, email privacy@zenplanner.app."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "body": "We use exactly three cookies: theme (light/dark), locale (en/th/zh), and session (authentication). No advertising trackers, no third-party analytics, no fingerprinting."
+        },
+        "retention": {
+          "title": "Retention",
+          "body": "• Account data — kept until you request deletion\n• Quiz results — kept for 24 months to support cohort analytics\n• Tool entries — kept indefinitely as your personal journal, deletable at any time"
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "Questions or requests? Email privacy@zenplanner.app and we will respond within 30 days as required by PDPA."
+        }
+      }
+    }
   }
 }

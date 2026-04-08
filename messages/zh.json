@@ -567,5 +567,47 @@
     "breakdownLabel": "工具明细",
     "reflectionLabel": "反思",
     "reflectionPlaceholder": "写下关于这段时间的自由笔记…"
+  },
+  "legal": {
+    "privacy": {
+      "title": "隐私政策",
+      "lastUpdated": "最后更新：2026年4月",
+      "intro": "ZenPlanner 尊重您的隐私。本政策说明我们收集哪些数据、为何收集，以及您在泰国《个人数据保护法》（PDPA）下的权利。",
+      "footerTermsLink": "查看服务条款",
+      "sections": {
+        "collect": {
+          "title": "我们收集哪些数据",
+          "body": "• 电子邮件地址（通过 Supabase 身份验证）\n• 测验回答 — 您的答案、得分及所得到的灵魂动物\n• 工具条目 — 您在规划器、心情记录或反思工具中写下的任何内容\n• Cookie — 主题偏好、语言和会话令牌"
+        },
+        "why": {
+          "title": "为何收集",
+          "body": "我们仅使用您的数据来提供服务：验证身份、计算原型、呈现仪表盘，以及在不同会话和设备之间保存您的进度。"
+        },
+        "sharing": {
+          "title": "与谁共享",
+          "body": "不与任何人共享 — 除下一节列出的子处理方之外。我们不会出售、出租或交易您的个人数据。"
+        },
+        "subprocessors": {
+          "title": "子处理方",
+          "body": "• Supabase（法兰克福区域）— 在欧盟进行身份验证和数据存储\n• Vercel — 全球边缘托管与分发\n• Pollinations.ai — 生成内容所用的 LLM 推理；仅发送匿名化分数，从不发送您的身份"
+        },
+        "rights": {
+          "title": "您的权利",
+          "body": "根据 PDPA，您有权访问、更正、删除和导出您的个人数据。如需行使任何权利，请发送电子邮件至 privacy@zenplanner.app。"
+        },
+        "cookies": {
+          "title": "Cookie",
+          "body": "我们仅使用三个 Cookie：主题（浅色/深色）、语言（en/th/zh）和会话（身份验证）。没有广告追踪器，没有第三方分析，没有指纹识别。"
+        },
+        "retention": {
+          "title": "保留期限",
+          "body": "• 账户数据 — 保留至您申请删除为止\n• 测验结果 — 保留 24 个月以支持群组分析\n• 工具条目 — 作为您的个人日志无限期保留，可随时删除"
+        },
+        "contact": {
+          "title": "联系方式",
+          "body": "有问题或请求？请发送电子邮件至 privacy@zenplanner.app，我们将在 PDPA 要求的 30 天内回复。"
+        }
+      }
+    }
   }
 }
