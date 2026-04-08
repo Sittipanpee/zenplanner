@@ -89,6 +89,9 @@ export { dailyPriorities };
 import { pomodoro } from "./pomodoro";
 export { pomodoro };
 
+import { tasks } from "./tasks";
+export { tasks };
+
 export const eisenhowerMatrix: ToolDefinition = makeStub({
   id: "eisenhower_matrix", category: "productivity",
   name: L("Eisenhower Matrix", "เมทริกซ์ไอเซนฮาวร์", "艾森豪威尔矩阵"),
@@ -114,15 +117,6 @@ export const timeBoxing: ToolDefinition = makeStub({
   icon: Clock, color: "zen-sky",
   recommendedFor: ["owl", "mountain", "lion"],
   recommendationReason: L("Hour-by-hour control for structured days.", "ควบคุมเป็นรายชั่วโมงสำหรับวันที่มีโครงสร้าง", "为结构化日子提供小时级控制"),
-});
-
-export const tasks: ToolDefinition = makeStub({
-  id: "tasks", category: "productivity",
-  name: L("Tasks", "งานที่ต้องทำ", "任务"),
-  description: L("Simple checkable task list.", "รายการงานที่ติ๊กได้แบบเรียบง่าย", "简单的可勾选任务列表"),
-  icon: CheckSquare, color: "zen-sage",
-  recommendedFor: ["fox", "lion", "wolf", "owl"],
-  recommendationReason: L("Universal capture for any planner.", "การจดบันทึกสากลสำหรับนักวางแผนทุกประเภท", "适合任何规划者的通用记录"),
 });
 
 export const focusBlocks: ToolDefinition = makeStub({
@@ -198,14 +192,8 @@ export const energyDial: ToolDefinition = makeStub({
   recommendationReason: L("One-tap energy check-in.", "เช็กอินพลังงานด้วยการแตะครั้งเดียว", "一键能量打卡"),
 });
 
-export const meditationTimer: ToolDefinition = makeStub({
-  id: "meditation_timer", category: "wellbeing",
-  name: L("Meditation Timer", "ตัวจับเวลานั่งสมาธิ", "冥想计时"),
-  description: L("Time your meditation sessions.", "จับเวลาช่วงนั่งสมาธิ", "为冥想计时"),
-  icon: Sparkles, color: "zen-indigo",
-  recommendedFor: ["whale", "sakura", "dove", "bamboo"],
-  recommendationReason: L("Stillness practice for reflective souls.", "การฝึกความนิ่งสำหรับจิตวิญญาณที่ใคร่ครวญ", "为内省灵魂提供静心练习"),
-});
+import { meditationTimer } from "./meditation_timer";
+export { meditationTimer };
 
 export const workoutLog: ToolDefinition = makeStub({
   id: "workout_log", category: "wellbeing",
@@ -449,5 +437,5 @@ export const SYNTHETIC_TOOL_IDS: ReadonlySet<string> = new Set(["period_reflecti
 // Lucide icon barrel for unused-import linter — every stub uses at least one.
 // Keeping all icon imports referenced silences the linter for the big import set.
 void ([
-  AlarmClock, FileText, TrendingUp, Flame,
+  AlarmClock, FileText, TrendingUp, Flame, Sparkles,
 ] satisfies LucideIcon[]);

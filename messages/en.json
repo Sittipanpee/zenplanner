@@ -451,6 +451,13 @@
       "addPlaceholder": "What matters today?",
       "emptyHint": "Tap a slot to add a priority"
     },
+    "tasks": {
+      "title": "Tasks",
+      "subtitle": "Check off what you get done today",
+      "addPlaceholder": "Add a task…",
+      "addButton": "Add task",
+      "emptyHint": "No tasks yet — add your first one above"
+    },
     "habitTracker": {
       "title": "Habit Tracker",
       "subtitle": "Daily habits, one tap to log",

@@ -451,6 +451,13 @@
       "addPlaceholder": "今天什么最重要？",
       "emptyHint": "点击空位添加要务"
     },
+    "tasks": {
+      "title": "任务",
+      "subtitle": "勾选今天完成的事情",
+      "addPlaceholder": "添加任务…",
+      "addButton": "添加任务",
+      "emptyHint": "还没有任务 — 在上方添加第一个"
+    },
     "habitTracker": {
       "title": "习惯追踪",
       "subtitle": "每日习惯，一键打卡",
