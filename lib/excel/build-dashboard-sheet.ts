@@ -18,7 +18,40 @@ import {
   LEFT,
   COLORS,
 } from "./styles";
-import { safeSheetName } from "./build-tool-sheet";
+import { safeSheetName, getRegisteredSpec, getSheetNameForToolId } from "./build-tool-sheet";
+
+/**
+ * KPI descriptor built from a tool's summaryCells registry. Maps a tool's
+ * exposed cell (e.g. "mood_tracker.avgMood") to a dashboard KPI card.
+ * Dashboard renders the first ~5 of these as the top KPI strip.
+ */
+interface DashboardKpi {
+  label: string;
+  toolId: ToolId;
+  summaryKey: string;
+  format?: string;
+}
+
+/**
+ * Canonical KPI priority list. Tools that expose their summary via
+ * summaryCells and appear here get a reserved slot in the top-strip.
+ * Order matters — the first 5 matches win the KPI cards. Tools not on
+ * this list still appear in the per-tool summary table below.
+ *
+ * This replaces the hardcoded if-chain that used to live in this file
+ * (habit_heatmap, mood_tracker, daily_power_block). Now the dashboard
+ * auto-discovers any tool that declares summaryCells — no code change
+ * needed when a new tool ships.
+ */
+const KPI_PRIORITY: DashboardKpi[] = [
+  { label: "Habit Check-ins", toolId: "habit_heatmap", summaryKey: "weekTotalDone", format: "#,##0" },
+  { label: "Avg Mood", toolId: "mood_tracker", summaryKey: "avgMood", format: "0.0" },
+  { label: "Avg Energy", toolId: "mood_tracker", summaryKey: "avgEnergy", format: "0.0" },
+  { label: "Weekly Completion", toolId: "weekly_compass", summaryKey: "completionPct", format: "0%" },
+  { label: "Priorities Done", toolId: "weekly_compass", summaryKey: "doneCount", format: "#,##0" },
+  // Future: the moment any tool adds summaryCells, extend this list
+  // and the dashboard picks it up automatically.
+];
 
 /**
  * Quote a sheet name for use inside a cross-sheet formula reference.
@@ -70,9 +103,8 @@ export function buildDashboardSheet(
     .map((id) => ({ id, name: TOOL_INFO[id]?.name ?? id }))
     .filter((t) => !!t.name);
 
-  // KPI: total entries (sum of "Tasks Filled" or COUNTA across known tools)
-  // We sum a generic "any non-empty cell in column B of every tool sheet"
-  // which is a safe approximation that works in both Excel and Sheets.
+  // KPI: total entries — generic COUNTA across all enabled tool sheets.
+  // Safe in both Excel and Google Sheets.
   if (enabledNames.length > 0) {
     const totalEntriesFormula =
       "=" +
@@ -82,34 +114,39 @@ export function buildDashboardSheet(
     kpis.push({ label: "Total Entries", formula: totalEntriesFormula, format: "#,##0" });
   }
 
-  // Habit completion % (if habit_heatmap enabled)
-  if (toolIds.includes("habit_heatmap")) {
-    const ref = quoteSheetRef(TOOL_INFO.habit_heatmap.name);
-    kpis.push({
-      label: "Habit Check-ins",
-      formula: `=SUM(${ref}!I4:I15)`,
-      format: "#,##0",
-    });
-  }
+  // Dynamic KPI discovery from the summaryCells registry (Wave 5 E3).
+  //
+  // Before this refactor, the dashboard had a hardcoded if-chain for each
+  // known KPI (habit_heatmap, mood_tracker, daily_power_block). Every new
+  // KPI required editing this file. Now the dashboard reads KPI_PRIORITY
+  // and, for each tool that's actually enabled AND exposes the requested
+  // summary cell, generates a cross-sheet formula automatically.
+  //
+  // The registry is populated during Phase 1 of the two-phase build
+  // (see sheet-builder.ts) before any dashboard rendering happens, so
+  // every lookup succeeds regardless of render order.
+  const enabledIds = new Set(toolIds);
+  for (const kpi of KPI_PRIORITY) {
+    if (!enabledIds.has(kpi.toolId)) continue;
 
-  // Average mood (if mood_tracker enabled)
-  if (toolIds.includes("mood_tracker")) {
-    const ref = quoteSheetRef(TOOL_INFO.mood_tracker.name);
-    kpis.push({
-      label: "Avg Mood",
-      formula: `=IFERROR(AVERAGE(${ref}!B4:B33),0)`,
-      format: "0.0",
-    });
-  }
+    const spec = getRegisteredSpec(kpi.toolId);
+    const sheetName = getSheetNameForToolId(kpi.toolId);
+    const cellAddress = spec?.summaryCells?.[kpi.summaryKey];
 
-  // Daily priorities done
-  if (toolIds.includes("daily_power_block")) {
-    const ref = quoteSheetRef(TOOL_INFO.daily_power_block.name);
+    if (!spec || !sheetName || !cellAddress) {
+      // Tool enabled but it hasn't exposed this summary cell — skip gracefully.
+      // Same blast radius as any other conditional KPI: just omits the slot.
+      continue;
+    }
+
     kpis.push({
-      label: "Priorities Done",
-      formula: `=COUNTIF(${ref}!D4:D6,"✓")`,
-      format: "#,##0",
+      label: kpi.label,
+      formula: `='${sheetName}'!${cellAddress}`,
+      format: kpi.format,
     });
+
+    // Max 5 KPI slots — stop early if the strip is full.
+    if (kpis.length >= 5) break;
   }
 
   // Render KPI cells (max 5)

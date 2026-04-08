@@ -61,12 +61,9 @@ export async function generatePlannerWorkbook(
   workbook.created = new Date();
   workbook.title = blueprint.title ?? "ZenPlanner";
 
-  // Dashboard MUST be the first sheet so it's the tab users see on open.
-  buildDashboardSheet(workbook, toolIds, blueprint.title ?? "ZenPlanner");
-
   // Phase 1: resolve all specs and register them in the cross-sheet registry.
-  // This must happen before any sheet is rendered so that consumesCell entries
-  // can resolve target tool sheet names and summaryCells at render time.
+  // MUST happen before buildDashboardSheet (so the dashboard can discover
+  // summaryCells) AND before buildToolSheet (so consumesCell can resolve).
   const specMap = new Map<ToolId, ReturnType<typeof getToolSpec>>();
   for (const toolId of toolIds) {
     const info = TOOL_INFO[toolId];
@@ -80,7 +77,12 @@ export async function generatePlannerWorkbook(
     }
   }
 
-  // Phase 2: build each tool sheet using the pre-registered specs.
+  // Phase 2a: Dashboard MUST be the first sheet added to the workbook so it's
+  // the tab users see on open. Now that the registry is populated (Phase 1),
+  // the dashboard can auto-discover KPIs from each tool's summaryCells.
+  buildDashboardSheet(workbook, toolIds, blueprint.title ?? "ZenPlanner");
+
+  // Phase 2b: build each tool sheet using the pre-registered specs.
   for (const toolId of toolIds) {
     const spec = specMap.get(toolId);
     if (!spec) {
