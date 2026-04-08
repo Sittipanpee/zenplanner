@@ -9,6 +9,7 @@ import { getMessages, getLocale } from 'next-intl/server'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
 import { LIFFProvider } from '@/components/liff/liff-provider'
+import { Analytics } from '@vercel/analytics/next'
 
 /**
  * Font CSS variable classes.
@@ -60,6 +61,7 @@ export default async function RootLayout({
             </LIFFProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
