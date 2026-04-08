@@ -1,8 +1,0 @@
-Schema validation failed: pm_report
-
-- 'to' is a required property
-- 'created_at' is a required property
-- 'summary' is a required property
-- 'worker-be-rate' does not match '^pm-[a-z0-9-]+$'
-- 'complete' is not one of ['IN_PROGRESS', 'COMPLETE', 'BLOCKED', 'ESCALATED']
-- Additional properties are not allowed ('dept', 'id', 'ticket', 'ts' were unexpected)
