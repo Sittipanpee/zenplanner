@@ -95,50 +95,20 @@ export { tasks };
 import { eisenhowerMatrix } from "./eisenhower_matrix";
 export { eisenhowerMatrix };
 
-export const kanbanBoard: ToolDefinition = makeStub({
-  id: "kanban_board", category: "productivity",
-  name: L("Kanban Board", "กระดานคัมบัง", "看板"),
-  description: L("To Do, Doing, Done — flexible workflow.", "ทำต่อ กำลังทำ เสร็จแล้ว — เวิร์กโฟลว์ยืดหยุ่น", "待办、进行中、完成 — 灵活工作流"),
-  icon: ClipboardList, color: "zen-sage",
-  recommendedFor: ["fox", "octopus", "butterfly"],
-  recommendationReason: L("Adaptive flow for parallel thinkers.", "การไหลที่ปรับตัวได้สำหรับนักคิดแบบขนาน", "适合并行思考者的自适应流程"),
-});
+import { kanbanBoard } from "./kanban_board";
+export { kanbanBoard };
 
-export const timeBoxing: ToolDefinition = makeStub({
-  id: "time_boxing", category: "productivity",
-  name: L("Time Boxing", "ไทม์บ็อกซิ่ง", "时间盒"),
-  description: L("Block your day hour by hour.", "บล็อกเวลาทีละชั่วโมง", "按小时安排你的一天"),
-  icon: Clock, color: "zen-sky",
-  recommendedFor: ["owl", "mountain", "lion"],
-  recommendationReason: L("Hour-by-hour control for structured days.", "ควบคุมเป็นรายชั่วโมงสำหรับวันที่มีโครงสร้าง", "为结构化日子提供小时级控制"),
-});
+import { timeBoxing } from "./time_boxing";
+export { timeBoxing };
 
-export const focusBlocks: ToolDefinition = makeStub({
-  id: "focus_blocks", category: "productivity",
-  name: L("Focus Blocks", "บล็อกโฟกัส", "专注时段"),
-  description: L("Reserve deep-focus blocks each day.", "จองเวลาโฟกัสลึกในแต่ละวัน", "每天预留深度专注时段"),
-  icon: Crosshair, color: "zen-clay",
-  recommendedFor: ["owl", "mountain"],
-  recommendationReason: L("Protected windows for deep workers.", "ช่วงเวลาที่ปกป้องสำหรับผู้ทำงานเชิงลึก", "为深度工作者保护的时间窗口"),
-});
+import { focusBlocks } from "./focus_blocks";
+export { focusBlocks };
 
-export const breakTimer: ToolDefinition = makeStub({
-  id: "break_timer", category: "productivity",
-  name: L("Break Timer", "ตัวจับเวลาพัก", "休息计时"),
-  description: L("Reminders to step away and recharge.", "ตัวเตือนให้พักและเติมพลัง", "提醒你休息与充电"),
-  icon: Coffee, color: "zen-amber",
-  recommendedFor: ["sakura", "dove", "cat", "bamboo"],
-  recommendationReason: L("Gentle pacing for sustainable energy.", "จังหวะอ่อนโยนเพื่อพลังที่ยั่งยืน", "为可持续能量提供温和节奏"),
-});
+import { breakTimer } from "./break_timer";
+export { breakTimer };
 
-export const deepWork: ToolDefinition = makeStub({
-  id: "deep_work", category: "productivity",
-  name: L("Deep Work", "ทำงานเชิงลึก", "深度工作"),
-  description: L("Track long, undistracted focus sessions.", "ติดตามช่วงโฟกัสยาวที่ไม่ถูกรบกวน", "追踪长时间无干扰的专注时段"),
-  icon: Brain, color: "zen-indigo",
-  recommendedFor: ["owl", "whale", "mountain"],
-  recommendationReason: L("Long-form focus for deep thinkers.", "โฟกัสระยะยาวสำหรับนักคิดเชิงลึก", "适合深度思考者的长时间专注"),
-});
+import { deepWork } from "./deep_work";
+export { deepWork };
 
 // ============================================================
 // WELLBEING (10)
@@ -159,32 +129,14 @@ export { sleep };
 import { energyLevel } from "./energy_level";
 export { energyLevel };
 
-export const moodScore: ToolDefinition = makeStub({
-  id: "mood_score", category: "wellbeing",
-  name: L("Mood Score", "คะแนนอารมณ์", "心情评分"),
-  description: L("Numeric daily mood score.", "คะแนนอารมณ์ประจำวันแบบตัวเลข", "每日心情数字评分"),
-  icon: BarChart3, color: "zen-rose",
-  recommendedFor: ["whale", "sakura", "dove"],
-  recommendationReason: L("Quantify mood for trend tracking.", "วัดอารมณ์เพื่อติดตามแนวโน้ม", "量化心情以追踪趋势"),
-});
+import { moodScore } from "./mood_score";
+export { moodScore };
 
-export const sleepQuality: ToolDefinition = makeStub({
-  id: "sleep_quality", category: "wellbeing",
-  name: L("Sleep Quality", "คุณภาพการนอน", "睡眠质量"),
-  description: L("Rate how rested you feel.", "ให้คะแนนความสดชื่นที่ได้รับ", "为你的休息感打分"),
-  icon: Star, color: "zen-indigo",
-  recommendedFor: ["whale", "bamboo", "turtle"],
-  recommendationReason: L("Lightweight rest tracking.", "การติดตามการพักแบบเบา", "轻量化的休息追踪"),
-});
+import { sleepQuality } from "./sleep_quality";
+export { sleepQuality };
 
-export const energyDial: ToolDefinition = makeStub({
-  id: "energy_dial", category: "wellbeing",
-  name: L("Energy Dial", "ตัวหมุนพลังงาน", "能量仪表"),
-  description: L("Quick dial for current energy level.", "ตัวหมุนเร็วสำหรับระดับพลังงานตอนนี้", "快速调节当前能量"),
-  icon: Activity, color: "zen-amber",
-  recommendedFor: ["fox", "dolphin", "butterfly"],
-  recommendationReason: L("One-tap energy check-in.", "เช็กอินพลังงานด้วยการแตะครั้งเดียว", "一键能量打卡"),
-});
+import { energyDial } from "./energy_dial";
+export { energyDial };
 
 import { meditationTimer } from "./meditation_timer";
 export { meditationTimer };
@@ -205,126 +157,54 @@ export { weeklyReview };
 import { dailyReflection } from "./daily_reflection";
 export { dailyReflection };
 
-export const monthlyHorizon: ToolDefinition = makeStub({
-  id: "monthly_horizon", category: "reflection",
-  name: L("Monthly Horizon", "เส้นขอบฟ้ารายเดือน", "月度展望"),
-  description: L("Plan and review the month ahead.", "วางแผนและทบทวนเดือนที่จะถึง", "规划与回顾未来的一个月"),
-  icon: CalendarDays, color: "zen-sky",
-  recommendedFor: ["turtle", "mountain", "bamboo", "eagle"],
-  recommendationReason: L("Monthly arc for steady builders.", "ส่วนโค้งรายเดือนสำหรับผู้สร้างที่มั่นคง", "为稳健建设者提供的月度轨迹"),
-});
+import { monthlyHorizon } from "./monthly_horizon";
+export { monthlyHorizon };
 
-export const quarterlyVision: ToolDefinition = makeStub({
-  id: "quarterly_vision", category: "reflection",
-  name: L("Quarterly Vision", "วิสัยทัศน์รายไตรมาส", "季度愿景"),
-  description: L("90-day OKR-style planning.", "การวางแผนแบบ OKR 90 วัน", "90 天 OKR 式规划"),
-  icon: Compass, color: "zen-clay",
-  recommendedFor: ["eagle", "lion", "crocodile"],
-  recommendationReason: L("Strategic horizon for visionaries.", "ขอบฟ้าเชิงกลยุทธ์สำหรับผู้มีวิสัยทัศน์", "为远见者设计的战略视野"),
-});
+import { quarterlyVision } from "./quarterly_vision";
+export { quarterlyVision };
 
-export const weeklyIntentions: ToolDefinition = makeStub({
-  id: "weekly_intentions", category: "reflection",
-  name: L("Weekly Intentions", "เจตนารายสัปดาห์", "每周意图"),
-  description: L("Set 3 intentions for the week.", "ตั้งเจตนา 3 ข้อสำหรับสัปดาห์", "为本周设定 3 个意图"),
-  icon: Flag, color: "zen-sage",
-  recommendedFor: ["dove", "sakura", "whale"],
-  recommendationReason: L("Soft commitments for gentle progress.", "พันธสัญญานุ่มนวลสำหรับความก้าวหน้าที่อ่อนโยน", "为温和的进步设定轻柔承诺"),
-});
+import { weeklyIntentions } from "./weekly_intentions";
+export { weeklyIntentions };
 
-export const monthlyReview: ToolDefinition = makeStub({
-  id: "monthly_review", category: "reflection",
-  name: L("Monthly Review", "ทบทวนรายเดือน", "月度回顾"),
-  description: L("Review what worked and what didn't.", "ทบทวนสิ่งที่ได้ผลและไม่ได้ผล", "回顾哪些有效、哪些无效"),
-  icon: BookOpen, color: "zen-sage",
-  recommendedFor: ["whale", "owl", "mountain"],
-  recommendationReason: L("Pause and learn at month-end.", "หยุดและเรียนรู้เมื่อจบเดือน", "月末停下脚步去学习"),
-});
+import { monthlyReview } from "./monthly_review";
+export { monthlyReview };
 
-export const quarterlyOkrs: ToolDefinition = makeStub({
-  id: "quarterly_okrs", category: "reflection",
-  name: L("Quarterly OKRs", "OKR รายไตรมาส", "季度 OKR"),
-  description: L("Objectives + Key Results, every 90 days.", "วัตถุประสงค์ + ผลลัพธ์หลัก ทุก 90 วัน", "目标与关键结果，每 90 天"),
-  icon: Target, color: "zen-clay",
-  recommendedFor: ["eagle", "lion", "crocodile"],
-  recommendationReason: L("Outcome-driven planning for ambition.", "การวางแผนเน้นผลลัพธ์สำหรับความทะเยอทะยาน", "为雄心驱动的成果规划"),
-});
+import { quarterlyOkrs } from "./quarterly_okrs";
+export { quarterlyOkrs };
 
-export const yearVision: ToolDefinition = makeStub({
-  id: "year_vision", category: "reflection",
-  name: L("Year Vision", "วิสัยทัศน์รายปี", "年度愿景"),
-  description: L("Sketch your year in one page.", "วาดภาพปีของคุณในหน้าเดียว", "在一页上勾勒你的一年"),
-  icon: Sun, color: "zen-amber",
-  recommendedFor: ["eagle", "whale", "mountain"],
-  recommendationReason: L("Long view for big-picture minds.", "มุมมองระยะยาวสำหรับผู้คิดภาพใหญ่", "为大局观者提供长远视角"),
-});
+import { yearVision } from "./year_vision";
+export { yearVision };
 
 import { gratitudeThree } from "./gratitude_three";
 export { gratitudeThree };
 
-export const lessonsLearned: ToolDefinition = makeStub({
-  id: "lessons_learned", category: "reflection",
-  name: L("Lessons Learned", "บทเรียนที่ได้", "经验教训"),
-  description: L("Capture what you learned today.", "บันทึกสิ่งที่คุณเรียนรู้วันนี้", "记录你今天学到了什么"),
-  icon: Lightbulb, color: "zen-amber",
-  recommendedFor: ["owl", "whale", "octopus"],
-  recommendationReason: L("Convert experience into wisdom.", "เปลี่ยนประสบการณ์เป็นปัญญา", "将经验转化为智慧"),
-});
+import { lessonsLearned } from "./lessons_learned";
+export { lessonsLearned };
 
 // ============================================================
 // TRACKING (7)
 // ============================================================
 
-export const booksLog: ToolDefinition = makeStub({
-  id: "books_log", category: "tracking",
-  name: L("Books Log", "บันทึกหนังสือ", "读书记录"),
-  description: L("Track what you're reading.", "ติดตามสิ่งที่คุณกำลังอ่าน", "追踪你正在读的书"),
-  icon: BookOpen, color: "zen-sage",
-  recommendedFor: ["owl", "whale", "cat"],
-  recommendationReason: L("A reading habit for curious minds.", "นิสัยการอ่านสำหรับผู้อยากรู้", "为好奇心提供阅读习惯"),
-});
+import { booksLog } from "./books_log";
+export { booksLog };
 
 import { goalsTracker } from "./goals_tracker";
 export { goalsTracker };
 
-export const decisionLog: ToolDefinition = makeStub({
-  id: "decision_log", category: "tracking",
-  name: L("Decision Log", "บันทึกการตัดสินใจ", "决策日志"),
-  description: L("Record decisions and their context.", "บันทึกการตัดสินใจและบริบท", "记录决策及其背景"),
-  icon: ScrollText, color: "zen-indigo",
-  recommendedFor: ["owl", "crocodile", "octopus"],
-  recommendationReason: L("Track your reasoning over time.", "ติดตามการให้เหตุผลของคุณตามเวลา", "随时间追踪你的推理"),
-});
+import { decisionLog } from "./decision_log";
+export { decisionLog };
 
-export const learningLog: ToolDefinition = makeStub({
-  id: "learning_log", category: "tracking",
-  name: L("Learning Log", "บันทึกการเรียนรู้", "学习日志"),
-  description: L("Log courses, lessons, breakthroughs.", "บันทึกคอร์ส บทเรียน ความก้าวหน้า", "记录课程、课堂与突破"),
-  icon: Briefcase, color: "zen-sage",
-  recommendedFor: ["owl", "octopus", "fox"],
-  recommendationReason: L("A growth ledger for learners.", "บันทึกการเติบโตสำหรับผู้เรียน", "为学习者的成长账本"),
-});
+import { learningLog } from "./learning_log";
+export { learningLog };
 
-export const financeQuick: ToolDefinition = makeStub({
-  id: "finance_quick", category: "tracking",
-  name: L("Quick Finance", "การเงินด่วน", "快速财务"),
-  description: L("One-line money tracking.", "ติดตามเงินบรรทัดเดียว", "单行财务追踪"),
-  icon: Wallet, color: "zen-amber",
-  recommendedFor: ["crocodile", "mountain", "turtle"],
-  recommendationReason: L("Lightweight money awareness.", "การตระหนักเรื่องเงินแบบเบา", "轻量化的金钱意识"),
-});
+import { financeQuick } from "./finance_quick";
+export { financeQuick };
 
 import { expenseLog } from "./expense_log";
 export { expenseLog };
 
-export const savingsGoal: ToolDefinition = makeStub({
-  id: "savings_goal", category: "tracking",
-  name: L("Savings Goal", "เป้าหมายการออม", "储蓄目标"),
-  description: L("Track progress toward a savings goal.", "ติดตามความก้าวหน้าสู่เป้าหมายการออม", "追踪储蓄目标的进度"),
-  icon: PiggyBank, color: "zen-rose",
-  recommendedFor: ["turtle", "bamboo", "mountain"],
-  recommendationReason: L("Patient saving for long-term builders.", "การออมที่อดทนสำหรับผู้สร้างระยะยาว", "为长期建设者提供耐心储蓄"),
-});
+import { savingsGoal } from "./savings_goal";
+export { savingsGoal };
 
 // ============================================================
 // CREATIVITY (3)

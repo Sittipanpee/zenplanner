@@ -516,9 +516,9 @@
     },
     "energyDial": {
       "title": "ตัวหมุนพลังงาน",
-      "subtitle": "ครั้งที่เช็กอินวันนี้",
-      "prompt": "ตอนนี้พลังงานของคุณเป็นอย่างไร?",
-      "checkedAt": "เช็กอินเมื่อเวลา {time}"
+      "subtitle": "เช็กอิน 5 ระดับเร็วๆ",
+      "prompt": "พลังงานตอนนี้เป็นยังไง?",
+      "checkedAt": "เช็กอินเมื่อ {time}"
     },
     "gratitude": {
       "title": "ความขอบคุณ",
@@ -644,6 +644,175 @@
       "notesPlaceholder": "บันทึกเพิ่มเติม…",
       "addButton": "บันทึกไอเดีย",
       "emptyHint": "จับไอเดียแรก"
+    },
+    "kanbanBoard": {
+      "title": "กระดานคัมบัง",
+      "subtitle": "ทำต่อ → กำลังทำ → เสร็จ",
+      "addPlaceholder": "เพิ่มการ์ด…",
+      "columns": {
+        "todo": "ทำต่อ",
+        "doing": "กำลังทำ",
+        "done": "เสร็จ"
+      }
+    },
+    "timeBoxing": {
+      "title": "ไทม์บ็อกซิ่ง",
+      "subtitle": "บล็อกเวลาทีละชั่วโมง",
+      "addHour": "ชั่วโมง",
+      "addLabel": "จะทำอะไร…",
+      "addButton": "เพิ่ม",
+      "emptyHint": "ยังไม่มีบล็อก"
+    },
+    "focusBlocks": {
+      "title": "บล็อกโฟกัส",
+      "subtitle": "จองเวลาโฟกัสลึก",
+      "labelPlaceholder": "จะโฟกัสอะไร…",
+      "minutesLabel": "นาที"
+    },
+    "breakTimer": {
+      "title": "ตัวจับเวลาพัก",
+      "subtitle": "บันทึกเวลาพัก",
+      "totalMinutes": "{count} นาที",
+      "emptyHint": "แตะค่าสำเร็จรูปเพื่อบันทึกการพักแรก"
+    },
+    "deepWork": {
+      "title": "ทำงานเชิงลึก",
+      "subtitle": "บันทึกช่วงโฟกัสยาว",
+      "addPlaceholder": "เซสชันอะไร…",
+      "emptyHint": "บันทึกเซสชันแรก"
+    },
+    "moodScore": {
+      "title": "คะแนนอารมณ์",
+      "subtitle": "คะแนนอารมณ์ 1-10",
+      "scoreLabel": "คะแนน",
+      "lowLabel": "ต่ำ",
+      "highLabel": "สูง"
+    },
+    "sleepQuality": {
+      "title": "คุณภาพการนอน",
+      "subtitle": "รู้สึกสดชื่นแค่ไหน?",
+      "ratings": {
+        "1": "หมดแรง",
+        "2": "เหนื่อย",
+        "3": "ปกติ",
+        "4": "ดี",
+        "5": "สดชื่น"
+      }
+    },
+    "monthlyHorizon": {
+      "title": "มองเดือนหน้า",
+      "subtitle": "วางแผนเดือนหน้า",
+      "fields": {
+        "theme": "ธีม",
+        "targets": "เป้า",
+        "reflection": "สะท้อน"
+      },
+      "placeholders": {
+        "theme": "คำเดียวสำหรับเดือนนี้…",
+        "targets": "อยากทำอะไรให้สำเร็จ?",
+        "reflection": "เดือนที่แล้วเป็นยังไง?"
+      }
+    },
+    "quarterlyVision": {
+      "title": "วิสัยทัศน์รายไตรมาส",
+      "subtitle": "วางแผน 90 วัน",
+      "fields": {
+        "objective": "วัตถุประสงค์",
+        "keyResults": "ผลลัพธ์หลัก",
+        "reflection": "สะท้อน"
+      },
+      "placeholders": {
+        "objective": "สิ่งใหญ่ที่อยากได้ไตรมาสนี้…",
+        "keyResults": "3-5 ผลลัพธ์วัดได้…",
+        "reflection": "ไตรมาสที่แล้วเป็นยังไง?"
+      }
+    },
+    "weeklyIntentions": {
+      "title": "เจตนารายสัปดาห์",
+      "subtitle": "ตั้งเจตนา 3 ข้อสำหรับสัปดาห์",
+      "placeholder1": "เจตนาแรก…",
+      "placeholder2": "เจตนาที่สอง…",
+      "placeholder3": "เจตนาที่สาม…",
+      "weekOf": "สัปดาห์ของ {date}"
+    },
+    "monthlyReview": {
+      "title": "ทบทวนรายเดือน",
+      "subtitle": "ทบทวนสิ่งที่ได้ผล",
+      "fields": {
+        "wins": "สิ่งที่สำเร็จ",
+        "challenges": "ความท้าทาย",
+        "nextMonth": "โฟกัสเดือนหน้า"
+      },
+      "placeholders": {
+        "wins": "อะไรเป็นไปด้วยดี?",
+        "challenges": "อะไรยาก?",
+        "nextMonth": "โฟกัสเดียวสำหรับเดือนหน้า…"
+      }
+    },
+    "quarterlyOkrs": {
+      "title": "OKR รายไตรมาส",
+      "subtitle": "วัตถุประสงค์ + ผลลัพธ์หลัก",
+      "fields": {
+        "objective": "วัตถุประสงค์",
+        "kr1": "ผลลัพธ์หลัก 1",
+        "kr2": "ผลลัพธ์หลัก 2"
+      },
+      "placeholders": {
+        "objective": "ทะเยอทะยานแต่ชัดเจน…",
+        "kr1": "ผลลัพธ์วัดได้…",
+        "kr2": "อีกผลลัพธ์วัดได้…"
+      }
+    },
+    "yearVision": {
+      "title": "วิสัยทัศน์รายปี",
+      "subtitle": "ปีของคุณในหน้าเดียว",
+      "fields": {
+        "theme": "ธีม",
+        "bigGoals": "เป้าหมายใหญ่",
+        "reflection": "สะท้อน"
+      },
+      "placeholders": {
+        "theme": "คำเดียวสำหรับปีนี้…",
+        "bigGoals": "3-5 สิ่งใหญ่ๆ…",
+        "reflection": "ปีที่แล้วเป็นยังไง?"
+      }
+    },
+    "lessonsLearned": {
+      "title": "บทเรียนที่ได้",
+      "subtitle": "บันทึกสิ่งที่เรียนรู้",
+      "addPlaceholder": "เรียนรู้อะไร…",
+      "emptyHint": "บันทึกบทเรียนแรก"
+    },
+    "booksLog": {
+      "title": "บันทึกหนังสือ",
+      "subtitle": "ติดตามสิ่งที่อ่าน",
+      "addPlaceholder": "ชื่อหนังสือ…",
+      "emptyHint": "เพิ่มหนังสือเล่มแรก"
+    },
+    "decisionLog": {
+      "title": "บันทึกการตัดสินใจ",
+      "subtitle": "บันทึกการตัดสินใจและบริบท",
+      "addPlaceholder": "ตัดสินใจ + เหตุผล…",
+      "emptyHint": "บันทึกการตัดสินใจแรก"
+    },
+    "learningLog": {
+      "title": "บันทึกการเรียนรู้",
+      "subtitle": "คอร์ส บทเรียน ความก้าวหน้า",
+      "addPlaceholder": "หัวข้อที่ศึกษา…",
+      "emptyHint": "บันทึกการเรียนรู้แรก"
+    },
+    "financeQuick": {
+      "title": "การเงินด่วน",
+      "subtitle": "ติดตามเงินบรรทัดเดียว",
+      "addPlaceholder": "รายการ…",
+      "emptyHint": "บันทึกรายการแรก"
+    },
+    "savingsGoal": {
+      "title": "เป้าหมายการออม",
+      "subtitle": "ปัจจุบันเทียบกับเป้า",
+      "labelPlaceholder": "ออมเพื่ออะไร…",
+      "currentLabel": "ปัจจุบัน",
+      "targetLabel": "เป้า"
     }
   },
   "reports": {

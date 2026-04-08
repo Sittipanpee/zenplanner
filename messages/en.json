@@ -516,8 +516,8 @@
     },
     "energyDial": {
       "title": "Energy Dial",
-      "subtitle": "check-ins today",
-      "prompt": "How's your energy RIGHT NOW?",
+      "subtitle": "Quick 5-point check-in",
+      "prompt": "How's your energy right now?",
       "checkedAt": "Checked in at {time}"
     },
     "gratitude": {
@@ -644,6 +644,175 @@
       "notesPlaceholder": "Optional notes…",
       "addButton": "Save idea",
       "emptyHint": "Capture your first spark"
+    },
+    "kanbanBoard": {
+      "title": "Kanban Board",
+      "subtitle": "To Do → Doing → Done",
+      "addPlaceholder": "Add a card…",
+      "columns": {
+        "todo": "To Do",
+        "doing": "Doing",
+        "done": "Done"
+      }
+    },
+    "timeBoxing": {
+      "title": "Time Boxing",
+      "subtitle": "Block your day hour by hour",
+      "addHour": "Hour",
+      "addLabel": "What you'll do…",
+      "addButton": "Add",
+      "emptyHint": "No blocks yet"
+    },
+    "focusBlocks": {
+      "title": "Focus Blocks",
+      "subtitle": "Reserve deep-focus windows",
+      "labelPlaceholder": "What to focus on…",
+      "minutesLabel": "Min"
+    },
+    "breakTimer": {
+      "title": "Break Timer",
+      "subtitle": "Log breaks taken",
+      "totalMinutes": "{count} min",
+      "emptyHint": "Tap a preset to log your first break"
+    },
+    "deepWork": {
+      "title": "Deep Work",
+      "subtitle": "Log long undistracted sessions",
+      "addPlaceholder": "What session was this?…",
+      "emptyHint": "Log your first deep work session"
+    },
+    "moodScore": {
+      "title": "Mood Score",
+      "subtitle": "Numeric 1-10 mood score",
+      "scoreLabel": "Score",
+      "lowLabel": "Low",
+      "highLabel": "High"
+    },
+    "sleepQuality": {
+      "title": "Sleep Quality",
+      "subtitle": "How rested do you feel?",
+      "ratings": {
+        "1": "Exhausted",
+        "2": "Tired",
+        "3": "OK",
+        "4": "Good",
+        "5": "Refreshed"
+      }
+    },
+    "monthlyHorizon": {
+      "title": "Monthly Horizon",
+      "subtitle": "Plan the month ahead",
+      "fields": {
+        "theme": "Theme",
+        "targets": "Targets",
+        "reflection": "Reflection"
+      },
+      "placeholders": {
+        "theme": "One word for this month…",
+        "targets": "What do you want to achieve?",
+        "reflection": "How did last month go?"
+      }
+    },
+    "quarterlyVision": {
+      "title": "Quarterly Vision",
+      "subtitle": "90-day planning",
+      "fields": {
+        "objective": "Objective",
+        "keyResults": "Key Results",
+        "reflection": "Reflection"
+      },
+      "placeholders": {
+        "objective": "Big thing you want this quarter…",
+        "keyResults": "3-5 measurable outcomes…",
+        "reflection": "How did last quarter go?"
+      }
+    },
+    "weeklyIntentions": {
+      "title": "Weekly Intentions",
+      "subtitle": "Set 3 intentions for the week",
+      "placeholder1": "First intention…",
+      "placeholder2": "Second intention…",
+      "placeholder3": "Third intention…",
+      "weekOf": "Week of {date}"
+    },
+    "monthlyReview": {
+      "title": "Monthly Review",
+      "subtitle": "Review what worked",
+      "fields": {
+        "wins": "Wins",
+        "challenges": "Challenges",
+        "nextMonth": "Next month focus"
+      },
+      "placeholders": {
+        "wins": "What went well?",
+        "challenges": "What was hard?",
+        "nextMonth": "One focus for next month…"
+      }
+    },
+    "quarterlyOkrs": {
+      "title": "Quarterly OKRs",
+      "subtitle": "Objectives + Key Results",
+      "fields": {
+        "objective": "Objective",
+        "kr1": "Key Result 1",
+        "kr2": "Key Result 2"
+      },
+      "placeholders": {
+        "objective": "Aspirational but concrete…",
+        "kr1": "Measurable outcome…",
+        "kr2": "Another measurable outcome…"
+      }
+    },
+    "yearVision": {
+      "title": "Year Vision",
+      "subtitle": "Your year in one page",
+      "fields": {
+        "theme": "Theme",
+        "bigGoals": "Big goals",
+        "reflection": "Reflection"
+      },
+      "placeholders": {
+        "theme": "One word for this year…",
+        "bigGoals": "3-5 big things…",
+        "reflection": "How did last year go?"
+      }
+    },
+    "lessonsLearned": {
+      "title": "Lessons Learned",
+      "subtitle": "Capture what you learned",
+      "addPlaceholder": "What did you learn?…",
+      "emptyHint": "Log your first lesson"
+    },
+    "booksLog": {
+      "title": "Books Log",
+      "subtitle": "Track what you're reading",
+      "addPlaceholder": "Book title…",
+      "emptyHint": "Add your first book"
+    },
+    "decisionLog": {
+      "title": "Decision Log",
+      "subtitle": "Record decisions and context",
+      "addPlaceholder": "Decision + why…",
+      "emptyHint": "Log your first decision"
+    },
+    "learningLog": {
+      "title": "Learning Log",
+      "subtitle": "Courses, lessons, breakthroughs",
+      "addPlaceholder": "Topic studied…",
+      "emptyHint": "Log your first learning"
+    },
+    "financeQuick": {
+      "title": "Quick Finance",
+      "subtitle": "One-line money tracking",
+      "addPlaceholder": "Entry…",
+      "emptyHint": "Log your first entry"
+    },
+    "savingsGoal": {
+      "title": "Savings Goal",
+      "subtitle": "Current vs target",
+      "labelPlaceholder": "What are you saving for?…",
+      "currentLabel": "Current",
+      "targetLabel": "Target"
     }
   },
   "reports": {

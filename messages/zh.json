@@ -516,8 +516,8 @@
     },
     "energyDial": {
       "title": "能量仪表",
-      "subtitle": "今日打卡次数",
-      "prompt": "你现在的能量状态如何？",
+      "subtitle": "快速 5 级打卡",
+      "prompt": "你现在能量如何？",
       "checkedAt": "打卡时间 {time}"
     },
     "gratitude": {
@@ -644,6 +644,175 @@
       "notesPlaceholder": "可选备注…",
       "addButton": "保存灵感",
       "emptyHint": "捕捉第一个火花"
+    },
+    "kanbanBoard": {
+      "title": "看板",
+      "subtitle": "待办 → 进行中 → 完成",
+      "addPlaceholder": "添加卡片…",
+      "columns": {
+        "todo": "待办",
+        "doing": "进行中",
+        "done": "完成"
+      }
+    },
+    "timeBoxing": {
+      "title": "时间盒",
+      "subtitle": "按小时安排一天",
+      "addHour": "小时",
+      "addLabel": "要做什么…",
+      "addButton": "添加",
+      "emptyHint": "暂无时间块"
+    },
+    "focusBlocks": {
+      "title": "专注时段",
+      "subtitle": "预留深度专注时段",
+      "labelPlaceholder": "要专注什么…",
+      "minutesLabel": "分"
+    },
+    "breakTimer": {
+      "title": "休息计时",
+      "subtitle": "记录休息时间",
+      "totalMinutes": "{count} 分",
+      "emptyHint": "点击预设记录第一次休息"
+    },
+    "deepWork": {
+      "title": "深度工作",
+      "subtitle": "记录长时间无干扰的时段",
+      "addPlaceholder": "这是什么会话…",
+      "emptyHint": "记录你的第一个深度工作时段"
+    },
+    "moodScore": {
+      "title": "心情评分",
+      "subtitle": "1-10 数字心情评分",
+      "scoreLabel": "分数",
+      "lowLabel": "低",
+      "highLabel": "高"
+    },
+    "sleepQuality": {
+      "title": "睡眠质量",
+      "subtitle": "你感觉多精神？",
+      "ratings": {
+        "1": "疲惫不堪",
+        "2": "疲倦",
+        "3": "一般",
+        "4": "不错",
+        "5": "精神焕发"
+      }
+    },
+    "monthlyHorizon": {
+      "title": "月度展望",
+      "subtitle": "规划下个月",
+      "fields": {
+        "theme": "主题",
+        "targets": "目标",
+        "reflection": "反思"
+      },
+      "placeholders": {
+        "theme": "本月一个关键词…",
+        "targets": "想实现什么？",
+        "reflection": "上个月怎么样？"
+      }
+    },
+    "quarterlyVision": {
+      "title": "季度愿景",
+      "subtitle": "90 天规划",
+      "fields": {
+        "objective": "目标",
+        "keyResults": "关键结果",
+        "reflection": "反思"
+      },
+      "placeholders": {
+        "objective": "本季度大目标…",
+        "keyResults": "3-5 个可量化结果…",
+        "reflection": "上季度如何？"
+      }
+    },
+    "weeklyIntentions": {
+      "title": "每周意图",
+      "subtitle": "为本周设定 3 个意图",
+      "placeholder1": "第一个意图…",
+      "placeholder2": "第二个意图…",
+      "placeholder3": "第三个意图…",
+      "weekOf": "{date} 那周"
+    },
+    "monthlyReview": {
+      "title": "月度回顾",
+      "subtitle": "回顾哪些有效",
+      "fields": {
+        "wins": "胜利",
+        "challenges": "挑战",
+        "nextMonth": "下月重点"
+      },
+      "placeholders": {
+        "wins": "什么顺利？",
+        "challenges": "什么很难？",
+        "nextMonth": "下月的一个重点…"
+      }
+    },
+    "quarterlyOkrs": {
+      "title": "季度 OKR",
+      "subtitle": "目标 + 关键结果",
+      "fields": {
+        "objective": "目标",
+        "kr1": "关键结果 1",
+        "kr2": "关键结果 2"
+      },
+      "placeholders": {
+        "objective": "有抱负但具体…",
+        "kr1": "可量化的结果…",
+        "kr2": "另一个可量化的结果…"
+      }
+    },
+    "yearVision": {
+      "title": "年度愿景",
+      "subtitle": "一页纸年度计划",
+      "fields": {
+        "theme": "主题",
+        "bigGoals": "大目标",
+        "reflection": "反思"
+      },
+      "placeholders": {
+        "theme": "本年一个关键词…",
+        "bigGoals": "3-5 件大事…",
+        "reflection": "去年如何？"
+      }
+    },
+    "lessonsLearned": {
+      "title": "经验教训",
+      "subtitle": "记录所学",
+      "addPlaceholder": "学到了什么…",
+      "emptyHint": "记录第一个教训"
+    },
+    "booksLog": {
+      "title": "读书记录",
+      "subtitle": "追踪你在读什么",
+      "addPlaceholder": "书名…",
+      "emptyHint": "添加第一本书"
+    },
+    "decisionLog": {
+      "title": "决策日志",
+      "subtitle": "记录决策与背景",
+      "addPlaceholder": "决策 + 原因…",
+      "emptyHint": "记录第一个决策"
+    },
+    "learningLog": {
+      "title": "学习日志",
+      "subtitle": "课程、课堂、突破",
+      "addPlaceholder": "学习的主题…",
+      "emptyHint": "记录第一次学习"
+    },
+    "financeQuick": {
+      "title": "快速财务",
+      "subtitle": "单行财务追踪",
+      "addPlaceholder": "条目…",
+      "emptyHint": "记录第一条"
+    },
+    "savingsGoal": {
+      "title": "储蓄目标",
+      "subtitle": "当前 vs 目标",
+      "labelPlaceholder": "为什么存钱…",
+      "currentLabel": "当前",
+      "targetLabel": "目标"
     }
   },
   "reports": {
