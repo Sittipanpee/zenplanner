@@ -97,6 +97,9 @@ function habitHeatmap(): ToolSheetSpec {
   for (let w = 1; w <= weeks; w++) {
     rows.push([`W${w}`, "", "", "", "", "", "", "", `=COUNTIF(B${w + 3}:H${w + 3},"✓")`]);
   }
+  // With title + subtitle, headerRowIdx=3, firstDataRow=4, lastDataRow=15.
+  // W12 (the most recent week) occupies data row 15; its Total cell is I15.
+  // This cell is exposed as `weekTotalDone` so other tools can cross-reference it.
   return {
     name: "Habit Heatmap",
     title: "🔥 Habit Heatmap",
@@ -118,6 +121,12 @@ function habitHeatmap(): ToolSheetSpec {
       { label: "Total Check-ins", formula: `=SUM(I4:I${weeks + 3})`, format: "number" },
       { label: "Avg / Week", formula: `=IFERROR(AVERAGE(I4:I${weeks + 3}),0)`, format: "number" },
     ],
+    // Named cell registry — I15 = W12 (most recent week) total check-ins.
+    // Exposed so weekly_compass (and future tools) can pull "habits this week"
+    // without duplicating the formula or hardcoding the target cell address.
+    summaryCells: {
+      weekTotalDone: "I15",
+    },
   };
 }
 
@@ -165,6 +174,15 @@ function gratitudeLog(): ToolSheetSpec {
 
 function weeklyCompass(): ToolSheetSpec {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  // Row layout (title + subtitle → headerRowIdx=3, firstDataRow=4):
+  //   Rows 4–10 : Mon–Sun data rows
+  //   Row 12    : summary "Filled Days"   (lastDataRow=10, summaryStart=12)
+  //   Row 13    : summary "Done"
+  //   Row 14    : summary "Completion %"
+  //   Row 16    : [cross-tool] "Habits kept this week" ← Habit Heatmap!I15
+  //
+  // B16 is the designated address for the cross-sheet habit total, placed
+  // two rows after the last summary entry to form a visually distinct section.
   return {
     name: "Weekly Compass",
     title: "🧭 Weekly Compass",
@@ -180,6 +198,16 @@ function weeklyCompass(): ToolSheetSpec {
       { label: "Filled Days", formula: '=COUNTA(B2:B8)' },
       { label: "Done", formula: '=COUNTIF(D2:D8,"Done")' },
       { label: "Completion %", formula: '=IFERROR(COUNTIF(D2:D8,"Done")/COUNTA(B2:B8),0)', format: "percent" },
+    ],
+    // Cross-sheet reference: pull the most-recent-week habit total from Habit Heatmap.
+    // Placed at B16 — two rows below the last summary row (row 14), giving visual
+    // breathing room. The label "Habits kept this week" is written to A16 by the renderer.
+    consumesCell: [
+      {
+        address: "B16",
+        label: "Habits kept this week",
+        from: { toolId: "habit_heatmap", summaryKey: "weekTotalDone" },
+      },
     ],
   };
 }

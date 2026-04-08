@@ -18,7 +18,7 @@ import ExcelJS from "exceljs";
 import type { ToolId, PlannerBlueprint } from "./types";
 import { TOOL_INFO } from "./archetype-map";
 import { buildDashboardSheet } from "./excel/build-dashboard-sheet";
-import { buildToolSheet } from "./excel/build-tool-sheet";
+import { buildToolSheet, registerSpecForToolId } from "./excel/build-tool-sheet";
 import { getToolSpec } from "./excel/tool-templates";
 
 const DEBUG = process.env.DEBUG_MODE === "true";
@@ -64,15 +64,30 @@ export async function generatePlannerWorkbook(
   // Dashboard MUST be the first sheet so it's the tab users see on open.
   buildDashboardSheet(workbook, toolIds, blueprint.title ?? "ZenPlanner");
 
-  // Tool sheets
+  // Phase 1: resolve all specs and register them in the cross-sheet registry.
+  // This must happen before any sheet is rendered so that consumesCell entries
+  // can resolve target tool sheet names and summaryCells at render time.
+  const specMap = new Map<ToolId, ReturnType<typeof getToolSpec>>();
   for (const toolId of toolIds) {
     const info = TOOL_INFO[toolId];
-    if (!info) {
-      dbg("[SKIP] Unknown tool id (not in TOOL_INFO):", toolId);
+    if (!info) continue;
+    try {
+      const spec = getToolSpec(toolId, info.name, info.description);
+      specMap.set(toolId, spec);
+      registerSpecForToolId(toolId, spec);
+    } catch (err) {
+      dbg("[SKIP] Failed to resolve spec for", toolId, "reason:", err);
+    }
+  }
+
+  // Phase 2: build each tool sheet using the pre-registered specs.
+  for (const toolId of toolIds) {
+    const spec = specMap.get(toolId);
+    if (!spec) {
+      dbg("[SKIP] No spec resolved for:", toolId);
       continue;
     }
     try {
-      const spec = getToolSpec(toolId, info.name, info.description);
       buildToolSheet(workbook, spec);
     } catch (err) {
       dbg("[SKIP] Failed to build sheet for", toolId, "reason:", err);
