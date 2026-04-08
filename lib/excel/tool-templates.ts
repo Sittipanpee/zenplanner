@@ -133,6 +133,14 @@ function habitHeatmap(): ToolSheetSpec {
 function moodTracker(): ToolSheetSpec {
   const days = 30;
   const rows = dateRows(days, 4);
+  // Summary sits directly after the data block. With title+subtitle header
+  // occupying rows 1–3, the first data row is row 4, so the last data row is
+  // row (days + 3) = 33. Summary starts 2 rows later at row 35:
+  //   row 35 = "Avg Mood"      → B35
+  //   row 36 = "Avg Energy"    → B36
+  //   row 37 = "Days Logged"   → B37
+  // These cell addresses are exposed via summaryCells so other tool sheets
+  // (e.g. weekly_review) can pull them via consumesCell.
   return {
     name: "Mood Tracker",
     title: "😊 Mood Tracker",
@@ -149,6 +157,11 @@ function moodTracker(): ToolSheetSpec {
       { label: "Avg Energy", formula: `=IFERROR(AVERAGE(C4:C${days + 3}),0)`, format: "number" },
       { label: "Days Logged", formula: `=COUNT(B4:B${days + 3})`, format: "number" },
     ],
+    summaryCells: {
+      avgMood: "B35",
+      avgEnergy: "B36",
+      daysLogged: "B37",
+    },
   };
 }
 
@@ -199,6 +212,13 @@ function weeklyCompass(): ToolSheetSpec {
       { label: "Done", formula: '=COUNTIF(D2:D8,"Done")' },
       { label: "Completion %", formula: '=IFERROR(COUNTIF(D2:D8,"Done")/COUNTA(B2:B8),0)', format: "percent" },
     ],
+    // Exposed for downstream aggregators (weekly_review, monthly dashboards).
+    // Summary block starts at row 12 per the layout comment above.
+    summaryCells: {
+      filledDays: "B12",
+      doneCount: "B13",
+      completionPct: "B14",
+    },
     // Cross-sheet reference: pull the most-recent-week habit total from Habit Heatmap.
     // Placed at B16 — two rows below the last summary row (row 14), giving visual
     // breathing room. The label "Habits kept this week" is written to A16 by the renderer.
@@ -344,6 +364,83 @@ function genericLog(name: string, title: string, subtitle: string): ToolSheetSpe
   };
 }
 
+/**
+ * Weekly Review — the cross-tool harmony sheet.
+ *
+ * This is the centerpiece of Excel tool-to-tool integration: a single sheet
+ * that pulls live formulas from THREE different tool sheets so the user gets
+ * a weekly snapshot of their whole system without leaving the review page.
+ *
+ * Cross-sheet references (via the `consumesCell` directive):
+ *   - B4  ← Habit Heatmap!{weekTotalDone}  = habits completed this week
+ *   - B5  ← Mood Tracker!{avgMood}         = average mood this week
+ *   - B6  ← Mood Tracker!{avgEnergy}       = average energy this week
+ *   - B7  ← Weekly Compass!{doneCount}     = priorities completed this week
+ *   - B8  ← Weekly Compass!{completionPct} = overall completion rate
+ *
+ * The renderer in buildToolSheet resolves each of these to a real
+ * cross-sheet Excel formula (e.g. ='Habit Heatmap'!I15) at generation time.
+ */
+function weeklyReview(): ToolSheetSpec {
+  return {
+    name: "Weekly Review",
+    title: "📊 Weekly Review",
+    subtitle: "Cross-tool snapshot of this week",
+    columns: [
+      { header: "Metric", width: 38 },
+      { header: "Value", width: 16, format: "number" },
+    ],
+    // Pre-seed rows so the cross-sheet addresses (B4–B8) land in the right
+    // spots. The renderer writes consumesCell values AFTER these rows exist.
+    rows: [
+      ["Pulled from other tool sheets:", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["What went well this week?", ""],
+      ["What got in the way?", ""],
+      ["One focus for next week:", ""],
+    ],
+    summary: [
+      { label: "Data points pulled", formula: '=COUNTA(B4:B8)', format: "number" },
+    ],
+    // Expose the "cross-tool score" so future monthly_horizon can pull from us
+    summaryCells: {
+      dataPointsPulled: "B14",
+    },
+    // THE HARMONY: 5 cross-sheet references pulling from 3 different tools
+    consumesCell: [
+      {
+        address: "B4",
+        label: "Habits completed this week",
+        from: { toolId: "habit_heatmap", summaryKey: "weekTotalDone" },
+      },
+      {
+        address: "B5",
+        label: "Average mood (1-5)",
+        from: { toolId: "mood_tracker", summaryKey: "avgMood" },
+      },
+      {
+        address: "B6",
+        label: "Average energy (1-5)",
+        from: { toolId: "mood_tracker", summaryKey: "avgEnergy" },
+      },
+      {
+        address: "B7",
+        label: "Priorities completed",
+        from: { toolId: "weekly_compass", summaryKey: "doneCount" },
+      },
+      {
+        address: "B8",
+        label: "Week completion %",
+        from: { toolId: "weekly_compass", summaryKey: "completionPct" },
+      },
+    ],
+  };
+}
+
 // ----- registry -----
 
 export type TemplateBuilder = () => ToolSheetSpec;
@@ -351,6 +448,7 @@ export type TemplateBuilder = () => ToolSheetSpec;
 export const TOOL_TEMPLATES: Partial<Record<ToolId, TemplateBuilder>> = {
   daily_power_block: dailyPowerBlock,
   weekly_compass: weeklyCompass,
+  weekly_review: weeklyReview,
   habit_heatmap: habitHeatmap,
   mood_tracker: moodTracker,
   gratitude_log: gratitudeLog,
