@@ -1,0 +1,60 @@
+{
+  "_schema": "ownership-v1",
+  "_comment": "File path → department owner map. Conflict Hawk hook reads this on every PreToolUse(Edit|Write) call. Only the owning department's workers may modify a path.",
+  "_last_updated": "2026-04-08T00:00:00Z",
+  "departments": {
+    "backend-api": {
+      "pm": "pm-backend-api",
+      "owns": ["app/api/**", "lib/supabase/server.ts", "middleware.ts", "lib/llm.ts", "lib/quiz-prompts.ts", "lib/quiz-engine.ts"],
+      "description": "API routes, server actions, server-side libs, middleware, LLM callers"
+    },
+    "database-auth": {
+      "pm": "pm-database-auth",
+      "owns": ["supabase/**", "lib/supabase/client.ts", "lib/auth/**", "app/(auth)/**"],
+      "description": "Migrations, RLS policies, Supabase clients, auth flows"
+    },
+    "frontend-ui": {
+      "pm": "pm-frontend-ui",
+      "owns": ["app/(app)/dashboard/**", "app/(app)/profile/**", "app/(app)/settings/**", "app/(app)/stats/**", "app/(app)/layout.tsx", "app/layout.tsx", "app/page.tsx", "components/ui/**", "components/layout/**", "components/dashboard/**", "styles/**", "tailwind.config.ts"],
+      "description": "Pages, layouts, design system, dashboard shell"
+    },
+    "productivity-tools": {
+      "pm": "pm-productivity-tools",
+      "owns": ["lib/tools/**", "components/blueprint/**", "app/(app)/blueprint/**", "app/(app)/tools/**"],
+      "description": "Tool definitions, widgets, catalog, blueprint page, full-page tool routes"
+    },
+    "data-reports": {
+      "pm": "pm-data-reports",
+      "owns": ["app/(app)/reports/**", "components/reports/**", "lib/tools/relations.ts", "lib/tools/aggregations.ts"],
+      "description": "Reports, KPI cards, cross-tool aggregation, relation graph"
+    },
+    "excel-export": {
+      "pm": "pm-excel-export",
+      "owns": ["lib/sheet-builder.ts", "lib/excel/**", "lib/planner-generator.sheetjs.ts.bak"],
+      "description": "ExcelJS rewrite, dashboard sheets, per-tool sheet builders, styling"
+    },
+    "i18n-content": {
+      "pm": "pm-i18n-content",
+      "owns": ["messages/**", "i18n/**"],
+      "description": "All locale files, i18n routing, copy quality, trilingual parity"
+    },
+    "infrastructure": {
+      "pm": "pm-infrastructure",
+      "owns": ["next.config.ts", "package.json", "package-lock.json", "tsconfig.json", ".vercel/**", "vercel.json", ".env.example", "playwright.config.ts", "public/sw.js", "public/register-sw.js", "public/manifest.json"],
+      "description": "Build config, deps, Vercel config, PWA, env templates"
+    }
+  },
+  "shared_readonly": {
+    "_comment": "Files any worker may READ but none may modify except via CO.",
+    "paths": ["CLAUDE.md", "README.md", "Development/**", ".orchestrator/state/**", ".orchestrator/schemas/**"]
+  },
+  "co_only": {
+    "_comment": "Files only the Chief Orchestrator may modify.",
+    "paths": [".orchestrator/state/ownership.json", ".orchestrator/state/phase.json", ".orchestrator/decisions/**", "lib/tools/types.ts", "lib/tools/registry.ts", "lib/tools/_all.ts", "lib/types.ts"]
+  },
+  "tests_shared": {
+    "_comment": "Any dept may add tests for their own code under tests/<dept>/. Cross-dept tests go to tests/integration/ which only QA cell may modify.",
+    "paths": ["tests/integration/**", "tests/e2e/**"],
+    "owner": "qa-cell"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "_schema": "phase-v1",
+  "_comment": "Current phase + gate status. Updated at phase start and phase gate events. Commander sign-off required to advance phase.",
+  "_last_updated": "2026-04-08T00:00:00Z",
+  "current_phase": "INFRA-BUILD",
+  "phase_started_at": "2026-04-08T00:00:00Z",
+  "gate_status": "open",
+  "next_gate_at": null,
+  "active_depts": [],
+  "history": [
+    {
+      "phase": "PTS-SPRINT",
+      "started_at": "2026-04-08T00:00:00Z",
+      "ended_at": "2026-04-08T00:00:00Z",
+      "verdict": "shipped",
+      "commit": "2d273c5"
+    }
+  ]
+}

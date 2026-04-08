@@ -1,0 +1,7 @@
+{
+  "_schema": "tickets-v1",
+  "_comment": "Master ticket database. Every ticket dispatched by CO is recorded here. Workers claim tickets by atomically updating status. See schemas/ticket.schema.json for validation.",
+  "_last_updated": "2026-04-08T00:00:00Z",
+  "next_id": 1,
+  "tickets": []
+}

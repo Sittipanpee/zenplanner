@@ -64,8 +64,8 @@ export function RecommendedToolkitCard({
           {tools.map((tool, i) => {
             const Icon = tool.icon;
             const isTopPick = i < TOP_PICK_COUNT;
-            const name = tool.name[locale] ?? tool.name.en;
-            const desc = tool.description[locale] ?? tool.description.en;
+            const name = tool.name?.[locale] ?? tool.name?.en ?? tool.id;
+            const desc = tool.description?.[locale] ?? tool.description?.en ?? "";
             return (
               <div
                 key={tool.id}

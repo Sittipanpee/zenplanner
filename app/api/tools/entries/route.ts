@@ -39,8 +39,10 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   let q;
   try {
+    // searchParams.get() returns null for missing keys; Zod's .optional()
+    // accepts undefined but rejects null — coalesce explicitly.
     q = getQuerySchema.parse({
-      toolId: searchParams.get("toolId"),
+      toolId: searchParams.get("toolId") ?? undefined,
       from: searchParams.get("from") ?? undefined,
       to: searchParams.get("to") ?? undefined,
     });

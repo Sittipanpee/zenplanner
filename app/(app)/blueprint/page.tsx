@@ -215,7 +215,9 @@ export default function BlueprintPage() {
     return catalog.filter((tool) => {
       if (category !== "all" && tool.category !== (category as ToolCategory)) return false;
       if (!q) return true;
-      const name = tool.name[locale].toLowerCase();
+      // Defensive: tool.name can be undefined for a malformed row — fall back
+      // to en, then to tool.id, before giving up. Never crash the catalog.
+      const name = (tool.name?.[locale] ?? tool.name?.en ?? tool.id).toLowerCase();
       return name.includes(q);
     });
   }, [catalog, category, search, locale]);

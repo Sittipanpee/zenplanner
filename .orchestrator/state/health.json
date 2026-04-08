@@ -1,0 +1,12 @@
+{
+  "_schema": "health-v1",
+  "_comment": "System pulse. Updated by sentinels after every check. CO reads this before dispatching any ticket or approving any merge.",
+  "_last_updated": "2026-04-08T00:00:00Z",
+  "build": { "status": "unknown", "last_check": null, "duration_ms": null, "error": null },
+  "type": { "status": "unknown", "last_check": null, "error_count": 0, "errors": [] },
+  "tests": { "status": "unknown", "last_check": null, "passed": 0, "failed": 0, "flaky": 0 },
+  "security": { "status": "unknown", "last_check": null, "findings": [] },
+  "conflict": { "status": "clean", "last_check": null, "violations": [] },
+  "merge_queue": { "status": "idle", "pending": 0, "processing": null, "last_merge": null },
+  "halt": { "active": false, "reason": null, "triggered_at": null, "triggered_by": null }
+}

@@ -106,7 +106,7 @@ export function ToolWidgetWrapper({
   const { config, setConfig } = useToolConfig(tool.id, userTool.config ?? {});
 
   const Icon = tool.icon;
-  const name = tool.name[locale] ?? tool.name.en;
+  const name = tool.name?.[locale] ?? tool.name?.en ?? tool.id;
 
   const handleEntryAdd = useCallback(
     async (payload: unknown) => {

@@ -43,8 +43,10 @@ export function ToolCard({
 }: ToolCardProps) {
   const t = useTranslations("tools.catalog");
   const Icon = resolveIcon(tool.iconName);
-  const name = tool.name[locale];
-  const description = tool.description[locale];
+  // Defensive: tool.name can be undefined for a malformed catalog row.
+  // Fall back to en, then to tool.id, before giving up. Never crash render.
+  const name = tool.name?.[locale] ?? tool.name?.en ?? tool.id;
+  const description = tool.description?.[locale] ?? tool.description?.en ?? "";
 
   const handleClick = () => {
     if (busy) return;
