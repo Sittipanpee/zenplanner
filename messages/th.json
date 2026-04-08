@@ -590,6 +590,54 @@
       },
       "addPlaceholder": "เพิ่มงาน…",
       "emptyHint": "4 ช่อง ช่องละ 4 งาน"
+    },
+    "gratitudeThree": {
+      "title": "3 ความกรัทัญญู",
+      "subtitle": "สามสิ่งทุกวัน",
+      "placeholder1": "สิ่งแรกที่ขอบคุณ…",
+      "placeholder2": "สิ่งที่สอง…",
+      "placeholder3": "สิ่งที่สาม…",
+      "completeMessage": "ครบแล้ว!"
+    },
+    "workoutLog": {
+      "title": "บันทึกการออกกำลังกาย",
+      "subtitle": "เซ็ต เรพ นาที",
+      "namePlaceholder": "ชื่อท่าออกกำลัง…",
+      "sets": "เซ็ต",
+      "reps": "ครั้ง",
+      "minutes": "นาที",
+      "addButton": "เพิ่มท่า",
+      "emptyHint": "บันทึกท่าแรก",
+      "totalMinutes": "{count} นาที"
+    },
+    "goalsTracker": {
+      "title": "ตัวติดตามเป้าหมาย",
+      "subtitle": "เป้าหมายระยะยาวพร้อม % ความก้าวหน้า",
+      "addPlaceholder": "เพิ่มเป้าหมาย…",
+      "emptyHint": "เพิ่มเป้าหมายแรก"
+    },
+    "expenseLog": {
+      "title": "บันทึกค่าใช้จ่าย",
+      "subtitle": "ติดตามทุกรายจ่ายวันนี้",
+      "notePlaceholder": "บันทึก…",
+      "total": "รวม {amount}",
+      "emptyHint": "บันทึกรายจ่ายแรก",
+      "categories": {
+        "food": "อาหาร",
+        "transport": "เดินทาง",
+        "shopping": "ช้อป",
+        "bills": "บิล",
+        "fun": "สนุก",
+        "other": "อื่นๆ"
+      }
+    },
+    "ideaCapture": {
+      "title": "จับไอเดีย",
+      "subtitle": "จดก่อนจะลืม",
+      "titlePlaceholder": "หัวข้อไอเดีย…",
+      "notesPlaceholder": "บันทึกเพิ่มเติม…",
+      "addButton": "บันทึกไอเดีย",
+      "emptyHint": "จับไอเดียแรก"
     }
   },
   "reports": {

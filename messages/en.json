@@ -590,6 +590,54 @@
       },
       "addPlaceholder": "Add task…",
       "emptyHint": "4 quadrants. 4 tasks each. Sort it out."
+    },
+    "gratitudeThree": {
+      "title": "3 Gratitudes",
+      "subtitle": "Three things every day",
+      "placeholder1": "First gratitude…",
+      "placeholder2": "Second gratitude…",
+      "placeholder3": "Third gratitude…",
+      "completeMessage": "Complete!"
+    },
+    "workoutLog": {
+      "title": "Workout Log",
+      "subtitle": "Sets, reps, minutes",
+      "namePlaceholder": "Exercise name…",
+      "sets": "Sets",
+      "reps": "Reps",
+      "minutes": "Min",
+      "addButton": "Add exercise",
+      "emptyHint": "Log your first exercise",
+      "totalMinutes": "{count} min"
+    },
+    "goalsTracker": {
+      "title": "Goals Tracker",
+      "subtitle": "Long-horizon goals with % progress",
+      "addPlaceholder": "Add a goal…",
+      "emptyHint": "Add your first goal"
+    },
+    "expenseLog": {
+      "title": "Expense Log",
+      "subtitle": "Track every expense today",
+      "notePlaceholder": "note…",
+      "total": "Total {amount}",
+      "emptyHint": "Log your first expense",
+      "categories": {
+        "food": "Food",
+        "transport": "Transport",
+        "shopping": "Shopping",
+        "bills": "Bills",
+        "fun": "Fun",
+        "other": "Other"
+      }
+    },
+    "ideaCapture": {
+      "title": "Idea Capture",
+      "subtitle": "Save before they vanish",
+      "titlePlaceholder": "Idea title…",
+      "notesPlaceholder": "Optional notes…",
+      "addButton": "Save idea",
+      "emptyHint": "Capture your first spark"
     }
   },
   "reports": {

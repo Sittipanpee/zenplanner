@@ -189,14 +189,8 @@ export const energyDial: ToolDefinition = makeStub({
 import { meditationTimer } from "./meditation_timer";
 export { meditationTimer };
 
-export const workoutLog: ToolDefinition = makeStub({
-  id: "workout_log", category: "wellbeing",
-  name: L("Workout Log", "บันทึกการออกกำลังกาย", "健身日志"),
-  description: L("Log workouts and physical activity.", "บันทึกการออกกำลังกายและกิจกรรมทางกาย", "记录健身与运动"),
-  icon: Heart, color: "zen-rose",
-  recommendedFor: ["lion", "wolf", "mountain", "eagle"],
-  recommendationReason: L("Physical discipline for action-driven types.", "วินัยทางกายสำหรับผู้ขับเคลื่อนด้วยการกระทำ", "为行动派提供身体纪律"),
-});
+import { workoutLog } from "./workout_log";
+export { workoutLog };
 
 // ============================================================
 // REFLECTION (11)
@@ -265,14 +259,8 @@ export const yearVision: ToolDefinition = makeStub({
   recommendationReason: L("Long view for big-picture minds.", "มุมมองระยะยาวสำหรับผู้คิดภาพใหญ่", "为大局观者提供长远视角"),
 });
 
-export const gratitudeThree: ToolDefinition = makeStub({
-  id: "gratitude_three", category: "reflection",
-  name: L("3 Gratitudes", "3 ความขอบคุณ", "三个感恩"),
-  description: L("Three things you appreciated today.", "สามสิ่งที่คุณซาบซึ้งวันนี้", "今天你欣赏的三件事"),
-  icon: Heart, color: "zen-rose",
-  recommendedFor: ["sakura", "dove", "cat", "bamboo"],
-  recommendationReason: L("A simple ritual that compounds.", "พิธีกรรมง่ายๆ ที่ทบทวีตามเวลา", "随时间累积的简单仪式"),
-});
+import { gratitudeThree } from "./gratitude_three";
+export { gratitudeThree };
 
 export const lessonsLearned: ToolDefinition = makeStub({
   id: "lessons_learned", category: "reflection",
@@ -296,14 +284,8 @@ export const booksLog: ToolDefinition = makeStub({
   recommendationReason: L("A reading habit for curious minds.", "นิสัยการอ่านสำหรับผู้อยากรู้", "为好奇心提供阅读习惯"),
 });
 
-export const goalsTracker: ToolDefinition = makeStub({
-  id: "goals_tracker", category: "tracking",
-  name: L("Goals Tracker", "ตัวติดตามเป้าหมาย", "目标追踪"),
-  description: L("Track progress toward each goal.", "ติดตามความก้าวหน้าสู่แต่ละเป้าหมาย", "追踪每个目标的进度"),
-  icon: Goal, color: "zen-clay",
-  recommendedFor: ["eagle", "lion", "crocodile", "wolf"],
-  recommendationReason: L("Progress visibility for goal seekers.", "ความชัดเจนของความก้าวหน้าสำหรับผู้แสวงหาเป้าหมาย", "为追求目标者提供进度可视化"),
-});
+import { goalsTracker } from "./goals_tracker";
+export { goalsTracker };
 
 export const decisionLog: ToolDefinition = makeStub({
   id: "decision_log", category: "tracking",
@@ -332,14 +314,8 @@ export const financeQuick: ToolDefinition = makeStub({
   recommendationReason: L("Lightweight money awareness.", "การตระหนักเรื่องเงินแบบเบา", "轻量化的金钱意识"),
 });
 
-export const expenseLog: ToolDefinition = makeStub({
-  id: "expense_log", category: "tracking",
-  name: L("Expense Log", "บันทึกค่าใช้จ่าย", "支出日志"),
-  description: L("Track every expense by category.", "ติดตามค่าใช้จ่ายทุกรายการตามหมวด", "按类别追踪每笔支出"),
-  icon: CreditCard, color: "zen-clay",
-  recommendedFor: ["crocodile", "owl", "mountain"],
-  recommendationReason: L("Detail-oriented money tracking.", "การติดตามเงินที่ใส่ใจในรายละเอียด", "注重细节的财务追踪"),
-});
+import { expenseLog } from "./expense_log";
+export { expenseLog };
 
 export const savingsGoal: ToolDefinition = makeStub({
   id: "savings_goal", category: "tracking",
@@ -360,14 +336,8 @@ export { quickNotes };
 import { brainDump } from "./brain_dump";
 export { brainDump };
 
-export const ideaCapture: ToolDefinition = makeStub({
-  id: "idea_capture", category: "creativity",
-  name: L("Idea Capture", "บันทึกไอเดีย", "灵感捕捉"),
-  description: L("Save ideas before they vanish.", "บันทึกไอเดียก่อนที่มันจะหายไป", "在灵感消失之前记录下来"),
-  icon: Rocket, color: "zen-amber",
-  recommendedFor: ["butterfly", "fox", "octopus", "dolphin"],
-  recommendationReason: L("Never lose a good thought.", "อย่าให้ความคิดดีๆ หายไป", "永不丢失好想法"),
-});
+import { ideaCapture } from "./idea_capture";
+export { ideaCapture };
 
 // ============================================================
 // SYNTHETIC (not shown in catalog)

@@ -590,6 +590,54 @@
       },
       "addPlaceholder": "添加任务…",
       "emptyHint": "4 象限，每个 4 个任务"
+    },
+    "gratitudeThree": {
+      "title": "三件感恩",
+      "subtitle": "每日三件事",
+      "placeholder1": "第一件…",
+      "placeholder2": "第二件…",
+      "placeholder3": "第三件…",
+      "completeMessage": "完成！"
+    },
+    "workoutLog": {
+      "title": "训练日志",
+      "subtitle": "组数、次数、分钟",
+      "namePlaceholder": "动作名称…",
+      "sets": "组",
+      "reps": "次",
+      "minutes": "分",
+      "addButton": "添加动作",
+      "emptyHint": "记录第一个动作",
+      "totalMinutes": "{count} 分钟"
+    },
+    "goalsTracker": {
+      "title": "目标追踪",
+      "subtitle": "长期目标的 % 进度",
+      "addPlaceholder": "添加目标…",
+      "emptyHint": "添加第一个目标"
+    },
+    "expenseLog": {
+      "title": "支出日志",
+      "subtitle": "追踪今日每笔支出",
+      "notePlaceholder": "备注…",
+      "total": "总计 {amount}",
+      "emptyHint": "记录第一笔支出",
+      "categories": {
+        "food": "食物",
+        "transport": "交通",
+        "shopping": "购物",
+        "bills": "账单",
+        "fun": "娱乐",
+        "other": "其他"
+      }
+    },
+    "ideaCapture": {
+      "title": "灵感捕捉",
+      "subtitle": "在消失前记录下来",
+      "titlePlaceholder": "灵感标题…",
+      "notesPlaceholder": "可选备注…",
+      "addButton": "保存灵感",
+      "emptyHint": "捕捉第一个火花"
     }
   },
   "reports": {
