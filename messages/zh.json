@@ -514,6 +514,12 @@
       "trendLabel": "趋势",
       "loggedAt": "记录于"
     },
+    "energyDial": {
+      "title": "能量仪表",
+      "subtitle": "今日打卡次数",
+      "prompt": "你现在的能量状态如何？",
+      "checkedAt": "打卡时间 {time}"
+    },
     "gratitude": {
       "title": "感恩日记",
       "subtitle": "今天你感激的 3 件事",

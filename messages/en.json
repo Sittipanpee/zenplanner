@@ -514,6 +514,12 @@
       "trendLabel": "Trend",
       "loggedAt": "Logged at"
     },
+    "energyDial": {
+      "title": "Energy Dial",
+      "subtitle": "check-ins today",
+      "prompt": "How's your energy RIGHT NOW?",
+      "checkedAt": "Checked in at {time}"
+    },
     "gratitude": {
       "title": "Gratitude",
       "subtitle": "3 things you're grateful for today",
