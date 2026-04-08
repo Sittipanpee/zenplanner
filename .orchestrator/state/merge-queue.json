@@ -1,7 +1,7 @@
 {
   "_schema": "merge-queue-v1",
   "_comment": "Pending merges waiting for processing. Workers push to feature branches then file a merge request here. Merge Queue processes serially: lint \u2192 type \u2192 build \u2192 test \u2192 merge to staging. Never parallel.",
-  "_last_updated": "2026-04-08T11:42:18Z",
+  "_last_updated": "2026-04-08T11:53:26Z",
   "pending": [],
   "processing": null,
   "history": [
@@ -60,6 +60,27 @@
       "dept": "infrastructure",
       "verdict": "ACCEPTED",
       "completed_at": "2026-04-08T11:42:18Z"
+    },
+    {
+      "branch": "feat/be/rate-2",
+      "ticket": "BE-RATE-2",
+      "dept": "backend-api",
+      "verdict": "ACCEPTED",
+      "completed_at": "2026-04-08T11:50:48Z"
+    },
+    {
+      "branch": "feat/infra/sentry",
+      "ticket": "INFRA-SENTRY",
+      "dept": "infrastructure",
+      "verdict": "ACCEPTED",
+      "completed_at": "2026-04-08T11:51:00Z"
+    },
+    {
+      "branch": "feat/fe/privacy",
+      "ticket": "FE-PRIVACY",
+      "dept": "frontend-ui",
+      "verdict": "ACCEPTED",
+      "completed_at": "2026-04-08T11:53:26Z"
     }
   ]
 }
