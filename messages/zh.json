@@ -50,7 +50,22 @@
       "notFound": "页面不存在",
       "serverError": "服务器错误，请稍后再试",
       "unauthorized": "请先登录后继续",
-      "networkError": "网络错误，请检查您的连接"
+      "networkError": "网络错误，请检查您的连接",
+      "pages": {
+        "notFound": {
+          "title": "页面不存在",
+          "subtitle": "这条路径已偏离地图。深呼吸，选择一条前进的路。",
+          "home": "返回首页",
+          "quiz": "开始测验",
+          "dashboard": "前往仪表盘"
+        },
+        "error": {
+          "title": "出了点问题",
+          "subtitle": "意外的波动打断了您的节奏。您可以重试或返回首页。",
+          "tryAgain": "重试",
+          "home": "返回首页"
+        }
+      }
     }
   },
   "landing": {

@@ -50,7 +50,22 @@
       "notFound": "Page not found",
       "serverError": "Server error — please try again later",
       "unauthorized": "Please log in to continue",
-      "networkError": "Network error — check your connection"
+      "networkError": "Network error — check your connection",
+      "pages": {
+        "notFound": {
+          "title": "Page not found",
+          "subtitle": "This path has drifted off the map. Take a breath and choose a way forward.",
+          "home": "Return home",
+          "quiz": "Take the quiz",
+          "dashboard": "Go to dashboard"
+        },
+        "error": {
+          "title": "Something went wrong",
+          "subtitle": "An unexpected ripple interrupted your flow. You can try again or head back home.",
+          "tryAgain": "Try again",
+          "home": "Return home"
+        }
+      }
     }
   },
   "landing": {
