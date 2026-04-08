@@ -92,14 +92,8 @@ export { pomodoro };
 import { tasks } from "./tasks";
 export { tasks };
 
-export const eisenhowerMatrix: ToolDefinition = makeStub({
-  id: "eisenhower_matrix", category: "productivity",
-  name: L("Eisenhower Matrix", "เมทริกซ์ไอเซนฮาวร์", "艾森豪威尔矩阵"),
-  description: L("Sort tasks by urgency and importance.", "จัดเรียงงานตามความเร่งด่วนและความสำคัญ", "按紧急性与重要性排序任务"),
-  icon: AlignJustify, color: "zen-clay",
-  recommendedFor: ["lion", "eagle", "crocodile", "owl"],
-  recommendationReason: L("Strategic prioritization for decisive planners.", "การจัดลำดับเชิงกลยุทธ์สำหรับผู้วางแผนเด็ดขาด", "为决断型规划者设计的战略优先级"),
-});
+import { eisenhowerMatrix } from "./eisenhower_matrix";
+export { eisenhowerMatrix };
 
 export const kanbanBoard: ToolDefinition = makeStub({
   id: "kanban_board", category: "productivity",
@@ -360,23 +354,11 @@ export const savingsGoal: ToolDefinition = makeStub({
 // CREATIVITY (3)
 // ============================================================
 
-export const quickNotes: ToolDefinition = makeStub({
-  id: "quick_notes", category: "creativity",
-  name: L("Quick Notes", "โน้ตด่วน", "速记"),
-  description: L("Capture short notes throughout the day.", "บันทึกโน้ตสั้นๆ ตลอดวัน", "整天捕捉简短笔记"),
-  icon: NotebookPen, color: "zen-sky",
-  recommendedFor: ["fox", "butterfly", "octopus", "cat"],
-  recommendationReason: L("Frictionless capture for fast minds.", "การบันทึกที่ไม่มีการเสียดทานสำหรับผู้คิดเร็ว", "为快速思考者提供零摩擦记录"),
-});
+import { quickNotes } from "./quick_notes";
+export { quickNotes };
 
-export const brainDump: ToolDefinition = makeStub({
-  id: "brain_dump", category: "creativity",
-  name: L("Brain Dump", "ระบายสมอง", "脑暴"),
-  description: L("Empty your head onto the page.", "เทสมองของคุณลงบนหน้ากระดาษ", "把脑子里的一切写下来"),
-  icon: Brain, color: "zen-indigo",
-  recommendedFor: ["octopus", "butterfly", "fox", "cat"],
-  recommendationReason: L("Pressure release for busy minds.", "การปลดปล่อยแรงดันสำหรับผู้คิดมาก", "为忙碌头脑提供减压"),
-});
+import { brainDump } from "./brain_dump";
+export { brainDump };
 
 export const ideaCapture: ToolDefinition = makeStub({
   id: "idea_capture", category: "creativity",

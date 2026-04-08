@@ -564,6 +564,32 @@
       "yesterdayLabel": "昨天你写道…",
       "ctaReflect": "反思今天",
       "noReflection": "还没有反思"
+    },
+    "quickNotes": {
+      "title": "速记",
+      "subtitle": "灵感一来就记下",
+      "addPlaceholder": "添加速记…",
+      "emptyHint": "点击 + 添加第一条笔记",
+      "noteCount": "今日 {count} 条笔记"
+    },
+    "brainDump": {
+      "title": "思维清空",
+      "subtitle": "把脑中所有想法倾倒出来",
+      "placeholder": "你在想什么？写下来吧…",
+      "charCount": "{count} / {max} 字",
+      "yesterdayLabel": "昨天"
+    },
+    "eisenhowerMatrix": {
+      "title": "艾森豪威尔矩阵",
+      "subtitle": "按紧急性 + 重要性排序任务",
+      "quadrants": {
+        "do": "立即做",
+        "schedule": "排期",
+        "delegate": "委派",
+        "delete": "删除"
+      },
+      "addPlaceholder": "添加任务…",
+      "emptyHint": "4 象限，每个 4 个任务"
     }
   },
   "reports": {

@@ -564,6 +564,32 @@
       "qualityLabel": "Quality",
       "hoursSlept": "Slept {value}",
       "trendLabel": "Last 7 days"
+    },
+    "quickNotes": {
+      "title": "Quick Notes",
+      "subtitle": "Jot it down before it's gone",
+      "addPlaceholder": "Add a quick note…",
+      "emptyHint": "Tap + to capture your first note",
+      "noteCount": "{count} notes today"
+    },
+    "brainDump": {
+      "title": "Brain Dump",
+      "subtitle": "Empty your head onto the page",
+      "placeholder": "What's on your mind? Just write…",
+      "charCount": "{count} / {max} characters",
+      "yesterdayLabel": "Yesterday"
+    },
+    "eisenhowerMatrix": {
+      "title": "Eisenhower Matrix",
+      "subtitle": "Sort tasks by urgency + importance",
+      "quadrants": {
+        "do": "Do",
+        "schedule": "Schedule",
+        "delegate": "Delegate",
+        "delete": "Delete"
+      },
+      "addPlaceholder": "Add task…",
+      "emptyHint": "4 quadrants. 4 tasks each. Sort it out."
     }
   },
   "reports": {

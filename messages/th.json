@@ -564,6 +564,32 @@
       "qualityLabel": "คุณภาพ",
       "hoursSlept": "นอน {value}",
       "trendLabel": "7 วันที่ผ่านมา"
+    },
+    "quickNotes": {
+      "title": "โน้ตเร็ว",
+      "subtitle": "จดไว้ก่อนจะลืม",
+      "addPlaceholder": "เพิ่มโน้ต…",
+      "emptyHint": "กด + เพื่อจดโน้ตแรก",
+      "noteCount": "{count} โน้ตวันนี้"
+    },
+    "brainDump": {
+      "title": "เทสมอง",
+      "subtitle": "เทความคิดทั้งหมดออกมา",
+      "placeholder": "กำลังคิดอะไรอยู่? เขียนเลย…",
+      "charCount": "{count} / {max} ตัวอักษร",
+      "yesterdayLabel": "เมื่อวาน"
+    },
+    "eisenhowerMatrix": {
+      "title": "เมทริกซ์ไอเซนฮาวร์",
+      "subtitle": "จัดเรียงงานตามความเร่งด่วน + ความสำคัญ",
+      "quadrants": {
+        "do": "ทำเลย",
+        "schedule": "วางแผน",
+        "delegate": "มอบหมาย",
+        "delete": "ลบทิ้ง"
+      },
+      "addPlaceholder": "เพิ่มงาน…",
+      "emptyHint": "4 ช่อง ช่องละ 4 งาน"
     }
   },
   "reports": {
