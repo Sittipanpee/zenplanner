@@ -1,15 +1,20 @@
 /**
- * Root Loading State — visual-only spinner (no text = no i18n needed)
- * Dark mode ready via zen CSS variables
+ * Root Loading State — branded skeleton shown during route transitions.
+ * Server component (no "use client"). Inline, no fetch.
  */
+import { Loader2 } from "lucide-react";
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-zen-bg flex flex-col items-center justify-center">
-      <div className="relative w-16 h-16">
-        <div className="absolute inset-0 rounded-full border-4 border-zen-border" />
-        <div className="absolute inset-0 rounded-full border-4 border-zen-sage border-t-transparent animate-spin" />
-      </div>
+    <div className="fixed inset-0 flex min-h-screen w-full flex-col items-center justify-center gap-4 bg-zen-bg dark:bg-zinc-950">
+      <Loader2
+        aria-hidden="true"
+        className="h-8 w-8 animate-spin text-zen-sage"
+      />
+      <p className="font-display text-xl text-zen-text dark:text-zinc-100">
+        ZenPlanner
+      </p>
+      <p className="text-sm text-zen-text/60 dark:text-zinc-400">Loading…</p>
     </div>
-  )
+  );
 }
