@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "pm_report",
+  "title": "PM Report",
+  "description": "Department PM aggregated progress report to Chief Orchestrator. Filed every 3 tickets or every 30 min, whichever first.",
+  "type": "object",
+  "required": ["type", "from", "to", "priority", "phase", "created_at", "status", "summary"],
+  "properties": {
+    "type": { "const": "pm_report" },
+    "from": {
+      "type": "string",
+      "pattern": "^pm-[a-z0-9-]+$",
+      "description": "PM agent id, e.g. pm-backend-api"
+    },
+    "to": { "const": "chief-orchestrator" },
+    "priority": { "enum": ["low", "normal", "high", "critical"] },
+    "phase": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "requires_decision": { "type": "boolean", "default": false },
+    "ticket_id": { "type": "string" },
+    "status": { "enum": ["IN_PROGRESS", "COMPLETE", "BLOCKED", "ESCALATED"] },
+    "summary": {
+      "type": "object",
+      "required": ["delivered", "files_touched"],
+      "properties": {
+        "delivered": { "type": "array", "items": { "type": "string" } },
+        "files_touched": { "type": "array", "items": { "type": "string" } },
+        "concerns": { "type": "array", "items": { "type": "string" } },
+        "next_suggestion": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

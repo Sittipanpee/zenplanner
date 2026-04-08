@@ -1,16 +1,16 @@
 {
   "_schema": "health-v1",
   "_comment": "System pulse. Updated by sentinels after every check. CO reads this before dispatching any ticket or approving any merge.",
-  "_last_updated": "2026-04-08T10:59:43Z",
+  "_last_updated": "2026-04-08T11:05:17Z",
   "build": {
-    "status": "unknown",
-    "last_check": null,
-    "duration_ms": null,
+    "status": "pass",
+    "last_check": "2026-04-08T11:05:17Z",
+    "duration_ms": 10000,
     "error": null
   },
   "type": {
     "status": "pass",
-    "last_check": "2026-04-08T10:57:59Z",
+    "last_check": "2026-04-08T11:05:15Z",
     "error_count": 0,
     "errors": []
   },

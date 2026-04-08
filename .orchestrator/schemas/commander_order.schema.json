@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "commander_order",
+  "title": "Commander Order",
+  "description": "Direct order from Commander. Highest priority. CO acts within one poll tick.",
+  "type": "object",
+  "required": ["type", "from", "to", "priority", "created_at", "order", "reason"],
+  "properties": {
+    "type": { "const": "commander_order" },
+    "from": { "const": "commander" },
+    "to": { "const": "chief-orchestrator" },
+    "priority": { "const": "highest" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "order": {
+      "enum": ["halt", "resume", "rollback", "approve_phase_gate", "reject_phase_gate", "dispatch", "pause_dept", "resume_dept", "amend_charter"]
+    },
+    "reason": { "type": "string" },
+    "target": {
+      "type": "string",
+      "description": "Optional target: dept name, commit sha, phase id, etc."
+    },
+    "acknowledge_required": { "type": "boolean", "default": true }
+  }
+}
