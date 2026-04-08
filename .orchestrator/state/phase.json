@@ -1,11 +1,11 @@
 {
   "_schema": "phase-v1",
   "_comment": "Current phase + gate status. Updated at phase start and phase gate events. Commander sign-off required to advance phase.",
-  "_last_updated": "2026-04-08T11:53:37Z",
+  "_last_updated": "2026-04-08T12:25:36Z",
   "current_phase": "INFRA-BUILD",
   "phase_started_at": "2026-04-08T00:00:00Z",
   "gate_status": "open",
-  "next_gate_at": "2026-04-08T13:53:26Z",
+  "next_gate_at": "2026-04-08T14:25:24Z",
   "active_depts": [],
   "history": [
     {
@@ -46,6 +46,14 @@
       "approved_at": "2026-04-08T11:53:37Z",
       "started_at": "2026-04-08T11:53:26Z",
       "ended_at": "2026-04-08T11:53:37Z"
+    },
+    {
+      "phase": "URGENT-HOTFIX-GATE",
+      "verdict": "approved",
+      "commit": "35dd62b0b63329163c6d12f0aef1985725cc221c",
+      "approved_at": "2026-04-08T12:25:36Z",
+      "started_at": "2026-04-08T12:25:24Z",
+      "ended_at": "2026-04-08T12:25:36Z"
     }
   ],
   "current_gate": null
