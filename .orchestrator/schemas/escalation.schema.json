@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "escalation",
+  "title": "Escalation",
+  "description": "PM → CO urgent blocker. Filed immediately when a worker is stuck.",
+  "type": "object",
+  "required": ["type", "from", "to", "priority", "created_at", "ticket_id", "blocker", "attempted"],
+  "properties": {
+    "type": { "const": "escalation" },
+    "from": { "type": "string", "pattern": "^pm-[a-z0-9-]+$" },
+    "to": { "const": "chief-orchestrator" },
+    "priority": { "enum": ["high", "critical"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "ticket_id": { "type": "string" },
+    "worker_id": { "type": "string" },
+    "blocker": {
+      "type": "string",
+      "description": "One-line description of what is blocking progress"
+    },
+    "attempted": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Approaches already tried"
+    },
+    "proposed_resolution": { "type": "string" }
+  },
+  "additionalProperties": false
+}

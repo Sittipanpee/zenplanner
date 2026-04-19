@@ -9,6 +9,8 @@
       "dashboard": "Dashboard",
       "quiz": "Quiz",
       "planner": "Planner",
+      "tools": "Tools",
+      "reports": "Reports",
       "profile": "Profile",
       "settings": "Settings",
       "logout": "Log out",
@@ -48,7 +50,22 @@
       "notFound": "Page not found",
       "serverError": "Server error — please try again later",
       "unauthorized": "Please log in to continue",
-      "networkError": "Network error — check your connection"
+      "networkError": "Network error — check your connection",
+      "pages": {
+        "notFound": {
+          "title": "Page not found",
+          "subtitle": "This path has drifted off the map. Take a breath and choose a way forward.",
+          "home": "Return home",
+          "quiz": "Take the quiz",
+          "dashboard": "Go to dashboard"
+        },
+        "error": {
+          "title": "Something went wrong",
+          "subtitle": "An unexpected ripple interrupted your flow. You can try again or head back home.",
+          "tryAgain": "Try again",
+          "home": "Return home"
+        }
+      }
     }
   },
   "landing": {
@@ -76,6 +93,8 @@
     "login": {
       "title": "Welcome back",
       "subtitle": "Sign in to continue your planning journey",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
       "lineButton": "Continue with LINE",
       "githubButton": "Continue with GitHub",
       "noAccount": "Don't have an account?",
@@ -104,13 +123,72 @@
       "hint": "Choose the answer that feels most natural to you"
     },
     "reveal": {
-      "title": "Your spirit animal is",
+      "title": "Your closest match is",
       "subtitle": "This archetype reflects how you naturally approach planning and life",
       "share": "Share your result",
       "takeAgain": "Retake quiz",
       "viewPlanner": "Create my planner",
       "copied": "Link copied to clipboard!",
-      "copyError": "Could not copy — please copy the URL manually"
+      "copyError": "Could not copy — please copy the URL manually",
+      "aiInsight": {
+        "title": "Your planning insight",
+        "loading": "Generating your insight...",
+        "unavailable": "Couldn't generate your insight — try retaking the quiz"
+      },
+      "matches": {
+        "title": "Other close matches",
+        "primary": "Closest match",
+        "secondary": "Secondary",
+        "tertiary": "Tertiary",
+        "hybridHint": "You're a {primary}-{secondary} hybrid — both archetypes resonate strongly"
+      },
+      "toolkit": {
+        "title": "Your recommended toolkit",
+        "subtitle": "Hand-picked for your {animal} archetype",
+        "ctaSetup": "Set up my toolkit",
+        "topPickBadge": "Top pick"
+      },
+      "stats": {
+        "title": "Profile Stats",
+        "energy": "Energy",
+        "planning": "Planning",
+        "social": "Social",
+        "decision": "Decision",
+        "focus": "Focus",
+        "drive": "Drive",
+        "descriptors": {
+          "energy": {
+            "high": "Early Riser",
+            "mid": "Flexible",
+            "low": "Night Owl"
+          },
+          "planning": {
+            "high": "Plans Ahead",
+            "mid": "Adaptive",
+            "low": "Spontaneous"
+          },
+          "social": {
+            "high": "Energized by Others",
+            "mid": "Selective",
+            "low": "Solo Best"
+          },
+          "decision": {
+            "high": "Decisive",
+            "mid": "Balanced",
+            "low": "Deliberate"
+          },
+          "focus": {
+            "high": "Deep Focus",
+            "mid": "Contextual",
+            "low": "Multi-Track"
+          },
+          "drive": {
+            "high": "Goal-Driven",
+            "mid": "Progress-Minded",
+            "low": "Process-Focused"
+          }
+        }
+      }
     },
     "profile": {
       "title": "Tell us about your lifestyle",
@@ -194,7 +272,7 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
+    "welcome": "Welcome back",
     "stats": {
       "currentStreak": "Current streak",
       "longestStreak": "Longest streak",
@@ -323,6 +401,480 @@
       "account": "Account",
       "signOut": "Sign out",
       "deleteAccount": "Delete account"
+    }
+  },
+  "tools": {
+    "catalog": {
+      "title": "Tool catalog",
+      "subtitle": "Pick the tools that fit how you actually work",
+      "filterAll": "All categories",
+      "empty": "No tools match your filters",
+      "emptyCategory": "No tools in this category yet",
+      "enable": "Enable",
+      "disable": "Disable",
+      "enabled": "Enabled",
+      "recommended": "Recommended",
+      "searchPlaceholder": "Search tools…",
+      "categoryProductivity": "Productivity",
+      "categoryWellbeing": "Wellbeing",
+      "categoryReflection": "Reflection",
+      "categoryTracking": "Tracking",
+      "categoryCreativity": "Creativity",
+      "heroTitle": "Your blueprint",
+      "heroSubtitleWithAnimal": "Based on your {animal} archetype, we recommend these tools to start with. Enable any you like — you can always change them later.",
+      "heroSubtitleNoAnimal": "Browse the full catalog and enable the tools that fit how you work.",
+      "enabledCount": "{count} tools enabled",
+      "goToDashboard": "Go to Dashboard"
+    },
+    "dashboard": {
+      "empty": "No tools yet. Enable a few from the catalog to get started.",
+      "emptyAction": "Open the catalog"
+    },
+    "widget": {
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "delete": "Remove",
+      "confirmDisable": "Hide this tool? Your data will be kept."
+    },
+    "entry": {
+      "savedToast": "Saved",
+      "errorToast": "Could not save — try again"
+    },
+    "recommendation": {
+      "title": "Your recommended toolkit",
+      "subtitle": "Hand-picked for your archetype",
+      "enableAll": "Enable all"
+    },
+    "dailyPriorities": {
+      "title": "Daily Priorities",
+      "subtitle": "Your top 3 for today",
+      "addPlaceholder": "What matters today?",
+      "emptyHint": "Tap a slot to add a priority"
+    },
+    "tasks": {
+      "title": "Tasks",
+      "subtitle": "Check off what you get done today",
+      "addPlaceholder": "Add a task…",
+      "addButton": "Add task",
+      "emptyHint": "No tasks yet — add your first one above"
+    },
+    "habitTracker": {
+      "title": "Habit Tracker",
+      "subtitle": "Daily habits, one tap to log",
+      "addHabit": "Add habit",
+      "streak": "{days}-day streak",
+      "todayCount": "{done} / {total} done today",
+      "noHabits": "No habits yet — add one to start"
+    },
+    "moodLog": {
+      "title": "Mood Log",
+      "subtitle": "How are you feeling today?",
+      "emojiLabels": {
+        "veryBad": "Very bad",
+        "bad": "Not great",
+        "neutral": "Okay",
+        "good": "Good",
+        "veryGood": "Amazing"
+      },
+      "noteLabel": "Add a note (optional)",
+      "noNote": "No note",
+      "trendLabel": "Last 7 days"
+    },
+    "pomodoro": {
+      "title": "Pomodoro",
+      "subtitle": "Focus in timed sessions",
+      "start": "Start",
+      "pause": "Pause",
+      "reset": "Reset",
+      "break": "Break",
+      "workSession": "Focus",
+      "completed": "Session complete",
+      "sessionsToday": "today",
+      "editLengths": "Edit lengths",
+      "sessionLengthLabel": "Session length (minutes)",
+      "breakLengthLabel": "Break length (minutes)"
+    },
+    "meditationTimer": {
+      "title": "Meditation",
+      "subtitle": "Sit. Breathe. Return.",
+      "start": "Start",
+      "pause": "Pause",
+      "reset": "Reset",
+      "presetLabel": "Presets",
+      "customLabel": "Custom length (min)",
+      "completedMessage": "Session complete. Well done.",
+      "totalToday": "min today"
+    },
+    "energyLevel": {
+      "title": "Energy Level",
+      "subtitle": "How energized do you feel right now?",
+      "currentLabel": "Right now",
+      "lowLabel": "Drained",
+      "highLabel": "Energized",
+      "trendLabel": "Trend",
+      "loggedAt": "Logged at"
+    },
+    "energyDial": {
+      "title": "Energy Dial",
+      "subtitle": "Quick 5-point check-in",
+      "prompt": "How's your energy right now?",
+      "checkedAt": "Checked in at {time}"
+    },
+    "gratitude": {
+      "title": "Gratitude",
+      "subtitle": "3 things you're grateful for today",
+      "placeholder1": "Something small that made you smile…",
+      "placeholder2": "A person you appreciate…",
+      "placeholder3": "A moment worth remembering…",
+      "yesterdayLabel": "Yesterday you wrote…",
+      "completeMessage": "Beautiful. Thank you."
+    },
+    "weeklyReview": {
+      "title": "Weekly Review",
+      "subtitle": "Reflect on this week — wins, losses, and what's next",
+      "winsLabel": "Wins",
+      "lossesLabel": "Losses / challenges",
+      "nextFocusLabel": "Next week's focus",
+      "ratingLabel": "Overall rating",
+      "saveBtn": "Save review",
+      "noReviewYet": "No review for this week yet",
+      "ctaReflect": "Reflect on your week",
+      "previousLabel": "Previous weeks",
+      "addItem": "Add item",
+      "noItems": "Nothing yet"
+    },
+    "dailyReflection": {
+      "title": "Daily Reflection",
+      "subtitle": "Three short prompts to close the day",
+      "highlightPrompt": "What was today's highlight?",
+      "challengePrompt": "What was challenging?",
+      "intentPrompt": "What's your intent for tomorrow?",
+      "saveBtn": "Save reflection",
+      "yesterdayLabel": "Yesterday you wrote…",
+      "ctaReflect": "Reflect on today",
+      "noReflection": "No reflection yet"
+    },
+    "water": {
+      "title": "Water",
+      "subtitle": "Tap a glass each time you drink.",
+      "goalReached": "Goal reached!",
+      "progressLabel": "{current}/{goal} glasses today",
+      "editGoal": "Edit goal",
+      "goalLabel": "Daily goal (glasses)"
+    },
+    "sleep": {
+      "title": "Sleep",
+      "subtitle": "Log bedtime, wake time, and how you slept.",
+      "bedtimeLabel": "Bedtime",
+      "wakeTimeLabel": "Wake time",
+      "qualityLabel": "Quality",
+      "hoursSlept": "Slept {value}",
+      "trendLabel": "Last 7 days"
+    },
+    "quickNotes": {
+      "title": "Quick Notes",
+      "subtitle": "Jot it down before it's gone",
+      "addPlaceholder": "Add a quick note…",
+      "emptyHint": "Tap + to capture your first note",
+      "noteCount": "{count} notes today"
+    },
+    "brainDump": {
+      "title": "Brain Dump",
+      "subtitle": "Empty your head onto the page",
+      "placeholder": "What's on your mind? Just write…",
+      "charCount": "{count} / {max} characters",
+      "yesterdayLabel": "Yesterday"
+    },
+    "eisenhowerMatrix": {
+      "title": "Eisenhower Matrix",
+      "subtitle": "Sort tasks by urgency + importance",
+      "quadrants": {
+        "do": "Do",
+        "schedule": "Schedule",
+        "delegate": "Delegate",
+        "delete": "Delete"
+      },
+      "addPlaceholder": "Add task…",
+      "emptyHint": "4 quadrants. 4 tasks each. Sort it out."
+    },
+    "gratitudeThree": {
+      "title": "3 Gratitudes",
+      "subtitle": "Three things every day",
+      "placeholder1": "First gratitude…",
+      "placeholder2": "Second gratitude…",
+      "placeholder3": "Third gratitude…",
+      "completeMessage": "Complete!"
+    },
+    "workoutLog": {
+      "title": "Workout Log",
+      "subtitle": "Sets, reps, minutes",
+      "namePlaceholder": "Exercise name…",
+      "sets": "Sets",
+      "reps": "Reps",
+      "minutes": "Min",
+      "addButton": "Add exercise",
+      "emptyHint": "Log your first exercise",
+      "totalMinutes": "{count} min"
+    },
+    "goalsTracker": {
+      "title": "Goals Tracker",
+      "subtitle": "Long-horizon goals with % progress",
+      "addPlaceholder": "Add a goal…",
+      "emptyHint": "Add your first goal"
+    },
+    "expenseLog": {
+      "title": "Expense Log",
+      "subtitle": "Track every expense today",
+      "notePlaceholder": "note…",
+      "total": "Total {amount}",
+      "emptyHint": "Log your first expense",
+      "categories": {
+        "food": "Food",
+        "transport": "Transport",
+        "shopping": "Shopping",
+        "bills": "Bills",
+        "fun": "Fun",
+        "other": "Other"
+      }
+    },
+    "ideaCapture": {
+      "title": "Idea Capture",
+      "subtitle": "Save before they vanish",
+      "titlePlaceholder": "Idea title…",
+      "notesPlaceholder": "Optional notes…",
+      "addButton": "Save idea",
+      "emptyHint": "Capture your first spark"
+    },
+    "kanbanBoard": {
+      "title": "Kanban Board",
+      "subtitle": "To Do → Doing → Done",
+      "addPlaceholder": "Add a card…",
+      "columns": {
+        "todo": "To Do",
+        "doing": "Doing",
+        "done": "Done"
+      }
+    },
+    "timeBoxing": {
+      "title": "Time Boxing",
+      "subtitle": "Block your day hour by hour",
+      "addHour": "Hour",
+      "addLabel": "What you'll do…",
+      "addButton": "Add",
+      "emptyHint": "No blocks yet"
+    },
+    "focusBlocks": {
+      "title": "Focus Blocks",
+      "subtitle": "Reserve deep-focus windows",
+      "labelPlaceholder": "What to focus on…",
+      "minutesLabel": "Min"
+    },
+    "breakTimer": {
+      "title": "Break Timer",
+      "subtitle": "Log breaks taken",
+      "totalMinutes": "{count} min",
+      "emptyHint": "Tap a preset to log your first break"
+    },
+    "deepWork": {
+      "title": "Deep Work",
+      "subtitle": "Log long undistracted sessions",
+      "addPlaceholder": "What session was this?…",
+      "emptyHint": "Log your first deep work session"
+    },
+    "moodScore": {
+      "title": "Mood Score",
+      "subtitle": "Numeric 1-10 mood score",
+      "scoreLabel": "Score",
+      "lowLabel": "Low",
+      "highLabel": "High"
+    },
+    "sleepQuality": {
+      "title": "Sleep Quality",
+      "subtitle": "How rested do you feel?",
+      "ratings": {
+        "1": "Exhausted",
+        "2": "Tired",
+        "3": "OK",
+        "4": "Good",
+        "5": "Refreshed"
+      }
+    },
+    "monthlyHorizon": {
+      "title": "Monthly Horizon",
+      "subtitle": "Plan the month ahead",
+      "fields": {
+        "theme": "Theme",
+        "targets": "Targets",
+        "reflection": "Reflection"
+      },
+      "placeholders": {
+        "theme": "One word for this month…",
+        "targets": "What do you want to achieve?",
+        "reflection": "How did last month go?"
+      }
+    },
+    "quarterlyVision": {
+      "title": "Quarterly Vision",
+      "subtitle": "90-day planning",
+      "fields": {
+        "objective": "Objective",
+        "keyResults": "Key Results",
+        "reflection": "Reflection"
+      },
+      "placeholders": {
+        "objective": "Big thing you want this quarter…",
+        "keyResults": "3-5 measurable outcomes…",
+        "reflection": "How did last quarter go?"
+      }
+    },
+    "weeklyIntentions": {
+      "title": "Weekly Intentions",
+      "subtitle": "Set 3 intentions for the week",
+      "placeholder1": "First intention…",
+      "placeholder2": "Second intention…",
+      "placeholder3": "Third intention…",
+      "weekOf": "Week of {date}"
+    },
+    "monthlyReview": {
+      "title": "Monthly Review",
+      "subtitle": "Review what worked",
+      "fields": {
+        "wins": "Wins",
+        "challenges": "Challenges",
+        "nextMonth": "Next month focus"
+      },
+      "placeholders": {
+        "wins": "What went well?",
+        "challenges": "What was hard?",
+        "nextMonth": "One focus for next month…"
+      }
+    },
+    "quarterlyOkrs": {
+      "title": "Quarterly OKRs",
+      "subtitle": "Objectives + Key Results",
+      "fields": {
+        "objective": "Objective",
+        "kr1": "Key Result 1",
+        "kr2": "Key Result 2"
+      },
+      "placeholders": {
+        "objective": "Aspirational but concrete…",
+        "kr1": "Measurable outcome…",
+        "kr2": "Another measurable outcome…"
+      }
+    },
+    "yearVision": {
+      "title": "Year Vision",
+      "subtitle": "Your year in one page",
+      "fields": {
+        "theme": "Theme",
+        "bigGoals": "Big goals",
+        "reflection": "Reflection"
+      },
+      "placeholders": {
+        "theme": "One word for this year…",
+        "bigGoals": "3-5 big things…",
+        "reflection": "How did last year go?"
+      }
+    },
+    "lessonsLearned": {
+      "title": "Lessons Learned",
+      "subtitle": "Capture what you learned",
+      "addPlaceholder": "What did you learn?…",
+      "emptyHint": "Log your first lesson"
+    },
+    "booksLog": {
+      "title": "Books Log",
+      "subtitle": "Track what you're reading",
+      "addPlaceholder": "Book title…",
+      "emptyHint": "Add your first book"
+    },
+    "decisionLog": {
+      "title": "Decision Log",
+      "subtitle": "Record decisions and context",
+      "addPlaceholder": "Decision + why…",
+      "emptyHint": "Log your first decision"
+    },
+    "learningLog": {
+      "title": "Learning Log",
+      "subtitle": "Courses, lessons, breakthroughs",
+      "addPlaceholder": "Topic studied…",
+      "emptyHint": "Log your first learning"
+    },
+    "financeQuick": {
+      "title": "Quick Finance",
+      "subtitle": "One-line money tracking",
+      "addPlaceholder": "Entry…",
+      "emptyHint": "Log your first entry"
+    },
+    "savingsGoal": {
+      "title": "Savings Goal",
+      "subtitle": "Current vs target",
+      "labelPlaceholder": "What are you saving for?…",
+      "currentLabel": "Current",
+      "targetLabel": "Target"
+    }
+  },
+  "reports": {
+    "title": "Your reports",
+    "subtitle": "Cross-tool insights from your daily logs",
+    "tabs": {
+      "week": "Week",
+      "month": "Month",
+      "quarter": "Quarter",
+      "year": "Year"
+    },
+    "kpi": {
+      "streak": "Streak",
+      "moodAverage": "Mood avg",
+      "prioritiesDone": "Priorities done",
+      "habitsPercent": "Habits %"
+    },
+    "empty": "Not enough data yet — log entries for a few days to see your report.",
+    "breakdownLabel": "Per-tool breakdown",
+    "reflectionLabel": "Reflection",
+    "reflectionPlaceholder": "Write a freeform note about this period…"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: April 2026",
+      "intro": "ZenPlanner respects your privacy. This policy explains what data we collect, why, and your rights under Thailand's Personal Data Protection Act (PDPA).",
+      "footerTermsLink": "See our Terms of Service",
+      "sections": {
+        "collect": {
+          "title": "What data we collect",
+          "body": "• Email address (via Supabase authentication)\n• Quiz responses — your answers, scores, and resulting spirit animal\n• Tool entries — anything you choose to write in the planner, mood tracker, or reflection tools\n• Cookies — theme preference, locale, and session token"
+        },
+        "why": {
+          "title": "Why we collect it",
+          "body": "We use your data solely to deliver the service: authenticate you, compute your archetype, render your dashboard, and persist your progress across sessions and devices."
+        },
+        "sharing": {
+          "title": "Who we share it with",
+          "body": "Nobody — except the subprocessors listed in the next section. We do not sell, rent, or trade your personal data."
+        },
+        "subprocessors": {
+          "title": "Subprocessors",
+          "body": "• Supabase (Frankfurt region) — authentication and data storage in the EU\n• Vercel — global edge hosting and delivery\n• Pollinations.ai — LLM inference for generated content; only anonymized scores are sent, never your identity"
+        },
+        "rights": {
+          "title": "Your rights",
+          "body": "Under PDPA you have the right to access, correct, delete, and export your personal data. To exercise any of these rights, email privacy@zenplanner.app."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "body": "We use exactly three cookies: theme (light/dark), locale (en/th/zh), and session (authentication). No advertising trackers, no third-party analytics, no fingerprinting."
+        },
+        "retention": {
+          "title": "Retention",
+          "body": "• Account data — kept until you request deletion\n• Quiz results — kept for 24 months to support cohort analytics\n• Tool entries — kept indefinitely as your personal journal, deletable at any time"
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "Questions or requests? Email privacy@zenplanner.app and we will respond within 30 days as required by PDPA."
+        }
+      }
     }
   }
 }

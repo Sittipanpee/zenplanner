@@ -7,6 +7,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { QuizCard } from "@/components/quiz/quiz-card";
@@ -29,7 +30,7 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   const [answers, setAnswers] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ animal: string; scores: AxisScores } | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [saveState, setSaveState] = useState<"saving" | "saved" | "error">("saving");
   const router = useRouter();
   const supabase = createClient();
   const t = useTranslations("quiz");
@@ -125,13 +126,11 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
   }, [currentQuestion, answers, mode]);
 
   const saveQuizResult = async (animal: string, scores: AxisScores) => {
-    setIsSaving(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
-        console.log("[SKIP] User not logged in, skipping quiz save");
-        setIsSaving(false);
+        setSaveState("saved");
         return;
       }
 
@@ -146,33 +145,83 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
       });
 
       if (response.ok) {
-        const data = await response.json();
-
+        await response.json();
+        setSaveState("saved");
       } else {
         console.error("Failed to save quiz:", await response.text());
+        setSaveState("error");
       }
     } catch (error) {
       console.error("Error saving quiz result:", error);
-    } finally {
-      setIsSaving(false);
+      setSaveState("error");
     }
   };
 
+  /**
+   * Discriminator-based weighted scoring (simplified IRT-style).
+   *
+   * For each (question, axis) pair, the weight is computed from three factors:
+   *   1. Discrimination — stdDev of the 4 option values for that axis in that
+   *      question. A question whose options span 20→90 on `energy` is far more
+   *      diagnostic of energy than one whose options sit at 45/50/55/60.
+   *   2. Signal — how far the user's chosen value sits from the question's
+   *      median value for that axis. Choosing an extreme answer carries more
+   *      signal than picking a middle-of-the-road option.
+   *   3. Focus boost — the question's declared `axisFocus` axis gets full
+   *      weight (1.0); off-focus axes get 0.5 (they still contribute, but the
+   *      author has marked them as secondary).
+   *
+   * Final weight = discrimination × (0.4 + 0.6 × signal) × focusBoost.
+   * Per-axis result = Σ(chosenValue × weight) / Σ(weight).
+   *
+   * Because option values already live in [0,100], the weighted average lands
+   * in [0,100] naturally — no rescaling needed before the archetype matcher.
+   */
   const calculateScores = (ans: number[]): AxisScores => {
-    const scores: AxisScores = { energy: 50, planning: 50, social: 50, decision: 50, focus: 50, drive: 50 };
+    const axes: (keyof AxisScores)[] = ["energy", "planning", "social", "decision", "focus", "drive"];
+    const sums: AxisScores = { energy: 0, planning: 0, social: 0, decision: 0, focus: 0, drive: 0 };
+    const weightTotals: AxisScores = { energy: 0, planning: 0, social: 0, decision: 0, focus: 0, drive: 0 };
 
-    ans.forEach((a, idx) => {
-      const option = QUIZ_QUESTIONS[idx]?.options[a];
-      if (option?.score) {
-        Object.entries(option.score).forEach(([k, v]) => {
-          if (k in scores && v !== undefined) {
-            const key = k as keyof AxisScores;
-            scores[key] = Math.min(100, Math.max(0, scores[key] + v / 3));
-          }
-        });
-      }
+    ans.forEach((chosenIdx, qIdx) => {
+      const question = QUIZ_QUESTIONS[qIdx];
+      const chosen = question?.options[chosenIdx];
+      if (!question || !chosen?.score) return;
+
+      axes.forEach((axis) => {
+        // Collect all option values for this axis in this question
+        const allValues = question.options.map((o) => o.score[axis] ?? 50);
+        const n = allValues.length;
+        const mean = allValues.reduce((s, v) => s + v, 0) / n;
+
+        // Discrimination: stdDev of this axis across the 4 options
+        // High stdDev → this question discriminates this axis well
+        const variance = allValues.reduce((s, v) => s + (v - mean) ** 2, 0) / n;
+        const stdDev = Math.sqrt(variance);
+        const discrimination = Math.min(1, stdDev / 25); // ~25 stdDev = max signal
+
+        // Signal: how far the chosen value sits from the question's median
+        const sorted = [...allValues].sort((a, b) => a - b);
+        const median = (sorted[Math.floor((n - 1) / 2)] + sorted[Math.floor(n / 2)]) / 2;
+        const signal = Math.min(1, Math.abs(chosen.score[axis] - median) / 40);
+
+        // Focus boost: declared focus axis carries more weight
+        const focusBoost = axis === question.axisFocus ? 1.0 : 0.5;
+
+        const weight = discrimination * (0.4 + 0.6 * signal) * focusBoost;
+        if (weight > 0) {
+          sums[axis] += chosen.score[axis] * weight;
+          weightTotals[axis] += weight;
+        }
+      });
     });
 
+    const scores: AxisScores = { energy: 50, planning: 50, social: 50, decision: 50, focus: 50, drive: 50 };
+    axes.forEach((axis) => {
+      if (weightTotals[axis] > 0) {
+        const raw = sums[axis] / weightTotals[axis];
+        scores[axis] = Math.round(Math.min(100, Math.max(0, raw)));
+      }
+    });
     return scores;
   };
 
@@ -202,19 +251,51 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
             {animalData.description}
           </p>
           {/* Saving status indicator */}
-          {isSaving && (
+          {saveState === "saving" && (
             <p className="text-sm text-zen-text-muted flex items-center justify-center gap-2">
               <span className="w-2 h-2 bg-zen-sage rounded-full animate-pulse" aria-hidden="true" />
               {tCommon("actions.loading")}
             </p>
           )}
-          {!isSaving && (
+          {saveState === "saved" && (
             <p className="text-sm text-zen-sage flex items-center justify-center gap-2">
               <span className="w-2 h-2 bg-zen-sage rounded-full" aria-hidden="true" />
               {tCommon("actions.done")}
             </p>
           )}
-          <ZenButton fullWidth onClick={() => router.push(`/quiz/reveal?animal=${result.animal}`)}>
+          {saveState === "error" && result && (
+            <p className="text-sm text-red-500 flex items-center justify-center gap-2 flex-wrap">
+              <span className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0" aria-hidden="true" />
+              {tCommon("errors.serverError")}
+              <Link
+                href={`/quiz/reveal?${new URLSearchParams({
+                  animal: result.animal,
+                  energy: String(Math.round(result.scores.energy)),
+                  planning: String(Math.round(result.scores.planning)),
+                  social: String(Math.round(result.scores.social)),
+                  decision: String(Math.round(result.scores.decision)),
+                  focus: String(Math.round(result.scores.focus)),
+                  drive: String(Math.round(result.scores.drive)),
+                }).toString()}`}
+                className="underline ml-1 text-red-400 hover:text-red-300"
+              >
+                {tCommon("actions.continue")}
+              </Link>
+            </p>
+          )}
+          <ZenButton fullWidth onClick={() => {
+            const s = result.scores;
+            const params = new URLSearchParams({
+              animal: result.animal,
+              energy:   String(Math.round(s.energy)),
+              planning: String(Math.round(s.planning)),
+              social:   String(Math.round(s.social)),
+              decision: String(Math.round(s.decision)),
+              focus:    String(Math.round(s.focus)),
+              drive:    String(Math.round(s.drive)),
+            });
+            router.push(`/quiz/reveal?${params.toString()}`);
+          }}>
             {tCommon("actions.continue")}
           </ZenButton>
         </div>
@@ -231,9 +312,8 @@ export default function QuizGamePage({ params }: { params: Promise<{ mode: strin
         question={{
           id: currentQ.id,
           scenario: currentQ.scenario,
-          options: currentQ.options.map((opt, i) => ({
+          options: currentQ.options.map((opt) => ({
             text: opt.label,
-            emoji: ["🔥", "🌊", "☕", "🤝"][i] || "✨",
             score: opt.score,
           })),
         }}

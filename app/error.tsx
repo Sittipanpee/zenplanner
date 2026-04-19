@@ -1,34 +1,67 @@
 'use client'
 
-import { useEffect } from 'react'
+/**
+ * Global Error Boundary
+ * Per Next.js App Router conventions, error.tsx must be a client component.
+ * Receives `error` and `reset` props; i18n + dark mode.
+ */
 
-export default function RootError({
-  error,
-  reset,
-}: {
+import { useEffect } from 'react'
+import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+
+interface RootErrorProps {
   error: Error & { digest?: string }
   reset: () => void
-}) {
+}
+
+export default function RootError({ error, reset }: RootErrorProps) {
+  const t = useTranslations('common.errors.pages.error')
+
   useEffect(() => {
-    console.error('Root error boundary caught:', error)
+    // Surface error for developer observability. Silent failure is a critical
+    // protocol violation per charter §3.8.
+    // eslint-disable-next-line no-console
+    console.error('[RootError] caught:', error)
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zen-bg p-4">
-      <div className="text-center space-y-4 max-w-md">
-        <div className="text-5xl">&#x26A0;&#xFE0F;</div>
-        <h2 className="text-xl font-semibold text-zen-text">Something went wrong</h2>
-        <p className="text-zen-text-muted text-sm">{error.message || 'An unexpected error occurred.'}</p>
-        <button
-          onClick={reset}
-          className="px-6 py-2 bg-zen-accent text-white rounded-lg hover:opacity-90 transition-opacity"
-        >
-          Try again
-        </button>
-        <div>
-          <a href="/" className="text-zen-text-muted text-sm underline">Return home</a>
+    <main className="min-h-screen bg-zen-bg flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md text-center space-y-8">
+        <div className="text-6xl mb-2" aria-hidden="true">
+          &#127783;&#65039;
+        </div>
+
+        <div className="space-y-3">
+          <h1 className="font-display text-2xl md:text-3xl font-semibold text-zen-text">
+            {t('title')}
+          </h1>
+          <p className="text-zen-text-secondary text-sm md:text-base leading-relaxed">
+            {t('subtitle')}
+          </p>
+          {error?.digest ? (
+            <p className="text-xs text-zen-text-muted font-mono">
+              ref: {error.digest}
+            </p>
+          ) : null}
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={() => reset()}
+            className="w-full px-6 py-3 bg-zen-sage text-white rounded-full font-medium hover:opacity-90 transition-opacity"
+          >
+            {t('tryAgain')}
+          </button>
+          <Link
+            href="/"
+            className="w-full px-6 py-3 bg-zen-surface border border-zen-border text-zen-text rounded-full font-medium hover:border-zen-sage transition-colors"
+          >
+            {t('home')}
+          </Link>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

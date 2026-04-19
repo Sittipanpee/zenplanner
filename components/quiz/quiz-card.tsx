@@ -15,7 +15,6 @@ export interface QuizQuestion {
   scenario: string;
   options: {
     text: string;
-    emoji: string;
     score: {
       energy?: number;
       planning?: number;
@@ -109,32 +108,42 @@ export function QuizCard({
 
         {/* Options */}
         <div className="space-y-3" role="radiogroup" aria-label={question.scenario}>
-          {question.options.map((option, index) => (
-            <button
-              key={index}
-              onClick={() => handleAnswer(index)}
-              disabled={isLoading}
-              role="radio"
-              aria-checked={selectedIndex === index}
-              className={`
-                w-full p-4 text-left rounded-xl border-2 border-zen-border
-                hover:border-zen-sage hover:bg-zen-sage/5 hover:-translate-y-1
-                focus-visible:ring-2 focus-visible:ring-zen-sage focus-visible:outline-none
-                transition-all duration-200 flex items-center gap-3
-                disabled:opacity-50 disabled:cursor-not-allowed
-                ${selectedIndex === index ? 'animate-zen-button-press border-zen-sage bg-zen-sage/10' : ''}
-                group
-              `}
-            >
-              <span className={`text-2xl transition-transform duration-200 ${selectedIndex === index ? 'scale-125' : 'group-hover:scale-110'}`}>
-                {option.emoji}
-              </span>
-              <span className={`text-zen-text flex-1 transition-colors duration-200 ${selectedIndex === index ? 'text-zen-sage font-medium' : ''}`}>
-                {option.text}
-              </span>
-              <ArrowRight className={`w-5 h-5 text-zen-text-muted transition-all duration-200 ${selectedIndex === index ? 'text-zen-sage animate-zen-shake' : 'group-hover:translate-x-1'}`} />
-            </button>
-          ))}
+          {question.options.map((option, index) => {
+            const letter = ["A", "B", "C", "D"][index] ?? String(index + 1);
+            const isSelected = selectedIndex === index;
+            return (
+              <button
+                key={index}
+                onClick={() => handleAnswer(index)}
+                disabled={isLoading}
+                role="radio"
+                aria-checked={isSelected}
+                className={`
+                  w-full p-4 text-left rounded-xl border-2 border-zen-border
+                  hover:border-zen-sage hover:bg-zen-sage/5 hover:-translate-y-1
+                  focus-visible:ring-2 focus-visible:ring-zen-sage focus-visible:outline-none
+                  transition-all duration-200 flex items-center gap-3
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  ${isSelected ? 'animate-zen-button-press border-zen-sage bg-zen-sage/10' : ''}
+                  group
+                `}
+              >
+                <span className={`
+                  flex-shrink-0 w-7 h-7 rounded-lg text-xs font-semibold
+                  flex items-center justify-center transition-all duration-200
+                  ${isSelected
+                    ? 'bg-zen-sage text-white'
+                    : 'bg-zen-surface-alt text-zen-text-muted group-hover:bg-zen-sage/20 group-hover:text-zen-sage'}
+                `}>
+                  {letter}
+                </span>
+                <span className={`text-zen-text flex-1 transition-colors duration-200 ${isSelected ? 'text-zen-sage font-medium' : ''}`}>
+                  {option.text}
+                </span>
+                <ArrowRight className={`w-5 h-5 text-zen-text-muted transition-all duration-200 ${isSelected ? 'text-zen-sage animate-zen-shake' : 'group-hover:translate-x-1'}`} />
+              </button>
+            );
+          })}
         </div>
       </ZenCard>
 

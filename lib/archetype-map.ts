@@ -173,69 +173,94 @@ export function calculateToolRecommendations(scores: AxisScores): ToolId[] {
 }
 
 /**
- * Get dominant animal based on axis scores
- * Uses 6-axis scoring to determine the best matching archetype
+ * Animal archetype profiles — declared at module scope so per-axis stdDev
+ * can be precomputed once and re-used by every match.
+ *
+ * Profile order: [energy, planning, social, decision, focus, drive]
+ * Values are author-declared "target levels" in the [0,100] range.
  */
-export function getDominantAnimal(scores: AxisScores): SpiritAnimal {
-  const { energy, planning, social, decision, focus, drive } = scores;
+const ARCHETYPE_PROFILES: Array<{ animal: SpiritAnimal; profile: number[] }> = [
+  { animal: "lion",      profile: [85, 85, 70, 75, 80, 85] },
+  { animal: "whale",     profile: [25, 20, 20, 25, 30, 25] },
+  { animal: "dolphin",   profile: [75, 25, 70, 30, 25, 30] },
+  { animal: "owl",       profile: [20, 80, 20, 75, 85, 25] },
+  { animal: "fox",       profile: [55, 35, 50, 70, 40, 70] },
+  { animal: "turtle",    profile: [30, 75, 25, 30, 65, 30] },
+  { animal: "eagle",     profile: [80, 85, 20, 80, 85, 90] },
+  { animal: "octopus",   profile: [50, 30, 65, 35, 35, 35] },
+  { animal: "mountain",  profile: [35, 90, 20, 70, 70, 75] },
+  { animal: "wolf",      profile: [75, 70, 85, 70, 65, 80] },
+  { animal: "sakura",    profile: [50, 25, 60, 30, 25, 25] },
+  { animal: "cat",       profile: [50, 30, 15, 25, 30, 25] },
+  { animal: "crocodile", profile: [45, 65, 20, 80, 75, 70] },
+  { animal: "dove",      profile: [35, 30, 75, 25, 50, 25] },
+  { animal: "butterfly", profile: [65, 20, 55, 25, 20, 30] },
+  { animal: "bamboo",    profile: [30, 25, 50, 30, 35, 35] },
+];
 
-  // Define archetype profiles with their axis preferences
-  // Each animal has preferred values for each axis (0-100)
-  const archetypes: Array<{ animal: SpiritAnimal; profile: number[] }> = [
-    // Lion: Leader, Dawn Igniter + Architect + Gatherer + Blade + Laser + Summit
-    { animal: "lion", profile: [85, 85, 70, 75, 80, 85] },
-    // Whale: Deep thinker, Night Weaver + Surfer + Hermit + Petal + Kaleidoscope + Garden
-    { animal: "whale", profile: [25, 20, 20, 25, 30, 25] },
-    // Dolphin: Creative, Dawn Igniter + Surfer + Gatherer + Petal + Kaleidoscope + Garden
-    { animal: "dolphin", profile: [75, 25, 70, 30, 25, 30] },
-    // Owl: Night owl, Night Weaver + Architect + Hermit + Blade + Laser + Garden
-    { animal: "owl", profile: [20, 80, 20, 75, 85, 25] },
-    // Fox: Adaptive strategist, Medium energy + Surfer + Medium + Blade + Kaleidoscope + Summit
-    { animal: "fox", profile: [55, 35, 50, 70, 40, 70] },
-    // Turtle: Steady builder, Low energy + Architect + Hermit + Petal + Laser + Garden
-    { animal: "turtle", profile: [30, 75, 25, 30, 65, 30] },
-    // Eagle: Visionary, Dawn Igniter + Architect + Hermit + Blade + Laser + Summit
-    { animal: "eagle", profile: [80, 85, 20, 80, 85, 90] },
-    // Octopus: Multi-tasker, Medium + Surfer + Gatherer + Petal + Kaleidoscope + Garden
-    { animal: "octopus", profile: [50, 30, 65, 35, 35, 35] },
-    // Mountain: Long-term architect, Low energy + Architect + Hermit + Blade + Laser + Summit
-    { animal: "mountain", profile: [35, 90, 20, 70, 70, 75] },
-    // Wolf: Pack leader, Dawn Igniter + Architect + Gatherer + Blade + Laser + Summit
-    { animal: "wolf", profile: [75, 70, 85, 70, 65, 80] },
-    // Sakura: Flow artist, Medium + Surfer + Gatherer + Petal + Kaleidoscope + Garden
-    { animal: "sakura", profile: [50, 25, 60, 30, 25, 25] },
-    // Cat: Independent, Medium + Surfer + Hermit + Petal + Kaleidoscope + Garden
-    { animal: "cat", profile: [50, 30, 15, 25, 30, 25] },
-    // Crocodile: Patient hunter, Medium + Architect + Hermit + Blade + Laser + Summit
-    { animal: "crocodile", profile: [45, 65, 20, 80, 75, 70] },
-    // Dove: Harmony keeper, Low energy + Surfer + Gatherer + Petal + Laser + Garden
-    { animal: "dove", profile: [35, 30, 75, 25, 50, 25] },
-    // Butterfly: Explorer, Dawn Igniter + Surfer + Gatherer + Petal + Kaleidoscope + Garden
-    { animal: "butterfly", profile: [65, 20, 55, 25, 20, 30] },
-    // Bamboo: Resilient, Low energy + Surfer + Gatherer + Petal + Kaleidoscope + Garden
-    { animal: "bamboo", profile: [30, 25, 50, 30, 35, 35] },
+/**
+ * Per-axis standard deviation across all 16 archetype profiles.
+ * Used to normalize Manhattan distance so axes with naturally wider spread
+ * (e.g., social: 15→85) don't dominate axes with narrower spread.
+ * Computed once at module load.
+ */
+const AXIS_SD: number[] = (() => {
+  const n = ARCHETYPE_PROFILES.length;
+  return [0, 1, 2, 3, 4, 5].map((axisIdx) => {
+    const values = ARCHETYPE_PROFILES.map((a) => a.profile[axisIdx]);
+    const mean = values.reduce((s, v) => s + v, 0) / n;
+    const variance = values.reduce((s, v) => s + (v - mean) ** 2, 0) / n;
+    return Math.max(1, Math.sqrt(variance)); // floor at 1 to avoid div-by-zero
+  });
+})();
+
+export interface AnimalMatch {
+  animal: SpiritAnimal;
+  /** Raw Manhattan distance in score units (smaller = closer) */
+  distance: number;
+  /** Z-score normalized distance — fairer cross-axis comparison */
+  zDistance: number;
+}
+
+/**
+ * Rank all archetypes by similarity to the user's score profile.
+ * Returns sorted ascending by zDistance (closest match first).
+ *
+ * Distance is computed as the sum of per-axis absolute differences divided
+ * by that axis's stdDev across the registry — so an axis with narrow spread
+ * carries the same per-unit weight as an axis with wide spread.
+ */
+export function getRankedAnimals(scores: AxisScores): AnimalMatch[] {
+  const userVec = [
+    scores.energy,
+    scores.planning,
+    scores.social,
+    scores.decision,
+    scores.focus,
+    scores.drive,
   ];
 
-  // Calculate Manhattan distance to each archetype
-  let closestAnimal: SpiritAnimal = "butterfly";
-  let minDistance = Infinity;
-
-  for (const { animal, profile } of archetypes) {
-    const distance =
-      Math.abs(energy - profile[0]) +
-      Math.abs(planning - profile[1]) +
-      Math.abs(social - profile[2]) +
-      Math.abs(decision - profile[3]) +
-      Math.abs(focus - profile[4]) +
-      Math.abs(drive - profile[5]);
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestAnimal = animal;
+  const ranked = ARCHETYPE_PROFILES.map(({ animal, profile }) => {
+    let raw = 0;
+    let z = 0;
+    for (let i = 0; i < 6; i++) {
+      const diff = Math.abs(userVec[i] - profile[i]);
+      raw += diff;
+      z += diff / AXIS_SD[i];
     }
-  }
+    return { animal, distance: raw, zDistance: z };
+  });
 
-  return closestAnimal;
+  ranked.sort((a, b) => a.zDistance - b.zDistance);
+  return ranked;
+}
+
+/**
+ * Get the single best-matching animal — convenience wrapper around
+ * getRankedAnimals that returns just the top result.
+ */
+export function getDominantAnimal(scores: AxisScores): SpiritAnimal {
+  return getRankedAnimals(scores)[0].animal;
 }
 
 /**

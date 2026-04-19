@@ -8,11 +8,21 @@ export const dynamic = 'force-dynamic'
 
 import { Sparkles, Target } from 'lucide-react'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { createClient } from '@/lib/supabase/server'
 import ThemeToggle from '@/components/ui/theme-toggle'
 import LanguageSwitcher from '@/components/ui/language-switcher'
 
 export default async function HomePage() {
+  // Commander directive (2026-04-08): "ถ้า login แล้วอย่าพาเข้า quiz พามา dashboard เลย"
+  // If authenticated, skip the marketing landing and go straight to /dashboard.
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+  if (data?.user) {
+    redirect('/dashboard')
+  }
+
   const t = await getTranslations()
 
   return (

@@ -1,0 +1,7 @@
+{
+  "_schema": "workers-v1",
+  "_comment": "Active worker registry. Every worker that is spawned registers here at start and deregisters at termination. Used by CO to track in-flight work.",
+  "_last_updated": "2026-04-08T00:00:00Z",
+  "active": [],
+  "quarantined": []
+}

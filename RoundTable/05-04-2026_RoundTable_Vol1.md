@@ -127,3 +127,39 @@ Production sprint complete. All waves delivered.
 - SPRINT_SSOT.md + SPRINT_TODO.md finalized
 - SPRINT-01_Production_Award_Sprint.md status: Complete
 - **Reason:** Sprint goal achieved — production-grade, 3-language, dark mode, zero critical bugs, clean build.
+
+---
+
+## Session 6 — Governed Commit: Promote Current State to main
+
+**Date:** 07-04-2026
+**Commander:** Sittipan (Overseer callsign)
+**Action:** `/git commit` — force commit to protected branch `main`
+
+### Safety Gate Status
+- **S2 Branch Protection:** main is protected — `--force` required (Commander directive)
+- **S4 Sensitive Scan:** `.claude_backup_before_uniops/settings.json` checked — no credentials, safe to include
+- **Ticket Gate (C1):** No Development/ ticket covers these changes — Commander waiver applied (explicit directive)
+
+### Staged Changes
+| File | Status |
+|------|--------|
+| app/layout.tsx | Modified (staged + unstaged) |
+| lib/liff.ts | Modified (unstaged) |
+| middleware.ts | Modified (staged) |
+| next.config.ts | Modified (staged + unstaged) |
+| package-lock.json | Modified (staged + unstaged) |
+| package.json | Modified (staged + unstaged) |
+
+### Untracked Files — Commander Decision
+- **Included:** PWA files (`public/manifest.json`, `public/sw.js`, `public/register-sw.js`, `public/icon-*.png`, `scripts/generate-icons.js`)
+- **Excluded:** `.claude_backup_before_uniops/`, `GEMINI.md`, `hybrid_erd.html`, `openclaw_prompt.txt`, `test-results/`
+
+### Git Record — Commit + Push
+- Branch: main (Commander override — protected branch)
+- Rebase: onto origin/main (8 remote commits preserved)
+- Commit: `902dad6` — feat(pwa+config): add PWA support and update dependencies
+- Push: origin/main — SUCCESS
+- Strategy: B — rebase local on top of remote, then push
+- Review: skipped (Commander directive)
+- Time: 07-04-2026

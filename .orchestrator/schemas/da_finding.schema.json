@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "da_finding",
+  "title": "Devil's Advocate Finding",
+  "description": "DA audit result, one finding per message. Filed after every phase gate or on-demand.",
+  "type": "object",
+  "required": ["type", "from", "to", "severity", "created_at", "file", "description"],
+  "properties": {
+    "type": { "const": "da_finding" },
+    "from": { "const": "devils-advocate" },
+    "to": { "const": "chief-orchestrator" },
+    "severity": { "enum": ["critical", "high", "medium", "low", "info"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "finding_id": { "type": "string", "pattern": "^(CRIT|HIGH|MED|LOW|INFO)-[0-9]+$" },
+    "file": { "type": "string" },
+    "line": { "type": "integer" },
+    "category": {
+      "enum": ["security", "correctness", "performance", "accessibility", "mobile-first", "i18n", "polish", "architecture"]
+    },
+    "description": { "type": "string" },
+    "evidence": { "type": "string" },
+    "proposed_fix": { "type": "string" },
+    "blocks_phase_gate": { "type": "boolean", "default": false }
+  }
+}

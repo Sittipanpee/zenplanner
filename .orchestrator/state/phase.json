@@ -1,0 +1,60 @@
+{
+  "_schema": "phase-v1",
+  "_comment": "Current phase + gate status. Updated at phase start and phase gate events. Commander sign-off required to advance phase.",
+  "_last_updated": "2026-04-08T12:25:36Z",
+  "current_phase": "INFRA-BUILD",
+  "phase_started_at": "2026-04-08T00:00:00Z",
+  "gate_status": "open",
+  "next_gate_at": "2026-04-08T14:25:24Z",
+  "active_depts": [],
+  "history": [
+    {
+      "phase": "PTS-SPRINT",
+      "started_at": "2026-04-08T00:00:00Z",
+      "ended_at": "2026-04-08T00:00:00Z",
+      "verdict": "shipped",
+      "commit": "2d273c5"
+    },
+    {
+      "phase": "INFRA-BUILD-GATE-01",
+      "verdict": "approved",
+      "commit": "9fd99dfd547968dbc70a65e81ea6317c3189b6f9",
+      "approved_at": "2026-04-08T11:05:27Z",
+      "started_at": "2026-04-08T11:05:15Z",
+      "ended_at": "2026-04-08T11:05:27Z"
+    },
+    {
+      "phase": "INFRA-PILOT-GATE",
+      "verdict": "approved",
+      "commit": "6e72ffe9dfef2b1f8d4c98a4d29a5e2683549c31",
+      "approved_at": "2026-04-08T11:26:44Z",
+      "started_at": "2026-04-08T11:26:33Z",
+      "ended_at": "2026-04-08T11:26:44Z"
+    },
+    {
+      "phase": "TIER-2-WAVE-2-GATE",
+      "verdict": "approved",
+      "commit": "0ac58dd39f7006c34845f09e2eb75feed401b7a3",
+      "approved_at": "2026-04-08T11:42:30Z",
+      "started_at": "2026-04-08T11:42:18Z",
+      "ended_at": "2026-04-08T11:42:30Z"
+    },
+    {
+      "phase": "TIER-2-WAVE-3-GATE",
+      "verdict": "approved",
+      "commit": "198f4c6d2a4936a4d6dc05b2df14f1edca1f3699",
+      "approved_at": "2026-04-08T11:53:37Z",
+      "started_at": "2026-04-08T11:53:26Z",
+      "ended_at": "2026-04-08T11:53:37Z"
+    },
+    {
+      "phase": "URGENT-HOTFIX-GATE",
+      "verdict": "approved",
+      "commit": "35dd62b0b63329163c6d12f0aef1985725cc221c",
+      "approved_at": "2026-04-08T12:25:36Z",
+      "started_at": "2026-04-08T12:25:24Z",
+      "ended_at": "2026-04-08T12:25:36Z"
+    }
+  ],
+  "current_gate": null
+}

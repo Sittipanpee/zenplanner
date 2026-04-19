@@ -18,7 +18,14 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  // [DBG] Supabase fetch can fail if project is paused or unreachable
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data.user
+  } catch {
+    return response
+  }
 
   const pathname = request.nextUrl.pathname
 
